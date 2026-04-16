@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Media Match — Performance Dashboard | Centerfield Health & Medicare</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --ink:#05080F;--ink2:#0A0F1C;--ink3:#111827;
+  --surface:rgba(255,255,255,0.035);--surface2:rgba(255,255,255,0.06);--surface3:rgba(255,255,255,0.09);
+  --edge:rgba(255,255,255,0.07);--edge2:rgba(255,255,255,0.12);
+  --cyan:#00E5FF;--cyan-dim:rgba(0,229,255,0.12);--cyan-glow:rgba(0,229,255,0.25);
+  --amber:#FFB547;--amber-dim:rgba(255,181,71,0.12);
+  --green:#00E676;--green-dim:rgba(0,230,118,0.1);
+  --red:#FF5252;--red-dim:rgba(255,82,82,0.1);
+  --violet:#B388FF;
+  --text:#F0F4FF;--text-2:rgba(240,244,255,0.6);--text-3:rgba(240,244,255,0.35);
+  --r-sm:5px;--r-md:10px;--r-lg:16px;--r-xl:22px;
+  --shadow:0 2px 20px rgba(0,0,0,0.5);--shadow-lg:0 8px 48px rgba(0,0,0,0.7);
+  --font-d:'Syne',sans-serif;--font-m:'Space Mono',monospace;--font-b:'Inter',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-b);background:var(--ink);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 100% 70% at 0% 0%,rgba(0,229,255,0.055) 0%,transparent 55%),radial-gradient(ellipse 80% 60% at 100% 100%,rgba(255,181,71,0.04) 0%,transparent 55%);pointer-events:none;}
+body::after{content:'';position:fixed;inset:0;z-index:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,0.007) 2px,rgba(255,255,255,0.007) 4px);pointer-events:none;}
+.shell{position:relative;z-index:1;max-width:1520px;margin:0 auto;padding:0 28px 60px;}
+
+/* HEADER */
+.header{display:flex;align-items:center;justify-content:space-between;padding:24px 0 22px;border-bottom:1px solid var(--edge);margin-bottom:28px;animation:slideDown 0.5s cubic-bezier(0.16,1,0.3,1) both;}
+.header-left{display:flex;align-items:center;gap:18px;}
+.logo-unit{display:flex;align-items:center;gap:12px;}
+.logo-mark{width:44px;height:44px;background:linear-gradient(135deg,var(--cyan) 0%,rgba(0,229,255,0.35) 100%);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.logo-mark span{font-family:var(--font-m);font-size:12px;font-weight:700;color:var(--ink);letter-spacing:-0.5px;}
+.header-wordmark{display:flex;flex-direction:column;gap:2px;}
+.header-eyebrow{font-family:var(--font-m);font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan);opacity:0.8;}
+.header-name{font-family:var(--font-d);font-size:18px;font-weight:800;color:var(--text);letter-spacing:-0.3px;line-height:1;}
+.hdivider{width:1px;height:32px;background:var(--edge2);}
+.header-sub{font-size:12px;color:var(--text-2);}
+.header-right{display:flex;align-items:center;gap:14px;}
+.period-tabs{display:flex;gap:2px;background:var(--surface);border:1px solid var(--edge);border-radius:var(--r-sm);padding:3px;}
+.ptab{padding:6px 16px;font-family:var(--font-m);font-size:11px;color:var(--text-3);background:transparent;border:none;border-radius:3px;cursor:pointer;transition:all 0.15s ease;letter-spacing:0.5px;}
+.ptab.active{background:var(--cyan);color:var(--ink);font-weight:700;}
+.ptab:hover:not(.active){color:var(--text);background:var(--surface2);}
+.live-ind{display:flex;align-items:center;gap:5px;padding:5px 12px;background:var(--green-dim);border:1px solid rgba(0,230,118,0.25);border-radius:20px;}
+.live-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 2s ease infinite;box-shadow:0 0 8px var(--green);}
+.live-lbl{font-family:var(--font-m);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);font-weight:700;}
+.pulse-wrap{font-family:var(--font-m);font-size:10px;color:var(--text-3);}
+
+/* SECTION */
+.sec{display:flex;align-items:center;gap:12px;margin-bottom:14px;margin-top:4px;}
+.sec-tag{font-family:var(--font-m);font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan);padding:4px 10px;background:var(--cyan-dim);border:1px solid rgba(0,229,255,0.2);border-radius:3px;}
+.sec-line{flex:1;height:1px;background:linear-gradient(90deg,var(--edge2) 0%,transparent 100%);}
+
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:28px;}
+.kpi{background:var(--surface);border:1px solid var(--edge);border-radius:var(--r-md);padding:18px 16px 14px;position:relative;overflow:hidden;cursor:default;transition:border-color 0.2s,background 0.2s,transform 0.2s;animation:riseIn 0.5s cubic-bezier(0.16,1,0.3,1) both;}
+.kpi:hover{border-color:var(--edge2);background:var(--surface2);transform:translateY(-2px);}
+.kpi-accent{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),transparent);opacity:0.5;}
+.kpi.primary .kpi-accent{background:linear-gradient(90deg,var(--amber),var(--cyan));opacity:1;}
+.kpi.primary{border-color:rgba(255,181,71,0.2);background:linear-gradient(135deg,rgba(255,181,71,0.06) 0%,var(--surface) 100%);}
+.kpi-label{font-family:var(--font-m);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);margin-bottom:10px;}
+.kpi-val{font-family:var(--font-d);font-size:30px;font-weight:800;color:var(--text);line-height:1;letter-spacing:-1px;margin-bottom:8px;}
+.kpi-val .unit{font-size:14px;font-weight:400;color:var(--text-2);letter-spacing:0;margin-left:1px;}
+.kpi-badge{display:inline-flex;align-items:center;gap:4px;font-family:var(--font-m);font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;letter-spacing:0.3px;}
+.kpi-badge.up{background:var(--green-dim);color:var(--green);}
+.kpi-badge.down{background:var(--red-dim);color:var(--red);}
+.kpi-badge.flat{background:var(--surface2);color:var(--text-3);}
+.kpi:nth-child(1){animation-delay:0.04s;}
+.kpi:nth-child(2){animation-delay:0.08s;}
+.kpi:nth-child(3){animation-delay:0.12s;}
+.kpi:nth-child(4){animation-delay:0.16s;}
+.kpi:nth-child(5){animation-delay:0.20s;}
+.kpi:nth-child(6){animation-delay:0.24s;}
+
+/* LAYOUTS */
+.g6040{display:grid;grid-template-columns:1.5fr 1fr;gap:12px;margin-bottom:12px;}
+.g3333{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;}
+.g5050{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;}
+
+/* PANEL */
+.panel{background:var(--surface);border:1px solid var(--edge);border-radius:var(--r-lg);padding:22px;animation:riseIn 0.55s cubic-bezier(0.16,1,0.3,1) both;transition:border-color 0.25s;}
+.panel:hover{border-color:var(--edge2);}
+.p-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;}
+.p-title{font-family:var(--font-d);font-size:13px;font-weight:700;color:var(--text);letter-spacing:-0.2px;margin-bottom:3px;}
+.p-sub{font-size:11px;color:var(--text-3);}
+.pill{font-family:var(--font-m);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:20px;border:1px solid;white-space:nowrap;}
+.pill-c{color:var(--cyan);border-color:rgba(0,229,255,0.3);background:var(--cyan-dim);}
+.pill-a{color:var(--amber);border-color:rgba(255,181,71,0.3);background:var(--amber-dim);}
+.pill-g{color:var(--green);border-color:rgba(0,230,118,0.3);background:var(--green-dim);}
+.pill-v{color:var(--violet);border-color:rgba(179,136,255,0.3);background:rgba(179,136,255,0.1);}
+
+/* FUNNEL */
+.funnel{display:flex;flex-direction:column;gap:9px;}
+.f-row{display:flex;align-items:center;gap:10px;}
+.f-label{font-size:11px;color:var(--text-2);width:145px;flex-shrink:0;text-align:right;}
+.f-track{flex:1;height:28px;background:rgba(255,255,255,0.03);border-radius:3px;overflow:hidden;border:1px solid var(--edge);}
+.f-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:10px;font-family:var(--font-m);font-size:10px;font-weight:700;color:rgba(255,255,255,0.9);transition:width 1.4s cubic-bezier(0.16,1,0.3,1);}
+.f-pct{font-family:var(--font-m);font-size:10px;color:var(--text-3);width:42px;flex-shrink:0;}
+
+/* CLIENT TABLE */
+.ct{width:100%;border-collapse:collapse;}
+.ct th{font-family:var(--font-m);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);text-align:left;padding:0 0 10px;border-bottom:1px solid var(--edge);}
+.ct th:not(:first-child){text-align:right;}
+.ct td{padding:11px 0;border-bottom:1px solid var(--edge);font-size:12px;color:var(--text-2);vertical-align:middle;}
+.ct td:not(:first-child){text-align:right;font-family:var(--font-m);font-size:11px;}
+.ct tr:last-child td{border-bottom:none;}
+.ct tr{transition:background 0.15s;}
+.ct tr:hover td{background:var(--surface2);}
+.c-name{font-family:var(--font-d);font-weight:700;font-size:13px;color:var(--text);}
+.c-type{font-size:10px;color:var(--text-3);margin-top:1px;display:block;}
+.mb-wrap{display:flex;align-items:center;justify-content:flex-end;gap:8px;}
+.mb{width:50px;height:3px;background:var(--edge);border-radius:2px;overflow:hidden;}
+.mb-fill{height:100%;border-radius:2px;transition:width 1s ease;}
+.stag{display:inline-block;font-family:var(--font-m);font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;letter-spacing:0.5px;}
+.stag-g{background:var(--green-dim);color:var(--green);}
+.stag-a{background:var(--amber-dim);color:var(--amber);}
+
+/* AGENTS */
+.agent-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:28px;animation:riseIn 0.6s cubic-bezier(0.16,1,0.3,1) both;}
+.ac{background:var(--surface);border:1px solid var(--edge);border-radius:var(--r-md);padding:16px 14px;display:flex;flex-direction:column;gap:8px;transition:all 0.2s ease;position:relative;overflow:hidden;}
+.ac:hover{border-color:var(--edge2);background:var(--surface2);transform:translateY(-1px);}
+.ac::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,var(--cyan),transparent);opacity:0;transition:opacity 0.2s;}
+.ac:hover::before{opacity:1;}
+.ac.build::before{background:linear-gradient(90deg,var(--amber),transparent);opacity:0.6;}
+.a-top{display:flex;align-items:center;justify-content:space-between;}
+.a-name{font-family:var(--font-d);font-size:12px;font-weight:800;color:var(--text);letter-spacing:-0.2px;}
+.a-st{display:flex;align-items:center;gap:4px;}
+.a-dot{width:6px;height:6px;border-radius:50%;}
+.dot-live{background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2s infinite;}
+.dot-build{background:var(--amber);box-shadow:0 0 8px var(--amber);animation:blink 2.5s infinite;}
+.a-stxt{font-family:var(--font-m);font-size:9px;font-weight:700;letter-spacing:1px;}
+.a-role{font-size:10px;color:var(--text-3);line-height:1.4;}
+.a-met{display:flex;align-items:baseline;gap:5px;margin-top:4px;}
+.a-val{font-family:var(--font-d);font-size:22px;font-weight:800;color:var(--text);letter-spacing:-0.5px;line-height:1;}
+.a-mlbl{font-size:9px;color:var(--text-3);font-family:var(--font-m);}
+.up-track{height:2px;background:var(--edge);border-radius:1px;overflow:hidden;margin-top:4px;}
+.up-fill{height:100%;background:linear-gradient(90deg,var(--cyan),rgba(0,229,255,0.4));border-radius:1px;transition:width 1.8s cubic-bezier(0.16,1,0.3,1);}
+
+/* FOOTER */
+.footer{display:flex;align-items:center;justify-content:space-between;padding-top:20px;border-top:1px solid var(--edge);font-size:11px;color:var(--text-3);font-family:var(--font-m);}
+.footer-note{display:flex;align-items:center;gap:8px;}
+.dtag{padding:3px 8px;background:var(--surface2);border:1px solid var(--edge2);border-radius:3px;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--amber);}
+.chart-wrap{position:relative;}
+
+/* ANIMATIONS */
+@keyframes slideDown{from{opacity:0;transform:translateY(-14px);}to{opacity:1;transform:translateY(0);}}
+@keyframes riseIn{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+@keyframes swap{0%{color:var(--cyan);}100%{color:var(--text);}}
+.swapped{animation:swap 0.4s ease;}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<header class="header">
+  <div class="header-left">
+    <div class="logo-unit">
+      <div class="logo-mark"><span>MM</span></div>
+      <div class="header-wordmark">
+        <div class="header-eyebrow">Centerfield · Health &amp; Medicare</div>
+        <div class="header-name">Media Match</div>
+      </div>
+    </div>
+    <div class="hdivider"></div>
+    <div class="header-sub">Performance Dashboard &nbsp;·&nbsp; AI-Powered Media Distribution Engine</div>
+  </div>
+  <div class="header-right">
+    <div class="period-tabs">
+      <button class="ptab" onclick="setPeriod('WTD',this)">WTD</button>
+      <button class="ptab active" onclick="setPeriod('MTD',this)">MTD</button>
+      <button class="ptab" onclick="setPeriod('QTD',this)">QTD</button>
+    </div>
+    <div class="live-ind"><span class="live-dot"></span><span class="live-lbl">Live</span></div>
+    <div class="pulse-wrap">Template · Swap live data</div>
+  </div>
+</header>
+
+<div class="sec"><div class="sec-tag">Revenue &amp; GP</div><div class="sec-line"></div></div>
+
+<div class="kpi-grid">
+  <div class="kpi primary"><div class="kpi-accent"></div><div class="kpi-label">Revenue / Call</div><div class="kpi-val" id="kv-rpc">$18.40</div><span class="kpi-badge up" id="kd-rpc">▲ 12.3% vs prior</span></div>
+  <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">Total Revenue</div><div class="kpi-val" id="kv-rev">$184K</div><span class="kpi-badge up" id="kd-rev">▲ 8.1% MoM</span></div>
+  <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">Gross Profit</div><div class="kpi-val" id="kv-gp">$52.4K</div><span class="kpi-badge up" id="kd-gp">▲ 6.7% MoM</span></div>
+  <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">GP Margin</div><div class="kpi-val" id="kv-margin">28.5<span class="unit">%</span></div><span class="kpi-badge flat" id="kd-margin">— vs 27.9% prior</span></div>
+  <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">QM Fill Rate</div><div class="kpi-val" id="kv-fill">74<span class="unit">%</span></div><span class="kpi-badge down" id="kd-fill">▼ 2.1% vs prior</span></div>
+  <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">Overflow Capture</div><div class="kpi-val" id="kv-overflow">$28.2K</div><span class="kpi-badge up" id="kd-overflow">▲ NEW revenue</span></div>
+</div>
+
+<div class="sec"><div class="sec-tag">Trends</div><div class="sec-line"></div></div>
+
+<div class="g6040">
+  <div class="panel">
+    <div class="p-head"><div><div class="p-title">Revenue &amp; GP Trend</div><div class="p-sub">Daily revenue vs. gross profit · MTD</div></div><span class="pill pill-a">Period-over-Period</span></div>
+    <div class="chart-wrap" style="height:210px"><canvas id="revChart"></canvas></div>
+  </div>
+  <div class="panel">
+    <div class="p-head"><div><div class="p-title">Call Routing Split</div><div class="p-sub">QM direct vs. Marketplace overflow</div></div><span class="pill pill-c">MTD</span></div>
+    <div class="chart-wrap" style="height:140px;display:flex;align-items:center;justify-content:center"><canvas id="routePie" style="max-height:140px;max-width:170px;"></canvas></div>
+    <div style="display:flex;gap:20px;justify-content:center;margin-top:14px;">
+      <div style="display:flex;align-items:center;gap:7px;"><span style="width:8px;height:8px;border-radius:2px;background:var(--cyan);display:inline-block;opacity:0.85;"></span><span style="font-size:11px;color:var(--text-2)">QM Direct</span><span style="font-family:var(--font-m);font-size:12px;font-weight:700;color:var(--text);margin-left:4px;">74%</span></div>
+      <div style="display:flex;align-items:center;gap:7px;"><span style="width:8px;height:8px;border-radius:2px;background:var(--amber);display:inline-block;opacity:0.85;"></span><span style="font-size:11px;color:var(--text-2)">Marketplace</span><span style="font-family:var(--font-m);font-size:12px;font-weight:700;color:var(--text);margin-left:4px;">26%</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="sec"><div class="sec-tag">Call Volume &amp; Routing</div><div class="sec-line"></div></div>
+
+<div class="g6040">
+  <div class="panel">
+    <div class="p-head"><div><div class="p-title">Daily Call Volume</div><div class="p-sub">QM filled vs. marketplace overflow · 14 days</div></div><span class="pill pill-c">Stacked</span></div>
+    <div class="chart-wrap" style="height:210px"><canvas id="callVolChart"></canvas></div>
+  </div>
+  <div class="panel">
+    <div class="p-head"><div><div class="p-title">Routing Funnel</div><div class="p-sub">Inbound → Answered → Routed → Converted</div></div><span class="pill pill-g">Live Logic</span></div>
+    <div class="funnel" id="funnelEl" style="margin-top:6px;"></div>
+  </div>
+</div>
+
+<div class="sec"><div class="sec-tag">Client Performance</div><div class="sec-line"></div></div>
+
+<div class="g5050">
+  <div class="panel">
+    <div class="p-head"><div><div class="p-title">CPA by Client vs. Target</div><div class="p-sub">Actual CPA vs. target — lower is better</div></div><span class="pill pill-c">MTD</span></div>
+    <div class="chart-wrap" style="height:210px"><canvas id="cpaChart"></canvas></div>
+  </div>
+  <div class="panel">
+    <div class="p-head"><div><div class="p-title">Client Scorecard</div><div class="p-sub">Volume · CPA · Status · vs. Target</div></div><span class="pill pill-a">Template Data</span></div>
+    <table class="ct"><thead><tr><th>Client</th><th>Calls</th><th>Actual CPA</th><th>Target</th><th>vs Target</th><th>Status</th></tr></thead><tbody id="clientTbody"></tbody></table>
+  </div>
+</div>
+
+<div class="sec"><div class="sec-tag">Revenue Analysis</div><div class="sec-line"></div></div>
+
+<div class="g3333">
+  <div class="panel">
+    <div class="p-head"><div><div class="p-title">Revenue/Call by Source</div><div class="p-sub">QM vs. Marketplace — 8 weeks</div></div><span class="pill pill-a">Comparison</span></div>
+    <div class="chart-wrap" style="height:170px"><canvas id="rpcChart"></canvas></div>
+  </div>
+  <div class="panel">
+    <div class="p-head"><div><div class="p-title">Overflow Revenue Recovery</div><div class="p-sub">$ captured from QM-declined calls</div></div><span class="pill pill-g">Proof Point #1</span></div>
+    <div class="chart-wrap" style="height:170px"><canvas id="overflowChart"></canvas></div>
+  </div>
+  <div class="panel">
+    <div class="p-head"><div><div class="p-title">GP Margin Trend</div><div class="p-sub">Weekly gross profit margin %</div></div><span class="pill pill-c">Trend</span></div>
+    <div class="chart-wrap" style="height:170px"><canvas id="marginChart"></canvas></div>
+  </div>
+</div>
+
+<div class="sec"><div class="sec-tag">AI Agent Health</div><div class="sec-line"></div></div>
+<div class="agent-strip" id="agentStrip"></div>
+
+<div class="footer">
+  <div class="footer-note"><span class="dtag">Template</span>Replace values in the <code style="color:var(--cyan);font-size:10px;">DATA</code> object to connect live numbers.</div>
+  <div>"We Supercharge Your Customer Acquisition" &nbsp;·&nbsp; Centerfield Media &nbsp;·&nbsp; Health &amp; Medicare</div>
+</div>
+
+</div>
+
+<script>
+const DATA={
+  kpis:{
+    WTD:{rpc:'$16.20',rpcD:'▲ 8.4% vs prior',rpcDir:'up',rev:'$41K',revD:'▲ 5.2% WoW',revDir:'up',gp:'$11.8K',gpD:'▲ 4.1% WoW',gpDir:'up',margin:'28.8',marginD:'— flat',marginDir:'flat',fill:'72',fillD:'▼ 1.5% vs prior',fillDir:'down',overflow:'$6.1K',overflowD:'▲ NEW revenue',overflowDir:'up'},
+    MTD:{rpc:'$18.40',rpcD:'▲ 12.3% vs prior',rpcDir:'up',rev:'$184K',revD:'▲ 8.1% MoM',revDir:'up',gp:'$52.4K',gpD:'▲ 6.7% MoM',gpDir:'up',margin:'28.5',marginD:'— vs 27.9% prior',marginDir:'flat',fill:'74',fillD:'▼ 2.1% vs prior',fillDir:'down',overflow:'$28.2K',overflowD:'▲ NEW revenue',overflowDir:'up'},
+    QTD:{rpc:'$17.90',rpcD:'▲ 9.8% vs prior',rpcDir:'up',rev:'$521K',revD:'▲ 11.4% QoQ',revDir:'up',gp:'$146K',gpD:'▲ 9.2% QoQ',gpDir:'up',margin:'28.0',marginD:'▲ +0.4pp QoQ',marginDir:'up',fill:'75',fillD:'▲ 1.0% vs prior',fillDir:'up',overflow:'$78K',overflowD:'▲ NEW revenue',overflowDir:'up'}
+  },
+  revTrend:{labels:['4/1','4/2','4/3','4/4','4/5','4/6','4/7','4/8','4/9','4/10','4/11','4/12','4/13','4/14','4/15','4/16','4/17','4/18','4/19','4/20'],revenue:[7200,8100,6800,9400,10200,8700,7500,9800,11200,10500,9200,10800,11500,9700,10100,12300,11800,10400,9900,11000],gp:[2050,2310,1940,2680,2910,2480,2140,2800,3200,2990,2620,3080,3280,2770,2880,3510,3360,2970,2820,3140]},
+  callVol:{labels:['4/7','4/8','4/9','4/10','4/11','4/12','4/13','4/14','4/15','4/16','4/17','4/18','4/19','4/20'],qm:[312,340,298,380,410,360,290,355,422,445,390,415,370,430],market:[88,95,82,120,130,105,80,115,148,155,130,140,120,150]},
+  funnel:[{label:'Inbound Calls Received',val:10340,pct:100},{label:'Calls Answered / IVR',val:9820,pct:95},{label:'Scored & Routed',val:9600,pct:92.8},{label:'QM — Filled',val:7130,pct:69.0},{label:'Marketplace — Captured',val:1960,pct:19.0},{label:'Converted (Sold)',val:9090,pct:88.0}],
+  clients:[{name:'Quote Manage',type:'Primary Buyer',calls:7130,cpa:142,target:150,status:'On Target'},{name:'Buyer A',type:'Marketplace',calls:820,cpa:168,target:160,status:'Over Target'},{name:'Buyer B',type:'Marketplace',calls:610,cpa:155,target:170,status:'On Target'},{name:'Buyer C',type:'Marketplace',calls:380,cpa:144,target:145,status:'On Target'},{name:'Buyer D',type:'Marketplace',calls:150,cpa:190,target:180,status:'Over Target'}],
+  rpc:{labels:['W1','W2','W3','W4','W5','W6','W7','W8'],qm:[16.2,16.8,17.1,16.9,17.5,18.0,17.8,18.4],market:[14.8,15.2,15.5,15.1,15.9,16.4,16.1,16.8]},
+  overflow:{labels:['W1','W2','W3','W4','W5','W6','W7','W8'],vals:[3200,4100,4800,5200,5800,6400,6100,6900]},
+  margin:{labels:['W1','W2','W3','W4','W5','W6','W7','W8'],vals:[26.4,27.1,27.5,27.2,27.8,28.2,28.0,28.5]},
+  agents:[{name:'Joanie',role:'Workflow Orchestrator',status:'Live',uptime:99.8,metric:'99.8%',label:'uptime'},{name:'MPQS',role:'Partner Quality Scoring',status:'Live',uptime:99.4,metric:'847',label:'partners scored'},{name:'Scoring',role:'Real-Time Call Quality',status:'Live',uptime:99.1,metric:'9,600',label:'calls scored MTD'},{name:'Data Agent',role:'Signal Aggregation',status:'Live',uptime:99.6,metric:'100%',label:'data freshness'},{name:'Right Pricing',role:'Dynamic Bid Optimization',status:'In Build',uptime:0,metric:"Q3 '26",label:'target launch'}]
+};
+
+Chart.defaults.color='rgba(240,244,255,0.4)';
+Chart.defaults.font.family="'Inter',sans-serif";
+Chart.defaults.font.size=11;
+const GRID={color:'rgba(255,255,255,0.04)',drawTicks:false};
+const TICKS={padding:8};
+const AX={grid:GRID,ticks:TICKS,border:{display:false}};
+const TS={backgroundColor:'#0A0F1C',borderColor:'rgba(0,229,255,0.2)',borderWidth:1,padding:10,cornerRadius:6,titleFont:{family:"'Space Mono',monospace",size:10},bodyFont:{family:"'Space Mono',monospace",size:11}};
+
+function buildRevChart(){
+  const ctx=document.getElementById('revChart').getContext('2d');
+  const g=ctx.createLinearGradient(0,0,0,210);
+  g.addColorStop(0,'rgba(0,229,255,0.2)');g.addColorStop(1,'rgba(0,229,255,0)');
+  new Chart(ctx,{type:'line',data:{labels:DATA.revTrend.labels,datasets:[{label:'Revenue ($)',data:DATA.revTrend.revenue,borderColor:'#00E5FF',borderWidth:2,backgroundColor:g,fill:true,pointRadius:0,pointHoverRadius:4,tension:0.4,yAxisID:'y'},{label:'Gross Profit ($)',data:DATA.revTrend.gp,borderColor:'#FFB547',borderWidth:2,borderDash:[5,3],backgroundColor:'transparent',fill:false,pointRadius:0,pointHoverRadius:4,tension:0.4,yAxisID:'y'}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',align:'end',labels:{boxWidth:12,boxHeight:2,padding:16,pointStyle:'line',usePointStyle:true,color:'rgba(240,244,255,0.5)',font:{family:"'Space Mono',monospace",size:10}}},tooltip:{...TS,callbacks:{label:c=>` ${c.dataset.label}: $${c.parsed.y.toLocaleString()}`}}},scales:{x:{...AX,ticks:{...TICKS,maxTicksLimit:10}},y:{...AX,ticks:{...TICKS,callback:v=>`$${(v/1000).toFixed(0)}k`}}}}});
+}
+
+function buildRoutePie(){
+  const ctx=document.getElementById('routePie').getContext('2d');
+  new Chart(ctx,{type:'doughnut',data:{labels:['QM Direct','Marketplace'],datasets:[{data:[74,26],backgroundColor:['rgba(0,229,255,0.8)','rgba(255,181,71,0.8)'],borderColor:'#05080F',borderWidth:3,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,cutout:'74%',plugins:{legend:{display:false},tooltip:{...TS,callbacks:{label:c=>` ${c.label}: ${c.parsed}%`}}}}});
+}
+
+function buildCallVolChart(){
+  const ctx=document.getElementById('callVolChart').getContext('2d');
+  new Chart(ctx,{type:'bar',data:{labels:DATA.callVol.labels,datasets:[{label:'QM Filled',data:DATA.callVol.qm,backgroundColor:'rgba(0,229,255,0.65)',borderRadius:3,borderSkipped:false,stack:'s'},{label:'Marketplace',data:DATA.callVol.market,backgroundColor:'rgba(255,181,71,0.75)',borderRadius:3,borderSkipped:false,stack:'s'}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',align:'end',labels:{boxWidth:10,padding:14,pointStyle:'rect',usePointStyle:true,color:'rgba(240,244,255,0.5)',font:{family:"'Space Mono',monospace",size:10}}},tooltip:{...TS}},scales:{x:{...AX,stacked:true},y:{...AX,stacked:true}}}});
+}
+
+function buildFunnel(){
+  const el=document.getElementById('funnelEl');
+  const colors=['#00E5FF','rgba(0,229,255,0.75)','rgba(0,229,255,0.55)','rgba(0,229,255,0.4)','#FFB547','#00E676'];
+  el.innerHTML=DATA.funnel.map((s,i)=>`<div class="f-row"><div class="f-label">${s.label}</div><div class="f-track"><div class="f-fill" style="background:${colors[i]};width:0%" data-t="${s.pct}">${s.val.toLocaleString()}</div></div><div class="f-pct">${s.pct}%</div></div>`).join('');
+  setTimeout(()=>{document.querySelectorAll('.f-fill').forEach(b=>{b.style.width=b.dataset.t+'%';});},250);
+}
+
+function buildCpaChart(){
+  const ctx=document.getElementById('cpaChart').getContext('2d');
+  const labels=DATA.clients.map(c=>c.name);
+  const actuals=DATA.clients.map(c=>c.cpa);
+  const targets=DATA.clients.map(c=>c.target);
+  new Chart(ctx,{type:'bar',data:{labels,datasets:[{label:'Actual CPA',data:actuals,backgroundColor:actuals.map((v,i)=>v<=targets[i]?'rgba(0,229,255,0.7)':'rgba(255,82,82,0.7)'),borderRadius:4,borderSkipped:false},{label:'Target CPA',data:targets,type:'line',borderColor:'rgba(255,181,71,0.8)',backgroundColor:'transparent',borderWidth:2,borderDash:[5,3],pointRadius:4,pointBackgroundColor:'#FFB547'}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',align:'end',labels:{boxWidth:10,padding:14,pointStyle:'rect',usePointStyle:true,color:'rgba(240,244,255,0.5)',font:{family:"'Space Mono',monospace",size:10}}},tooltip:{...TS,callbacks:{label:c=>` ${c.dataset.label}: $${c.parsed.y}`}}},scales:{x:{...AX},y:{...AX,ticks:{...TICKS,callback:v=>`$${v}`}}}}});
+}
+
+function buildClientTable(){
+  const tbody=document.getElementById('clientTbody');
+  const maxCpa=Math.max(...DATA.clients.map(c=>c.cpa));
+  tbody.innerHTML=DATA.clients.map(c=>{
+    const pct=Math.round((c.cpa/maxCpa)*100);
+    const vs=c.cpa-c.target;
+    const vsLbl=vs<=0?`–$${Math.abs(vs)} ✓`:`+$${vs}`;
+    const vsClr=vs<=0?'var(--green)':'var(--red)';
+    const tag=c.status==='On Target'?'stag-g':'stag-a';
+    const barC=vs<=0?'var(--cyan)':'var(--red)';
+    return `<tr><td><span class="c-name">${c.name}</span><span class="c-type">${c.type}</span></td><td>${c.calls.toLocaleString()}</td><td><div class="mb-wrap"><div class="mb"><div class="mb-fill" style="width:0%;background:${barC}" data-t="${pct}"></div></div>$${c.cpa}</div></td><td>$${c.target}</td><td style="color:${vsClr};font-weight:700;">${vsLbl}</td><td><span class="stag ${tag}">${c.status}</span></td></tr>`;
+  }).join('');
+  setTimeout(()=>{document.querySelectorAll('.mb-fill').forEach(el=>{el.style.width=el.dataset.t+'%';});},350);
+}
+
+function buildRpcChart(){
+  const ctx=document.getElementById('rpcChart').getContext('2d');
+  new Chart(ctx,{type:'line',data:{labels:DATA.rpc.labels,datasets:[{label:'QM',data:DATA.rpc.qm,borderColor:'#00E5FF',borderWidth:2,pointRadius:3,pointBackgroundColor:'#00E5FF',tension:0.3},{label:'Marketplace',data:DATA.rpc.market,borderColor:'#FFB547',borderWidth:2,pointRadius:3,pointBackgroundColor:'#FFB547',tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',align:'end',labels:{boxWidth:10,padding:12,color:'rgba(240,244,255,0.5)',font:{family:"'Space Mono',monospace",size:10}}},tooltip:{...TS,callbacks:{label:c=>` ${c.dataset.label}: $${c.parsed.y.toFixed(2)}`}}},scales:{x:{...AX},y:{...AX,min:13,ticks:{...TICKS,callback:v=>`$${v.toFixed(0)}`}}}}});
+}
+
+function buildOverflowChart(){
+  const ctx=document.getElementById('overflowChart').getContext('2d');
+  new Chart(ctx,{type:'bar',data:{labels:DATA.overflow.labels,datasets:[{label:'Overflow Revenue',data:DATA.overflow.vals,backgroundColor:'rgba(0,230,118,0.65)',borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TS,callbacks:{label:c=>` $${c.parsed.y.toLocaleString()}`}}},scales:{x:{...AX},y:{...AX,ticks:{...TICKS,callback:v=>`$${(v/1000).toFixed(0)}k`}}}}});
+}
+
+function buildMarginChart(){
+  const ctx=document.getElementById('marginChart').getContext('2d');
+  new Chart(ctx,{type:'line',data:{labels:DATA.margin.labels,datasets:[{label:'GP Margin %',data:DATA.margin.vals,borderColor:'#FFB547',borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#FFB547',tension:0.4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TS,callbacks:{label:c=>` GP Margin: ${c.parsed.y}%`}}},scales:{x:{...AX},y:{...AX,min:25,ticks:{...TICKS,callback:v=>`${v}%`}}}}});
+}
+
+function buildAgents(){
+  const s=document.getElementById('agentStrip');
+  s.innerHTML=DATA.agents.map(a=>{
+    const isLive=a.status==='Live';
+    const dc=isLive?'dot-live':'dot-build';
+    const sc=isLive?'var(--green)':'var(--amber)';
+    const cc=isLive?'':'build';
+    return `<div class="ac ${cc}"><div class="a-top"><div class="a-name">${a.name}</div><div class="a-st"><span class="a-dot ${dc}"></span><span class="a-stxt" style="color:${sc}">${a.status}</span></div></div><div class="a-role">${a.role}</div><div class="a-met"><span class="a-val">${a.metric}</span><span class="a-mlbl">${a.label}</span></div>${isLive?`<div class="up-track"><div class="up-fill" style="width:0%" data-t="${a.uptime}"></div></div>`:`<div style="font-size:9px;color:var(--amber);font-family:'Space Mono',monospace;letter-spacing:0.5px;margin-top:2px;">▶ Active development</div>`}</div>`;
+  }).join('');
+  setTimeout(()=>{document.querySelectorAll('.up-fill').forEach(el=>{el.style.width=el.dataset.t+'%';});},450);
+}
+
+function setPeriod(p,btn){
+  document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const d=DATA.kpis[p];
+  const map=[
+    ['kv-rpc',d.rpc,false,false],['kd-rpc',d.rpcD,false,d.rpcDir],
+    ['kv-rev',d.rev,false,false],['kd-rev',d.revD,false,d.revDir],
+    ['kv-gp',d.gp,false,false],['kd-gp',d.gpD,false,d.gpDir],
+    ['kv-margin',d.margin+'<span class="unit">%</span>',true,false],['kd-margin',d.marginD,false,d.marginDir],
+    ['kv-fill',d.fill+'<span class="unit">%</span>',true,false],['kd-fill',d.fillD,false,d.fillDir],
+    ['kv-overflow',d.overflow,false,false],['kd-overflow',d.overflowD,false,d.overflowDir],
+  ];
+  map.forEach(([id,val,isHtml,dir])=>{
+    const el=document.getElementById(id);if(!el)return;
+    if(isHtml)el.innerHTML=val;else el.textContent=val;
+    if(dir)el.className=`kpi-badge ${dir}`;
+    el.classList.remove('swapped');void el.offsetWidth;el.classList.add('swapped');
+  });
+}
+
+window.addEventListener('DOMContentLoaded',()=>{
+  buildRevChart();buildRoutePie();buildCallVolChart();buildFunnel();
+  buildCpaChart();buildClientTable();buildRpcChart();buildOverflowChart();
+  buildMarginChart();buildAgents();
+});
+</script>
+</body>
+</html>
