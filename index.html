@@ -5,17 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Media Match — Performance Dashboard | Centerfield Health & Medicare</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700&family=Inter:wght@300;400;500;600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-:root{--ink:#05080F;--ink2:#0A0F1C;--surface:rgba(255,255,255,0.035);--surface2:rgba(255,255,255,0.06);--edge:rgba(255,255,255,0.07);--edge2:rgba(255,255,255,0.13);--cyan:#00E5FF;--cyan-dim:rgba(0,229,255,0.12);--amber:#FFB547;--amber-dim:rgba(255,181,71,0.12);--green:#00E676;--green-dim:rgba(0,230,118,0.10);--red:#FF5252;--red-dim:rgba(255,82,82,0.10);--violet:#B388FF;--violet-dim:rgba(179,136,255,0.1);--text:#F0F4FF;--text-2:rgba(240,244,255,0.6);--text-3:rgba(240,244,255,0.35);--r-sm:5px;--r-md:10px;--r-lg:16px;--font-d:'Syne',sans-serif;--font-m:'Space Mono',monospace;--font-b:'Inter',sans-serif;}
+:root{--ink:#05080F;--ink2:#0A0F1C;--surface:rgba(255,255,255,0.035);--surface2:rgba(255,255,255,0.06);--edge:rgba(255,255,255,0.07);--edge2:rgba(255,255,255,0.13);--cyan:#00E5FF;--cyan-dim:rgba(0,229,255,0.12);--amber:#FFB547;--amber-dim:rgba(255,181,71,0.12);--green:#00E676;--green-dim:rgba(0,230,118,0.10);--red:#FF5252;--red-dim:rgba(255,82,82,0.10);--violet:#B388FF;--violet-dim:rgba(179,136,255,0.1);--blue:#4FC3F7;--blue-dim:rgba(79,195,247,0.1);--text:#F0F4FF;--text-2:rgba(240,244,255,0.6);--text-3:rgba(240,244,255,0.35);--r-sm:5px;--r-md:10px;--r-lg:16px;--font-d:'Syne',sans-serif;--font-m:'Space Mono',monospace;--font-b:'Inter',sans-serif;--font-s:'DM Sans',sans-serif;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:var(--font-b);background:var(--ink);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
 body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 100% 70% at 0% 0%,rgba(0,229,255,0.055) 0%,transparent 55%),radial-gradient(ellipse 80% 60% at 100% 100%,rgba(255,181,71,0.04) 0%,transparent 55%);pointer-events:none;}
 body::after{content:'';position:fixed;inset:0;z-index:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,0.007) 2px,rgba(255,255,255,0.007) 4px);pointer-events:none;}
-.shell{position:relative;z-index:1;max-width:1540px;margin:0 auto;padding:0 28px 60px;}
+.shell{position:relative;z-index:1;max-width:1540px;margin:0 auto;padding:0 28px 60px;min-width:0;}
+
 /* HEADER */
-.header{display:flex;align-items:center;justify-content:space-between;padding:22px 0 20px;border-bottom:1px solid var(--edge);margin-bottom:26px;animation:slideDown 0.5s cubic-bezier(0.16,1,0.3,1) both;}
+.header{display:flex;align-items:center;justify-content:space-between;padding:22px 0 0;border-bottom:1px solid var(--edge);margin-bottom:0;animation:slideDown 0.5s cubic-bezier(0.16,1,0.3,1) both;}
 .header-left{display:flex;align-items:center;gap:18px;}
 .logo-mark{width:42px;height:42px;background:linear-gradient(135deg,var(--cyan),rgba(0,229,255,0.3));border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .logo-mark span{font-family:var(--font-m);font-size:12px;font-weight:700;color:var(--ink);}
@@ -24,50 +25,68 @@ body::after{content:'';position:fixed;inset:0;z-index:0;background-image:repeati
 .header-name{font-family:var(--font-d);font-size:18px;font-weight:800;color:var(--text);letter-spacing:-0.3px;line-height:1;}
 .hdivider{width:1px;height:32px;background:var(--edge2);}
 .header-sub{font-size:12px;color:var(--text-2);}
-.header-right{display:flex;align-items:center;gap:12px;}
+.header-right{display:flex;align-items:center;gap:12px;padding-bottom:16px;}
 .period-tabs{display:flex;gap:2px;background:var(--surface);border:1px solid var(--edge);border-radius:var(--r-sm);padding:3px;}
 .ptab{padding:6px 14px;font-family:var(--font-m);font-size:11px;color:var(--text-3);background:transparent;border:none;border-radius:3px;cursor:pointer;transition:all 0.15s;letter-spacing:0.5px;}
 .ptab.active{background:var(--cyan);color:var(--ink);font-weight:700;}
 .ptab:hover:not(.active){color:var(--text);background:var(--surface2);}
-/* REFRESH BUTTON */
 .refresh-btn{display:flex;align-items:center;gap:8px;padding:7px 16px;background:var(--surface);border:1px solid var(--edge2);border-radius:var(--r-sm);cursor:pointer;transition:all 0.2s;font-family:var(--font-m);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--cyan);}
 .refresh-btn:hover{background:var(--cyan-dim);border-color:rgba(0,229,255,0.4);transform:translateY(-1px);}
-.refresh-btn:active{transform:translateY(0);}
 .refresh-btn.loading{color:var(--text-3);pointer-events:none;border-color:var(--edge);}
 .refresh-icon{font-size:14px;display:inline-block;transition:transform 0.3s;}
 .refresh-btn.loading .refresh-icon{animation:spin 1s linear infinite;}
 .last-sync{font-family:var(--font-m);font-size:9px;color:var(--text-3);display:flex;align-items:center;gap:5px;}
 .sync-dot{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:blink 2s infinite;}
 .sync-dot.stale{background:var(--amber);box-shadow:0 0 6px var(--amber);animation:none;}
+
+/* NAV TABS */
+.nav-tabs{display:flex;gap:2px;border-bottom:1px solid var(--edge);margin-bottom:24px;}
+.nav-tab{padding:12px 20px;font-family:var(--font-s);font-size:13px;font-weight:500;color:var(--text-3);background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all 0.15s;letter-spacing:0.2px;margin-bottom:-1px;}
+.nav-tab.active{color:var(--cyan);border-bottom-color:var(--cyan);font-weight:600;}
+.nav-tab:hover:not(.active){color:var(--text-2);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
 /* NOTION BANNER */
 .notion-banner{display:flex;align-items:center;gap:12px;padding:10px 16px;background:linear-gradient(90deg,rgba(0,229,255,0.06),rgba(0,229,255,0.02));border:1px solid rgba(0,229,255,0.15);border-radius:var(--r-md);margin-bottom:22px;font-size:12px;color:var(--text-2);animation:riseIn 0.4s ease both;flex-wrap:wrap;gap:8px;}
 .notion-banner strong{color:var(--cyan);font-family:var(--font-m);font-size:10px;letter-spacing:1px;text-transform:uppercase;}
 .notion-source-pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;background:var(--cyan-dim);border:1px solid rgba(0,229,255,0.25);border-radius:20px;font-family:var(--font-m);font-size:9px;color:var(--cyan);font-weight:700;letter-spacing:1px;white-space:nowrap;}
+
 /* SECTION */
 .sec{display:flex;align-items:center;gap:12px;margin-bottom:14px;margin-top:4px;}
 .sec-tag{font-family:var(--font-m);font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan);padding:4px 10px;background:var(--cyan-dim);border:1px solid rgba(0,229,255,0.2);border-radius:3px;}
+.sec-tag.amber{color:var(--amber);background:var(--amber-dim);border-color:rgba(255,181,71,0.2);}
+.sec-tag.green{color:var(--green);background:var(--green-dim);border-color:rgba(0,230,118,0.2);}
+.sec-tag.violet{color:var(--violet);background:var(--violet-dim);border-color:rgba(179,136,255,0.2);}
 .sec-line{flex:1;height:1px;background:linear-gradient(90deg,var(--edge2) 0%,transparent 100%);}
 .sec-count{font-family:var(--font-m);font-size:9px;color:var(--text-3);}
+
 /* KPI GRID */
-.kpi-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:26px;}
+.kpi-grid{display:grid;grid-template-columns:repeat(6,minmax(180px,1fr));gap:10px;margin-bottom:26px;}
+.kpi-grid-4{display:grid;grid-template-columns:repeat(4,minmax(200px,1fr));gap:10px;margin-bottom:26px;}
+.kpi-grid-3{display:grid;grid-template-columns:repeat(3,minmax(220px,1fr));gap:10px;margin-bottom:26px;}
 .kpi{background:var(--surface);border:1px solid var(--edge);border-radius:var(--r-md);padding:18px 16px 14px;position:relative;overflow:hidden;cursor:default;transition:border-color 0.2s,background 0.2s,transform 0.2s;animation:riseIn 0.5s cubic-bezier(0.16,1,0.3,1) both;}
 .kpi:hover{border-color:var(--edge2);background:var(--surface2);transform:translateY(-2px);}
 .kpi-accent{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),transparent);opacity:0.5;}
 .kpi.primary .kpi-accent{background:linear-gradient(90deg,var(--amber),var(--cyan));opacity:1;}
 .kpi.primary{border-color:rgba(255,181,71,0.2);background:linear-gradient(135deg,rgba(255,181,71,0.06) 0%,var(--surface) 100%);}
+.kpi.green-accent .kpi-accent{background:linear-gradient(90deg,var(--green),transparent);opacity:0.8;}
+.kpi.amber-accent .kpi-accent{background:linear-gradient(90deg,var(--amber),transparent);opacity:0.8;}
+.kpi.violet-accent .kpi-accent{background:linear-gradient(90deg,var(--violet),transparent);opacity:0.8;}
 .kpi-label{font-family:var(--font-m);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);margin-bottom:10px;}
-.kpi-val{font-family:var(--font-d);font-size:28px;font-weight:800;color:var(--text);line-height:1;letter-spacing:-1px;margin-bottom:8px;}
+.kpi-val{font-family:var(--font-d);font-size:26px;font-weight:800;color:var(--text);line-height:1;letter-spacing:-0.5px;margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .kpi-val .unit{font-size:14px;font-weight:400;color:var(--text-2);letter-spacing:0;margin-left:1px;}
 .kpi-badge{display:inline-flex;align-items:center;gap:4px;font-family:var(--font-m);font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;letter-spacing:0.3px;}
 .kpi-badge.up{background:var(--green-dim);color:var(--green);}
 .kpi-badge.down{background:var(--red-dim);color:var(--red);}
 .kpi-badge.flat{background:var(--surface2);color:var(--text-3);}
-.kpi:nth-child(1){animation-delay:0.04s;}.kpi:nth-child(2){animation-delay:0.08s;}.kpi:nth-child(3){animation-delay:0.12s;}
-.kpi:nth-child(4){animation-delay:0.16s;}.kpi:nth-child(5){animation-delay:0.20s;}.kpi:nth-child(6){animation-delay:0.24s;}
+
 /* LAYOUTS */
 .g6040{display:grid;grid-template-columns:1.5fr 1fr;gap:12px;margin-bottom:12px;}
 .g3333{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;}
 .g5050{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;}
+.g4060{display:grid;grid-template-columns:1fr 1.5fr;gap:12px;margin-bottom:12px;}
+
 /* PANEL */
 .panel{background:var(--surface);border:1px solid var(--edge);border-radius:var(--r-lg);padding:22px;animation:riseIn 0.55s cubic-bezier(0.16,1,0.3,1) both;transition:border-color 0.25s;}
 .panel:hover{border-color:var(--edge2);}
@@ -78,7 +97,9 @@ body::after{content:'';position:fixed;inset:0;z-index:0;background-image:repeati
 .pill-c{color:var(--cyan);border-color:rgba(0,229,255,0.3);background:var(--cyan-dim);}
 .pill-a{color:var(--amber);border-color:rgba(255,181,71,0.3);background:var(--amber-dim);}
 .pill-g{color:var(--green);border-color:rgba(0,230,118,0.3);background:var(--green-dim);}
+.pill-v{color:var(--violet);border-color:rgba(179,136,255,0.3);background:var(--violet-dim);}
 .pill-notion{color:var(--violet);border-color:rgba(179,136,255,0.3);background:var(--violet-dim);}
+
 /* FUNNEL */
 .funnel{display:flex;flex-direction:column;gap:9px;}
 .f-row{display:flex;align-items:center;gap:10px;}
@@ -86,6 +107,7 @@ body::after{content:'';position:fixed;inset:0;z-index:0;background-image:repeati
 .f-track{flex:1;height:28px;background:rgba(255,255,255,0.03);border-radius:3px;overflow:hidden;border:1px solid var(--edge);}
 .f-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:10px;font-family:var(--font-m);font-size:10px;font-weight:700;color:rgba(255,255,255,0.9);transition:width 1.4s cubic-bezier(0.16,1,0.3,1);}
 .f-pct{font-family:var(--font-m);font-size:10px;color:var(--text-3);width:42px;flex-shrink:0;}
+
 /* CLIENT TABLE */
 .ct{width:100%;border-collapse:collapse;}
 .ct th{font-family:var(--font-m);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);text-align:left;padding:0 0 10px;border-bottom:1px solid var(--edge);}
@@ -103,8 +125,9 @@ body::after{content:'';position:fixed;inset:0;z-index:0;background-image:repeati
 .stag{display:inline-block;font-family:var(--font-m);font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;letter-spacing:0.5px;}
 .stag-g{background:var(--green-dim);color:var(--green);}
 .stag-a{background:var(--amber-dim);color:var(--amber);}
+
 /* PUBLISHER SCORECARD */
-.publisher-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-bottom:24px;}
+.publisher-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;margin-bottom:24px;}
 .pub-card{background:var(--surface);border:1px solid var(--edge);border-radius:var(--r-md);padding:16px 15px;position:relative;overflow:hidden;transition:border-color 0.2s,transform 0.2s,background 0.2s;cursor:default;}
 .pub-card:hover{border-color:var(--edge2);background:var(--surface2);transform:translateY(-2px);}
 .pub-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;}
@@ -130,9 +153,10 @@ body::after{content:'';position:fixed;inset:0;z-index:0;background-image:repeati
 .pub-metric-val.bad{color:var(--red);}
 .pub-headline{font-size:10px;color:var(--text-3);line-height:1.4;padding-top:8px;border-top:1px solid var(--edge);}
 .pub-risk{display:flex;align-items:flex-start;gap:5px;font-size:10px;color:rgba(255,82,82,0.75);margin-top:5px;line-height:1.35;}
-.pub-risk::before{content:'!';font-family:var(--font-m);font-size:9px;font-weight:700;flex-shrink:0;margin-top:0px;background:var(--red-dim);border-radius:50%;width:12px;height:12px;display:flex;align-items:center;justify-content:center;}
+.pub-risk::before{content:'!';font-family:var(--font-m);font-size:9px;font-weight:700;flex-shrink:0;background:var(--red-dim);border-radius:50%;width:12px;height:12px;display:flex;align-items:center;justify-content:center;}
 .pub-opp{display:flex;align-items:flex-start;gap:5px;font-size:10px;color:rgba(0,230,118,0.7);margin-top:4px;line-height:1.35;}
 .pub-opp::before{content:'+';font-family:var(--font-m);font-size:10px;font-weight:700;flex-shrink:0;}
+
 /* AGENT STRIP */
 .agent-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:28px;animation:riseIn 0.6s cubic-bezier(0.16,1,0.3,1) both;}
 .ac{background:var(--surface);border:1px solid var(--edge);border-radius:var(--r-md);padding:16px 14px;display:flex;flex-direction:column;gap:8px;transition:all 0.2s;position:relative;overflow:hidden;}
@@ -153,12 +177,50 @@ body::after{content:'';position:fixed;inset:0;z-index:0;background-image:repeati
 .a-mlbl{font-size:9px;color:var(--text-3);font-family:var(--font-m);}
 .up-track{height:2px;background:var(--edge);border-radius:1px;overflow:hidden;margin-top:4px;}
 .up-fill{height:100%;background:linear-gradient(90deg,var(--cyan),rgba(0,229,255,0.4));border-radius:1px;transition:width 1.8s cubic-bezier(0.16,1,0.3,1);}
+
+/* AI ACTIVITY */
+.ai-feed{display:flex;flex-direction:column;gap:0;}
+.ai-item{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--edge);}
+.ai-item:last-child{border-bottom:none;}
+.ai-score{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-size:14px;font-weight:800;flex-shrink:0;}
+.ai-content{flex:1;}
+.ai-task{font-family:var(--font-s);font-size:12px;font-weight:600;color:var(--text);}
+.ai-meta{font-family:var(--font-m);font-size:10px;color:var(--text-3);margin-top:2px;}
+.ai-note{font-size:11px;color:var(--text-2);margin-top:3px;line-height:1.4;}
+.ai-saved{font-family:var(--font-m);font-size:9px;padding:2px 7px;border-radius:20px;background:var(--green-dim);color:var(--green);flex-shrink:0;margin-top:4px;}
+
+/* SCORE BAR */
+.score-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.score-bar-label{font-family:var(--font-s);font-size:11px;color:var(--text-2);width:120px;flex-shrink:0;}
+.score-bar-track{flex:1;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;}
+.score-bar-fill{height:6px;border-radius:3px;}
+.score-bar-val{font-family:var(--font-m);font-size:11px;font-weight:700;color:var(--text);width:30px;text-align:right;}
+.score-bar-ct{font-family:var(--font-m);font-size:10px;color:var(--text-3);width:30px;}
+
+/* SCORECARD ITEM */
+.sc-item{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--edge);}
+.sc-item:last-child{border-bottom:none;}
+.sc-score{width:44px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-size:14px;font-weight:800;flex-shrink:0;}
+.sc-content{flex:1;}
+.sc-label{font-family:var(--font-s);font-size:12px;font-weight:600;color:var(--text);}
+.sc-meta{font-family:var(--font-m);font-size:10px;color:var(--text-3);margin-top:2px;}
+
+/* SEASON PILLS */
+.season-strip{display:flex;gap:10px;margin-bottom:20px;}
+.season-pill{flex:1;padding:14px 16px;border-radius:var(--r-md);border:1px solid var(--edge);background:var(--surface);display:flex;flex-direction:column;gap:4px;transition:all 0.2s;}
+.season-pill:hover{border-color:var(--edge2);transform:translateY(-1px);}
+.season-pill-label{font-family:var(--font-m);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3);}
+.season-pill-val{font-family:var(--font-d);font-size:22px;font-weight:800;color:var(--text);line-height:1;}
+.season-pill-sub{font-size:10px;color:var(--text-3);}
+
 /* SKELETON */
 .skeleton{background:linear-gradient(90deg,var(--surface) 25%,var(--surface2) 50%,var(--surface) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;}
+
 /* FOOTER */
 .footer{display:flex;align-items:center;justify-content:space-between;padding-top:20px;border-top:1px solid var(--edge);font-size:11px;color:var(--text-3);font-family:var(--font-m);}
 .dtag{padding:3px 8px;background:var(--surface2);border:1px solid var(--edge2);border-radius:3px;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--amber);}
-.chart-wrap{position:relative;}
+.auto-refresh-badge{display:flex;align-items:center;gap:5px;font-family:var(--font-m);font-size:9px;color:var(--text-3);padding:3px 10px;background:var(--surface);border:1px solid var(--edge);border-radius:20px;}
+
 /* ANIMATIONS */
 @keyframes slideDown{from{opacity:0;transform:translateY(-14px);}to{opacity:1;transform:translateY(0);}}
 @keyframes riseIn{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
@@ -167,10 +229,13 @@ body::after{content:'';position:fixed;inset:0;z-index:0;background-image:repeati
 @keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
 @keyframes swap{0%{color:var(--cyan);}100%{color:var(--text);}}
 .swapped{animation:swap 0.4s ease;}
+.chart-wrap{position:relative;}
 </style>
 </head>
 <body>
 <div class="shell">
+
+<!-- HEADER -->
 <header class="header">
   <div class="header-left">
     <div class="logo-mark"><span>MM</span></div>
@@ -198,96 +263,191 @@ body::after{content:'';position:fixed;inset:0;z-index:0;background-image:repeati
   </div>
 </header>
 
-<div class="notion-banner">
-  <span style="font-size:16px;">&#9672;</span>
-  <div><strong>Live Data Source</strong> &nbsp;&middot;&nbsp; Publisher scorecards pulled from your Notion workspace on demand</div>
-  <span class="notion-source-pill">Joanie QM Scorecards</span>
-  <span class="notion-source-pill">Media Partner Framework</span>
-  <div style="margin-left:auto;font-size:11px;color:var(--text-3);">Hit <strong style="color:var(--cyan)">Sync Notion</strong> above to refresh</div>
-</div>
+<!-- NAV TABS -->
+<nav class="nav-tabs">
+  <button class="nav-tab active" onclick="switchTab('overview',this)">Overview</button>
+  <button class="nav-tab" onclick="switchTab('publishers',this)">Publisher Scorecards</button>
+  <button class="nav-tab" onclick="switchTab('scorecards',this)">QM &amp; MP Scorecards</button>
+  <button class="nav-tab" onclick="switchTab('ai',this)">Joanie AI Activity</button>
+  <button class="nav-tab" onclick="switchTab('agents',this)">Agent Health</button>
+</nav>
 
-<div class="sec"><div class="sec-tag">Revenue &amp; GP</div><div class="sec-line"></div></div>
-<div class="kpi-grid">
-  <div class="kpi primary"><div class="kpi-accent"></div><div class="kpi-label">Revenue / Call</div><div class="kpi-val" id="kv-rpc">$18.40</div><span class="kpi-badge up" id="kd-rpc">&#9650; 12.3% vs prior</span></div>
-  <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">Total Revenue</div><div class="kpi-val" id="kv-rev">$184K</div><span class="kpi-badge up" id="kd-rev">&#9650; 8.1% MoM</span></div>
-  <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">Gross Profit</div><div class="kpi-val" id="kv-gp">$52.4K</div><span class="kpi-badge up" id="kd-gp">&#9650; 6.7% MoM</span></div>
-  <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">GP Margin</div><div class="kpi-val" id="kv-margin">28.5<span class="unit">%</span></div><span class="kpi-badge flat" id="kd-margin">&#8212; vs 27.9% prior</span></div>
-  <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">QM Fill Rate</div><div class="kpi-val" id="kv-fill">74<span class="unit">%</span></div><span class="kpi-badge down" id="kd-fill">&#9660; 2.1% vs prior</span></div>
-  <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">Overflow Capture</div><div class="kpi-val" id="kv-overflow">$28.2K</div><span class="kpi-badge up" id="kd-overflow">&#9650; NEW revenue</span></div>
-</div>
-
-<div class="sec"><div class="sec-tag">Trends</div><div class="sec-line"></div></div>
-<div class="g6040">
-  <div class="panel"><div class="p-head"><div><div class="p-title">Revenue &amp; GP Trend</div><div class="p-sub">Daily revenue vs. gross profit &middot; MTD</div></div><span class="pill pill-a">Period-over-Period</span></div><div class="chart-wrap" style="height:210px"><canvas id="revChart"></canvas></div></div>
-  <div class="panel"><div class="p-head"><div><div class="p-title">Call Routing Split</div><div class="p-sub">QM direct vs. Marketplace overflow</div></div><span class="pill pill-c">MTD</span></div><div class="chart-wrap" style="height:140px;display:flex;align-items:center;justify-content:center"><canvas id="routePie" style="max-height:140px;max-width:170px;"></canvas></div><div style="display:flex;gap:20px;justify-content:center;margin-top:14px;"><div style="display:flex;align-items:center;gap:7px;"><span style="width:8px;height:8px;border-radius:2px;background:var(--cyan);display:inline-block;opacity:0.85;"></span><span style="font-size:11px;color:var(--text-2)">QM Direct</span><span style="font-family:var(--font-m);font-size:12px;font-weight:700;color:var(--text);margin-left:4px;">74%</span></div><div style="display:flex;align-items:center;gap:7px;"><span style="width:8px;height:8px;border-radius:2px;background:var(--amber);display:inline-block;opacity:0.85;"></span><span style="font-size:11px;color:var(--text-2)">Marketplace</span><span style="font-family:var(--font-m);font-size:12px;font-weight:700;color:var(--text);margin-left:4px;">26%</span></div></div></div>
-</div>
-
-<div class="sec"><div class="sec-tag">Call Volume &amp; Routing</div><div class="sec-line"></div></div>
-<div class="g6040">
-  <div class="panel"><div class="p-head"><div><div class="p-title">Daily Call Volume</div><div class="p-sub">QM filled vs. marketplace overflow &middot; 14 days</div></div><span class="pill pill-c">Stacked</span></div><div class="chart-wrap" style="height:210px"><canvas id="callVolChart"></canvas></div></div>
-  <div class="panel"><div class="p-head"><div><div class="p-title">Routing Funnel</div><div class="p-sub">Inbound &#8594; Answered &#8594; Routed &#8594; Converted</div></div><span class="pill pill-g">Live Logic</span></div><div class="funnel" id="funnelEl" style="margin-top:6px;"></div></div>
-</div>
-
-<div class="sec"><div class="sec-tag">Client Performance</div><div class="sec-line"></div></div>
-<div class="g5050">
-  <div class="panel"><div class="p-head"><div><div class="p-title">CPA by Client vs. Target</div><div class="p-sub">Actual CPA vs. target &#8212; lower is better</div></div><span class="pill pill-c">MTD</span></div><div class="chart-wrap" style="height:210px"><canvas id="cpaChart"></canvas></div></div>
-  <div class="panel"><div class="p-head"><div><div class="p-title">Client Scorecard</div><div class="p-sub">Volume &middot; CPA &middot; Status &middot; vs. Target</div></div><span class="pill pill-a">Template Data</span></div><table class="ct"><thead><tr><th>Client</th><th>Calls</th><th>Actual CPA</th><th>Target</th><th>vs Target</th><th>Status</th></tr></thead><tbody id="clientTbody"></tbody></table></div>
-</div>
-
-<div class="sec"><div class="sec-tag">Revenue Analysis</div><div class="sec-line"></div></div>
-<div class="g3333">
-  <div class="panel"><div class="p-head"><div><div class="p-title">Revenue/Call by Source</div><div class="p-sub">QM vs. Marketplace &#8212; 8 weeks</div></div><span class="pill pill-a">Comparison</span></div><div class="chart-wrap" style="height:170px"><canvas id="rpcChart"></canvas></div></div>
-  <div class="panel"><div class="p-head"><div><div class="p-title">Overflow Revenue Recovery</div><div class="p-sub">$ captured from QM-declined calls</div></div><span class="pill pill-g">Proof Point #1</span></div><div class="chart-wrap" style="height:170px"><canvas id="overflowChart"></canvas></div></div>
-  <div class="panel"><div class="p-head"><div><div class="p-title">GP Margin Trend</div><div class="p-sub">Weekly gross profit margin %</div></div><span class="pill pill-c">Trend</span></div><div class="chart-wrap" style="height:170px"><canvas id="marginChart"></canvas></div></div>
-</div>
-
-<div class="sec"><div class="sec-tag">Publisher Scorecards</div><div class="sec-line"></div><div class="sec-count" id="pubCount">&#8212; partners</div><span class="pill pill-notion" style="font-size:8px;padding:3px 9px;">&#9672; Live from Notion</span></div>
-
-<div class="panel" style="margin-bottom:12px;">
-  <div class="p-head"><div><div class="p-title">MPQS Portfolio Distribution</div><div class="p-sub">Action band breakdown &#8212; from Notion scorecards</div></div><span class="pill pill-notion">&#9672; Live</span></div>
-  <div id="mpqsDist" style="display:flex;gap:10px;align-items:stretch;height:56px;">
-    <div style="flex:1;background:var(--surface2);border-radius:4px;" class="skeleton"></div>
+<!-- OVERVIEW TAB -->
+<div id="tab-overview" class="tab-panel active">
+  <div class="notion-banner">
+    <span style="font-size:16px;">&#9672;</span>
+    <div><strong>Live Data Source</strong> &nbsp;&middot;&nbsp; Publisher scorecards, scorecards &amp; AI activity pulled from Notion on demand</div>
+    <span class="notion-source-pill">Joanie QM Scorecards</span>
+    <span class="notion-source-pill">Joanie MPQS</span>
+    <span class="notion-source-pill">Joanie AI Activity Log</span>
+    <div style="margin-left:auto;font-size:11px;color:var(--text-3);">Auto-refreshes every <strong style="color:var(--cyan)">60s</strong></div>
   </div>
-  <div id="mpqsLegend" style="display:flex;gap:16px;margin-top:12px;flex-wrap:wrap;"></div>
+
+  <div class="sec"><div class="sec-tag">Revenue &amp; GP</div><div class="sec-line"></div></div>
+  <div class="kpi-grid">
+    <div class="kpi primary"><div class="kpi-accent"></div><div class="kpi-label">Revenue / Call</div><div class="kpi-val" id="kv-rpc">$18.40</div><span class="kpi-badge up" id="kd-rpc">&#9650; 12.3% vs prior</span></div>
+    <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">Total Revenue</div><div class="kpi-val" id="kv-rev">$184K</div><span class="kpi-badge up" id="kd-rev">&#9650; 8.1% MoM</span></div>
+    <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">Gross Profit</div><div class="kpi-val" id="kv-gp">$52.4K</div><span class="kpi-badge up" id="kd-gp">&#9650; 6.7% MoM</span></div>
+    <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">GP Margin</div><div class="kpi-val" id="kv-margin">28.5<span class="unit">%</span></div><span class="kpi-badge flat" id="kd-margin">&#8212; vs 27.9% prior</span></div>
+    <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">QM Fill Rate</div><div class="kpi-val" id="kv-fill">74<span class="unit">%</span></div><span class="kpi-badge down" id="kd-fill">&#9660; 2.1% vs prior</span></div>
+    <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">Overflow Capture</div><div class="kpi-val" id="kv-overflow">$28.2K</div><span class="kpi-badge up" id="kd-overflow">&#9650; NEW revenue</span></div>
+  </div>
+
+  <div class="sec"><div class="sec-tag amber">Season Activity</div><div class="sec-line"></div></div>
+  <div class="season-strip" id="seasonStrip">
+    <div class="season-pill"><div class="season-pill-label" style="color:rgba(0,229,255,0.6);">OEP</div><div class="season-pill-val">—</div><div class="season-pill-sub">Jan 1 – Mar 31</div></div>
+    <div class="season-pill"><div class="season-pill-label" style="color:rgba(0,230,118,0.6);">SEP</div><div class="season-pill-val">—</div><div class="season-pill-sub">Apr 1 – Oct 14</div></div>
+    <div class="season-pill"><div class="season-pill-label" style="color:rgba(255,181,71,0.6);">AEP</div><div class="season-pill-val">—</div><div class="season-pill-sub">Oct 15 – Nov 7</div></div>
+  </div>
+
+  <div class="sec"><div class="sec-tag">Trends</div><div class="sec-line"></div></div>
+  <div class="g6040">
+    <div class="panel"><div class="p-head"><div><div class="p-title">Revenue &amp; GP Trend</div><div class="p-sub">Daily revenue vs. gross profit &middot; MTD</div></div><span class="pill pill-a">Period-over-Period</span></div><div class="chart-wrap" style="height:210px"><canvas id="revChart"></canvas></div></div>
+    <div class="panel"><div class="p-head"><div><div class="p-title">Call Routing Split</div><div class="p-sub">QM direct vs. Marketplace overflow</div></div><span class="pill pill-c">MTD</span></div><div class="chart-wrap" style="height:140px;display:flex;align-items:center;justify-content:center"><canvas id="routePie" style="max-height:140px;max-width:170px;"></canvas></div><div style="display:flex;gap:20px;justify-content:center;margin-top:14px;"><div style="display:flex;align-items:center;gap:7px;"><span style="width:8px;height:8px;border-radius:2px;background:var(--cyan);display:inline-block;opacity:0.85;"></span><span style="font-size:11px;color:var(--text-2)">QM Direct</span><span style="font-family:var(--font-m);font-size:12px;font-weight:700;color:var(--text);margin-left:4px;">74%</span></div><div style="display:flex;align-items:center;gap:7px;"><span style="width:8px;height:8px;border-radius:2px;background:var(--amber);display:inline-block;opacity:0.85;"></span><span style="font-size:11px;color:var(--text-2)">Marketplace</span><span style="font-family:var(--font-m);font-size:12px;font-weight:700;color:var(--text);margin-left:4px;">26%</span></div></div></div>
+  </div>
+
+  <div class="sec"><div class="sec-tag">Call Volume</div><div class="sec-line"></div></div>
+  <div class="g6040">
+    <div class="panel"><div class="p-head"><div><div class="p-title">Daily Call Volume</div><div class="p-sub">QM filled vs. marketplace overflow &middot; 14 days</div></div><span class="pill pill-c">Stacked</span></div><div class="chart-wrap" style="height:210px"><canvas id="callVolChart"></canvas></div></div>
+    <div class="panel"><div class="p-head"><div><div class="p-title">Routing Funnel</div><div class="p-sub">Inbound &#8594; Answered &#8594; Routed &#8594; Converted</div></div><span class="pill pill-g">Live Logic</span></div><div class="funnel" id="funnelEl" style="margin-top:6px;"></div></div>
+  </div>
 </div>
 
-<div id="publisherGrid" class="publisher-grid">
-  <div class="pub-card" style="height:160px;"><div class="skeleton" style="height:100%;border-radius:8px;"></div></div>
-  <div class="pub-card" style="height:160px;"><div class="skeleton" style="height:100%;border-radius:8px;"></div></div>
-  <div class="pub-card" style="height:160px;"><div class="skeleton" style="height:100%;border-radius:8px;"></div></div>
-  <div class="pub-card" style="height:160px;"><div class="skeleton" style="height:100%;border-radius:8px;"></div></div>
-  <div class="pub-card" style="height:160px;"><div class="skeleton" style="height:100%;border-radius:8px;"></div></div>
-  <div class="pub-card" style="height:160px;"><div class="skeleton" style="height:100%;border-radius:8px;"></div></div>
+<!-- PUBLISHERS TAB -->
+<div id="tab-publishers" class="tab-panel">
+  <div class="sec"><div class="sec-tag">Publisher Scorecards</div><div class="sec-line"></div><div class="sec-count" id="pubCount">&#8212; partners</div><span class="pill pill-notion" style="font-size:8px;padding:3px 9px;">&#9672; Live from Notion</span></div>
+
+  <div class="panel" style="margin-bottom:12px;">
+    <div class="p-head"><div><div class="p-title">MPQS Portfolio Distribution</div><div class="p-sub">Action band breakdown &mdash; from Notion scorecards</div></div><span class="pill pill-notion">&#9672; Live</span></div>
+    <div id="mpqsDist" style="display:flex;gap:10px;align-items:stretch;height:56px;"><div style="flex:1;background:var(--surface2);border-radius:4px;" class="skeleton"></div></div>
+    <div id="mpqsLegend" style="display:flex;gap:16px;margin-top:12px;flex-wrap:wrap;"></div>
+  </div>
+
+  <div id="publisherGrid" class="publisher-grid">
+    <div class="pub-card" style="height:160px;"><div class="skeleton" style="height:100%;border-radius:8px;"></div></div>
+    <div class="pub-card" style="height:160px;"><div class="skeleton" style="height:100%;border-radius:8px;"></div></div>
+    <div class="pub-card" style="height:160px;"><div class="skeleton" style="height:100%;border-radius:8px;"></div></div>
+    <div class="pub-card" style="height:160px;"><div class="skeleton" style="height:100%;border-radius:8px;"></div></div>
+  </div>
+
+  <div class="sec" style="margin-top:8px;"><div class="sec-tag">Client Performance</div><div class="sec-line"></div></div>
+  <div class="g5050">
+    <div class="panel"><div class="p-head"><div><div class="p-title">CPA by Client vs. Target</div><div class="p-sub">Actual CPA vs. target &mdash; lower is better</div></div><span class="pill pill-c">MTD</span></div><div class="chart-wrap" style="height:210px"><canvas id="cpaChart"></canvas></div></div>
+    <div class="panel"><div class="p-head"><div><div class="p-title">Client Scorecard</div><div class="p-sub">Volume &middot; CPA &middot; Status &middot; vs. Target</div></div><span class="pill pill-a">Template Data</span></div><table class="ct"><thead><tr><th>Client</th><th>Calls</th><th>Actual CPA</th><th>Target</th><th>vs Target</th><th>Status</th></tr></thead><tbody id="clientTbody"></tbody></table></div>
+  </div>
 </div>
 
-<div class="sec" style="margin-top:8px;"><div class="sec-tag">AI Agent Health</div><div class="sec-line"></div></div>
-<div class="agent-strip" id="agentStrip"></div>
+<!-- SCORECARDS TAB -->
+<div id="tab-scorecards" class="tab-panel">
+  <div class="kpi-grid-4" style="margin-bottom:20px;">
+    <div class="kpi green-accent"><div class="kpi-accent"></div><div class="kpi-label">MPQS Evaluations</div><div class="kpi-val" id="sc-mpqs-count">—</div><span class="kpi-badge flat">All time</span></div>
+    <div class="kpi green-accent"><div class="kpi-accent"></div><div class="kpi-label">Avg MPQS Score</div><div class="kpi-val" id="sc-mpqs-avg">—</div><span class="kpi-badge flat" id="sc-mpqs-badge">Loading...</span></div>
+    <div class="kpi amber-accent"><div class="kpi-accent"></div><div class="kpi-label">QM Scorecards</div><div class="kpi-val" id="sc-qm-count">—</div><span class="kpi-badge flat">All time</span></div>
+    <div class="kpi amber-accent"><div class="kpi-accent"></div><div class="kpi-label">Avg QM Score</div><div class="kpi-val" id="sc-qm-avg">—</div><span class="kpi-badge flat" id="sc-qm-badge">Loading...</span></div>
+  </div>
 
-<div class="footer">
-  <div style="display:flex;align-items:center;gap:8px;"><span class="dtag">Live</span>Publisher scorecards sync from <span style="color:var(--violet);">&#9672; Notion</span> on demand &nbsp;&middot;&nbsp; KPI rows connect to Looker</div>
+  <div class="g5050">
+    <div class="panel">
+      <div class="p-head"><div><div class="p-title">Recent MPQS Evaluations</div><div class="p-sub">Latest from Joanie MPQS database</div></div><span class="pill pill-g">&#9672; Live</span></div>
+      <div id="mpqs-feed"><div style="color:var(--text-3);font-size:12px;text-align:center;padding:30px;">Loading MPQS data...</div></div>
+    </div>
+    <div class="panel">
+      <div class="p-head"><div><div class="p-title">Recent QM Scorecards</div><div class="p-sub">Latest from Joanie QM Scorecards</div></div><span class="pill pill-a">&#9672; Live</span></div>
+      <div id="qm-feed"><div style="color:var(--text-3);font-size:12px;text-align:center;padding:30px;">Loading QM data...</div></div>
+    </div>
+  </div>
+
+  <div class="sec" style="margin-top:8px;"><div class="sec-tag">Revenue Analysis</div><div class="sec-line"></div></div>
+  <div class="g3333">
+    <div class="panel"><div class="p-head"><div><div class="p-title">Revenue/Call by Source</div><div class="p-sub">QM vs. Marketplace &mdash; 8 weeks</div></div><span class="pill pill-a">Comparison</span></div><div class="chart-wrap" style="height:170px"><canvas id="rpcChart"></canvas></div></div>
+    <div class="panel"><div class="p-head"><div><div class="p-title">Overflow Revenue Recovery</div><div class="p-sub">$ captured from QM-declined calls</div></div><span class="pill pill-g">Proof Point</span></div><div class="chart-wrap" style="height:170px"><canvas id="overflowChart"></canvas></div></div>
+    <div class="panel"><div class="p-head"><div><div class="p-title">GP Margin Trend</div><div class="p-sub">Weekly gross profit margin %</div></div><span class="pill pill-c">Trend</span></div><div class="chart-wrap" style="height:170px"><canvas id="marginChart"></canvas></div></div>
+  </div>
+</div>
+
+<!-- AI ACTIVITY TAB -->
+<div id="tab-ai" class="tab-panel">
+  <div class="kpi-grid-4" style="margin-bottom:20px;">
+    <div class="kpi violet-accent"><div class="kpi-accent"></div><div class="kpi-label">Total AI Interactions</div><div class="kpi-val" id="ai-total">—</div><span class="kpi-badge flat">All time</span></div>
+    <div class="kpi violet-accent"><div class="kpi-accent"></div><div class="kpi-label">Avg Quality Score</div><div class="kpi-val" id="ai-avg">—</div><span class="kpi-badge flat" id="ai-avg-badge">out of 10</span></div>
+    <div class="kpi violet-accent"><div class="kpi-accent"></div><div class="kpi-label">Outputs Saved</div><div class="kpi-val" id="ai-saved">—</div><span class="kpi-badge flat" id="ai-saved-badge">save rate</span></div>
+    <div class="kpi violet-accent"><div class="kpi-accent"></div><div class="kpi-label">Open Flags</div><div class="kpi-val" id="ai-flags">—</div><span class="kpi-badge flat" id="ai-flags-badge">scores below 6</span></div>
+  </div>
+
+  <div class="g5050">
+    <div class="panel">
+      <div class="p-head"><div><div class="p-title">Quality by Task Type</div><div class="p-sub">Average score per AI task category</div></div><span class="pill pill-v">&#9672; Live</span></div>
+      <div id="ai-quality-bars"><div style="color:var(--text-3);font-size:12px;text-align:center;padding:30px;">Loading AI data...</div></div>
+    </div>
+    <div class="panel">
+      <div class="p-head"><div><div class="p-title">Recent AI Activity</div><div class="p-sub">Latest logged sessions from Joanie AI Activity Log</div></div><span class="pill pill-v">&#9672; Live</span></div>
+      <div id="ai-feed" class="ai-feed"><div style="color:var(--text-3);font-size:12px;text-align:center;padding:30px;">Loading activity...</div></div>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top:12px;">
+    <div class="p-head"><div><div class="p-title">Flags &mdash; Sessions Scoring Below 6</div><div class="p-sub">Review these to improve prompt quality and output consistency</div></div><span class="pill" style="color:var(--red);border-color:rgba(255,82,82,0.3);background:var(--red-dim);">Attention</span></div>
+    <div id="ai-flags-feed" class="ai-feed"><div style="color:var(--text-3);font-size:12px;text-align:center;padding:20px;">No flags — all scores above 6 ✓</div></div>
+  </div>
+</div>
+
+<!-- AGENTS TAB -->
+<div id="tab-agents" class="tab-panel">
+  <div class="sec"><div class="sec-tag green">AI Agent Health</div><div class="sec-line"></div></div>
+  <div class="agent-strip" id="agentStrip"></div>
+
+  <div class="sec"><div class="sec-tag">Routing &amp; Efficiency</div><div class="sec-line"></div></div>
+  <div class="g5050">
+    <div class="panel"><div class="p-head"><div><div class="p-title">Daily Call Volume</div><div class="p-sub">QM filled vs. marketplace overflow &middot; 14 days</div></div><span class="pill pill-c">14 Day</span></div><div class="chart-wrap" style="height:210px"><canvas id="callVolChart2"></canvas></div></div>
+    <div class="panel"><div class="p-head"><div><div class="p-title">Routing Funnel</div><div class="p-sub">Inbound &#8594; Answered &#8594; Routed &#8594; Converted</div></div><span class="pill pill-g">Live Logic</span></div><div class="funnel" id="funnelEl2" style="margin-top:6px;"></div></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div style="display:flex;align-items:center;gap:8px;"><span class="dtag">Live</span>Scorecards &amp; activity sync from <span style="color:var(--violet);">&#9672; Notion</span> &nbsp;&middot;&nbsp; Auto-refresh every 60s</div>
+  <div class="auto-refresh-badge"><span class="sync-dot" style="width:5px;height:5px;"></span><span id="countdown">Next refresh in 60s</span></div>
   <div>"We Supercharge Your Customer Acquisition" &nbsp;&middot;&nbsp; Centerfield Media &nbsp;&middot;&nbsp; Health &amp; Medicare</div>
-</div>
-</div>
-<script>
-const STATIC={kpis:{WTD:{rpc:'$16.20',rpcD:'&#9650; 8.4% vs prior',rpcDir:'up',rev:'$41K',revD:'&#9650; 5.2% WoW',revDir:'up',gp:'$11.8K',gpD:'&#9650; 4.1% WoW',gpDir:'up',margin:'28.8',marginD:'&#8212; flat',marginDir:'flat',fill:'72',fillD:'&#9660; 1.5% vs prior',fillDir:'down',overflow:'$6.1K',overflowD:'&#9650; NEW revenue',overflowDir:'up'},MTD:{rpc:'$18.40',rpcD:'&#9650; 12.3% vs prior',rpcDir:'up',rev:'$184K',revD:'&#9650; 8.1% MoM',revDir:'up',gp:'$52.4K',gpD:'&#9650; 6.7% MoM',gpDir:'up',margin:'28.5',marginD:'&#8212; vs 27.9% prior',marginDir:'flat',fill:'74',fillD:'&#9660; 2.1% vs prior',fillDir:'down',overflow:'$28.2K',overflowD:'&#9650; NEW revenue',overflowDir:'up'},QTD:{rpc:'$17.90',rpcD:'&#9650; 9.8% vs prior',rpcDir:'up',rev:'$521K',revD:'&#9650; 11.4% QoQ',revDir:'up',gp:'$146K',gpD:'&#9650; 9.2% QoQ',gpDir:'up',margin:'28.0',marginD:'&#9650; +0.4pp QoQ',marginDir:'up',fill:'75',fillD:'&#9650; 1.0% vs prior',fillDir:'up',overflow:'$78K',overflowD:'&#9650; NEW revenue',overflowDir:'up'}},revTrend:{labels:['4/1','4/2','4/3','4/4','4/5','4/6','4/7','4/8','4/9','4/10','4/11','4/12','4/13','4/14','4/15','4/16','4/17','4/18','4/19','4/20'],revenue:[7200,8100,6800,9400,10200,8700,7500,9800,11200,10500,9200,10800,11500,9700,10100,12300,11800,10400,9900,11000],gp:[2050,2310,1940,2680,2910,2480,2140,2800,3200,2990,2620,3080,3280,2770,2880,3510,3360,2970,2820,3140]},callVol:{labels:['4/7','4/8','4/9','4/10','4/11','4/12','4/13','4/14','4/15','4/16','4/17','4/18','4/19','4/20'],qm:[312,340,298,380,410,360,290,355,422,445,390,415,370,430],market:[88,95,82,120,130,105,80,115,148,155,130,140,120,150]},funnel:[{label:'Inbound Calls Received',val:10340,pct:100},{label:'Calls Answered / IVR',val:9820,pct:95},{label:'Scored & Routed',val:9600,pct:92.8},{label:'QM — Filled',val:7130,pct:69.0},{label:'Marketplace — Captured',val:1960,pct:19.0},{label:'Converted (Sold)',val:9090,pct:88.0}],clients:[{name:'Quote Manage',type:'Primary Buyer',calls:7130,cpa:142,target:150,status:'On Target'},{name:'Buyer A',type:'Marketplace',calls:820,cpa:168,target:160,status:'Over Target'},{name:'Buyer B',type:'Marketplace',calls:610,cpa:155,target:170,status:'On Target'},{name:'Buyer C',type:'Marketplace',calls:380,cpa:144,target:145,status:'On Target'},{name:'Buyer D',type:'Marketplace',calls:150,cpa:190,target:180,status:'Over Target'}],rpc:{labels:['W1','W2','W3','W4','W5','W6','W7','W8'],qm:[16.2,16.8,17.1,16.9,17.5,18.0,17.8,18.4],market:[14.8,15.2,15.5,15.1,15.9,16.4,16.1,16.8]},overflow:{labels:['W1','W2','W3','W4','W5','W6','W7','W8'],vals:[3200,4100,4800,5200,5800,6400,6100,6900]},margin:{labels:['W1','W2','W3','W4','W5','W6','W7','W8'],vals:[26.4,27.1,27.5,27.2,27.8,28.2,28.0,28.5]},agents:[{name:'Joanie',role:'Workflow Orchestrator',status:'Live',uptime:99.8,metric:'99.8%',label:'uptime'},{name:'MPQS',role:'Partner Quality Scoring',status:'Live',uptime:99.4,metric:'847',label:'partners scored'},{name:'Scoring',role:'Real-Time Call Quality',status:'Live',uptime:99.1,metric:'9,600',label:'calls scored MTD'},{name:'Data Agent',role:'Signal Aggregation',status:'Live',uptime:99.6,metric:'100%',label:'data freshness'},{name:'Right Pricing',role:'Dynamic Bid Optimization',status:'In Build',uptime:0,metric:"Q3 '26",label:'target launch'}]};
+</footer>
 
+</div><!-- /shell -->
+
+<script>
+/* ── STATIC DATA ─────────────────────────────────────────────────── */
+const STATIC={kpis:{WTD:{rpc:'$16.20',rpcD:'&#9650; 8.4% vs prior',rpcDir:'up',rev:'$41K',revD:'&#9650; 5.2% WoW',revDir:'up',gp:'$11.8K',gpD:'&#9650; 4.1% WoW',gpDir:'up',margin:'28.8',marginD:'&#8212; flat',marginDir:'flat',fill:'72',fillD:'&#9660; 1.5% vs prior',fillDir:'down',overflow:'$6.1K',overflowD:'&#9650; NEW revenue',overflowDir:'up'},MTD:{rpc:'$18.40',rpcD:'&#9650; 12.3% vs prior',rpcDir:'up',rev:'$184K',revD:'&#9650; 8.1% MoM',revDir:'up',gp:'$52.4K',gpD:'&#9650; 6.7% MoM',gpDir:'up',margin:'28.5',marginD:'&#8212; vs 27.9% prior',marginDir:'flat',fill:'74',fillD:'&#9660; 2.1% vs prior',fillDir:'down',overflow:'$28.2K',overflowD:'&#9650; NEW revenue',overflowDir:'up'},QTD:{rpc:'$17.90',rpcD:'&#9650; 9.8% vs prior',rpcDir:'up',rev:'$521K',revD:'&#9650; 11.4% QoQ',revDir:'up',gp:'$146K',gpD:'&#9650; 9.2% QoQ',gpDir:'up',margin:'28.0',marginD:'&#9650; +0.4pp QoQ',marginDir:'up',fill:'75',fillD:'&#9650; 1.0% vs prior',fillDir:'up',overflow:'$78K',overflowD:'&#9650; NEW revenue',overflowDir:'up'}},revTrend:{labels:['4/1','4/2','4/3','4/4','4/5','4/6','4/7','4/8','4/9','4/10','4/11','4/12','4/13','4/14','4/15','4/16','4/17','4/18','4/19','4/20'],revenue:[7200,8100,6800,9400,10200,8700,7500,9800,11200,10500,9200,10800,11500,9700,10100,12300,11800,10400,9900,11000],gp:[2050,2310,1940,2680,2910,2480,2140,2800,3200,2990,2620,3080,3280,2770,2880,3510,3360,2970,2820,3140]},callVol:{labels:['4/7','4/8','4/9','4/10','4/11','4/12','4/13','4/14','4/15','4/16','4/17','4/18','4/19','4/20'],qm:[312,340,298,380,410,360,290,355,422,445,390,415,370,430],market:[88,95,82,120,130,105,80,115,148,155,130,140,120,150]},funnel:[{label:'Inbound Calls',val:10340,pct:100},{label:'Answered / IVR',val:9820,pct:95},{label:'Scored & Routed',val:9600,pct:92.8},{label:'QM — Filled',val:7130,pct:69.0},{label:'Marketplace',val:1960,pct:19.0},{label:'Converted',val:9090,pct:88.0}],clients:[{name:'Quote Manage',type:'Primary Buyer',calls:7130,cpa:142,target:150,status:'On Target'},{name:'Buyer A',type:'Marketplace',calls:820,cpa:168,target:160,status:'Over Target'},{name:'Buyer B',type:'Marketplace',calls:610,cpa:155,target:170,status:'On Target'},{name:'Buyer C',type:'Marketplace',calls:380,cpa:144,target:145,status:'On Target'},{name:'Buyer D',type:'Marketplace',calls:150,cpa:190,target:180,status:'Over Target'}],rpc:{labels:['W1','W2','W3','W4','W5','W6','W7','W8'],qm:[16.2,16.8,17.1,16.9,17.5,18.0,17.8,18.4],market:[14.8,15.2,15.5,15.1,15.9,16.4,16.1,16.8]},overflow:{labels:['W1','W2','W3','W4','W5','W6','W7','W8'],vals:[3200,4100,4800,5200,5800,6400,6100,6900]},margin:{labels:['W1','W2','W3','W4','W5','W6','W7','W8'],vals:[26.4,27.1,27.5,27.2,27.8,28.2,28.0,28.5]},agents:[{name:'Joanie',role:'Workflow Orchestrator',status:'Live',uptime:99.8,metric:'99.8%',label:'uptime'},{name:'MPQS',role:'Partner Quality Scoring',status:'Live',uptime:99.4,metric:'847',label:'partners scored'},{name:'Scoring',role:'Real-Time Call Quality',status:'Live',uptime:99.1,metric:'9,600',label:'calls scored MTD'},{name:'Data Agent',role:'Signal Aggregation',status:'Live',uptime:99.6,metric:'100%',label:'data freshness'},{name:'Right Pricing',role:'Dynamic Bid Optimization',status:'In Build',uptime:0,metric:"Q3 '26",label:'target launch'}]};
+
+/* ── CHART DEFAULTS ──────────────────────────────────────────────── */
 Chart.defaults.color='rgba(240,244,255,0.4)';Chart.defaults.font.family="'Inter',sans-serif";Chart.defaults.font.size=11;
 const GRID={color:'rgba(255,255,255,0.04)',drawTicks:false},TICKS={padding:8},AX={grid:GRID,ticks:TICKS,border:{display:false}};
 const TS={backgroundColor:'#0A0F1C',borderColor:'rgba(0,229,255,0.2)',borderWidth:1,padding:10,cornerRadius:6,titleFont:{family:"'Space Mono',monospace",size:10},bodyFont:{family:"'Space Mono',monospace",size:11}};
 
+/* ── CHART BUILDERS ──────────────────────────────────────────────── */
 function buildRevChart(){const ctx=document.getElementById('revChart').getContext('2d');const g=ctx.createLinearGradient(0,0,0,210);g.addColorStop(0,'rgba(0,229,255,0.2)');g.addColorStop(1,'rgba(0,229,255,0)');new Chart(ctx,{type:'line',data:{labels:STATIC.revTrend.labels,datasets:[{label:'Revenue ($)',data:STATIC.revTrend.revenue,borderColor:'#00E5FF',borderWidth:2,backgroundColor:g,fill:true,pointRadius:0,pointHoverRadius:4,tension:0.4,yAxisID:'y'},{label:'Gross Profit ($)',data:STATIC.revTrend.gp,borderColor:'#FFB547',borderWidth:2,borderDash:[5,3],backgroundColor:'transparent',fill:false,pointRadius:0,pointHoverRadius:4,tension:0.4,yAxisID:'y'}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',align:'end',labels:{boxWidth:12,boxHeight:2,padding:16,pointStyle:'line',usePointStyle:true,color:'rgba(240,244,255,0.5)',font:{family:"'Space Mono',monospace",size:10}}},tooltip:{...TS,callbacks:{label:c=>` ${c.dataset.label}: $${c.parsed.y.toLocaleString()}`}}},scales:{x:{...AX,ticks:{...TICKS,maxTicksLimit:10}},y:{...AX,ticks:{...TICKS,callback:v=>`$${(v/1000).toFixed(0)}k`}}}}});}
 function buildRoutePie(){const ctx=document.getElementById('routePie').getContext('2d');new Chart(ctx,{type:'doughnut',data:{labels:['QM Direct','Marketplace'],datasets:[{data:[74,26],backgroundColor:['rgba(0,229,255,0.8)','rgba(255,181,71,0.8)'],borderColor:'#05080F',borderWidth:3,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,cutout:'74%',plugins:{legend:{display:false},tooltip:{...TS,callbacks:{label:c=>` ${c.label}: ${c.parsed}%`}}}}});}
-function buildCallVolChart(){const ctx=document.getElementById('callVolChart').getContext('2d');new Chart(ctx,{type:'bar',data:{labels:STATIC.callVol.labels,datasets:[{label:'QM Filled',data:STATIC.callVol.qm,backgroundColor:'rgba(0,229,255,0.65)',borderRadius:3,borderSkipped:false,stack:'s'},{label:'Marketplace',data:STATIC.callVol.market,backgroundColor:'rgba(255,181,71,0.75)',borderRadius:3,borderSkipped:false,stack:'s'}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',align:'end',labels:{boxWidth:10,padding:14,pointStyle:'rect',usePointStyle:true,color:'rgba(240,244,255,0.5)',font:{family:"'Space Mono',monospace",size:10}}},tooltip:{...TS}},scales:{x:{...AX,stacked:true},y:{...AX,stacked:true}}}});}
-function buildFunnel(){const el=document.getElementById('funnelEl');const colors=['#00E5FF','rgba(0,229,255,0.75)','rgba(0,229,255,0.55)','rgba(0,229,255,0.4)','#FFB547','#00E676'];el.innerHTML=STATIC.funnel.map((s,i)=>`<div class="f-row"><div class="f-label">${s.label}</div><div class="f-track"><div class="f-fill" style="background:${colors[i]};width:0%" data-t="${s.pct}">${s.val.toLocaleString()}</div></div><div class="f-pct">${s.pct}%</div></div>`).join('');setTimeout(()=>{document.querySelectorAll('.f-fill').forEach(b=>{b.style.width=b.dataset.t+'%';});},250);}
+
+function buildCallVolChart(canvasId){const ctx=document.getElementById(canvasId).getContext('2d');new Chart(ctx,{type:'bar',data:{labels:STATIC.callVol.labels,datasets:[{label:'QM Filled',data:STATIC.callVol.qm,backgroundColor:'rgba(0,229,255,0.65)',borderRadius:3,borderSkipped:false,stack:'s'},{label:'Marketplace',data:STATIC.callVol.market,backgroundColor:'rgba(255,181,71,0.75)',borderRadius:3,borderSkipped:false,stack:'s'}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',align:'end',labels:{boxWidth:10,padding:14,pointStyle:'rect',usePointStyle:true,color:'rgba(240,244,255,0.5)',font:{family:"'Space Mono',monospace",size:10}}},tooltip:{...TS}},scales:{x:{...AX,stacked:true},y:{...AX,stacked:true}}}});}
+
+function buildFunnel(elId){const el=document.getElementById(elId);const colors=['#00E5FF','rgba(0,229,255,0.75)','rgba(0,229,255,0.55)','rgba(0,229,255,0.4)','#FFB547','#00E676'];el.innerHTML=STATIC.funnel.map((s,i)=>`<div class="f-row"><div class="f-label">${s.label}</div><div class="f-track"><div class="f-fill" style="background:${colors[i]};width:0%" data-t="${s.pct}">${s.val.toLocaleString()}</div></div><div class="f-pct">${s.pct}%</div></div>`).join('');setTimeout(()=>{document.querySelectorAll('.f-fill').forEach(b=>{b.style.width=b.dataset.t+'%';});},250);}
 function buildCpaChart(){const ctx=document.getElementById('cpaChart').getContext('2d');const labels=STATIC.clients.map(c=>c.name);const actuals=STATIC.clients.map(c=>c.cpa);const targets=STATIC.clients.map(c=>c.target);new Chart(ctx,{type:'bar',data:{labels,datasets:[{label:'Actual CPA',data:actuals,backgroundColor:actuals.map((v,i)=>v<=targets[i]?'rgba(0,229,255,0.7)':'rgba(255,82,82,0.7)'),borderRadius:4,borderSkipped:false},{label:'Target CPA',data:targets,type:'line',borderColor:'rgba(255,181,71,0.8)',backgroundColor:'transparent',borderWidth:2,borderDash:[5,3],pointRadius:4,pointBackgroundColor:'#FFB547'}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',align:'end',labels:{boxWidth:10,padding:14,pointStyle:'rect',usePointStyle:true,color:'rgba(240,244,255,0.5)',font:{family:"'Space Mono',monospace",size:10}}},tooltip:{...TS,callbacks:{label:c=>` ${c.dataset.label}: $${c.parsed.y}`}}},scales:{x:{...AX},y:{...AX,ticks:{...TICKS,callback:v=>`$${v}`}}}}});}
 function buildClientTable(){const tbody=document.getElementById('clientTbody');const maxCpa=Math.max(...STATIC.clients.map(c=>c.cpa));tbody.innerHTML=STATIC.clients.map(c=>{const pct=Math.round((c.cpa/maxCpa)*100);const vs=c.cpa-c.target;const vsLbl=vs<=0?`-$${Math.abs(vs)}`:`+$${vs}`;const vsClr=vs<=0?'var(--green)':'var(--red)';const tag=c.status==='On Target'?'stag-g':'stag-a';const barC=vs<=0?'var(--cyan)':'var(--red)';return `<tr><td><span class="c-name">${c.name}</span><span class="c-type">${c.type}</span></td><td>${c.calls.toLocaleString()}</td><td><div class="mb-wrap"><div class="mb"><div class="mb-fill" style="width:0%;background:${barC}" data-t="${pct}"></div></div>$${c.cpa}</div></td><td>$${c.target}</td><td style="color:${vsClr};font-weight:700;">${vsLbl}</td><td><span class="stag ${tag}">${c.status}</span></td></tr>`;}).join('');setTimeout(()=>{document.querySelectorAll('.mb-fill').forEach(el=>{el.style.width=el.dataset.t+'%';});},350);}
 function buildRpcChart(){const ctx=document.getElementById('rpcChart').getContext('2d');new Chart(ctx,{type:'line',data:{labels:STATIC.rpc.labels,datasets:[{label:'QM',data:STATIC.rpc.qm,borderColor:'#00E5FF',borderWidth:2,pointRadius:3,pointBackgroundColor:'#00E5FF',tension:0.3},{label:'Marketplace',data:STATIC.rpc.market,borderColor:'#FFB547',borderWidth:2,pointRadius:3,pointBackgroundColor:'#FFB547',tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,position:'top',align:'end',labels:{boxWidth:10,padding:12,color:'rgba(240,244,255,0.5)',font:{family:"'Space Mono',monospace",size:10}}},tooltip:{...TS,callbacks:{label:c=>` ${c.dataset.label}: $${c.parsed.y.toFixed(2)}`}}},scales:{x:{...AX},y:{...AX,min:13,ticks:{...TICKS,callback:v=>`$${v.toFixed(0)}`}}}}});}
 function buildOverflowChart(){const ctx=document.getElementById('overflowChart').getContext('2d');new Chart(ctx,{type:'bar',data:{labels:STATIC.overflow.labels,datasets:[{label:'Overflow Revenue',data:STATIC.overflow.vals,backgroundColor:'rgba(0,230,118,0.65)',borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TS,callbacks:{label:c=>` $${c.parsed.y.toLocaleString()}`}}},scales:{x:{...AX},y:{...AX,ticks:{...TICKS,callback:v=>`$${(v/1000).toFixed(0)}k`}}}}});}
 function buildMarginChart(){const ctx=document.getElementById('marginChart').getContext('2d');new Chart(ctx,{type:'line',data:{labels:STATIC.margin.labels,datasets:[{label:'GP Margin %',data:STATIC.margin.vals,borderColor:'#FFB547',borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#FFB547',tension:0.4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TS,callbacks:{label:c=>` GP Margin: ${c.parsed.y}%`}}},scales:{x:{...AX},y:{...AX,min:25,ticks:{...TICKS,callback:v=>`${v}%`}}}}});}
+
 function buildAgents(){const s=document.getElementById('agentStrip');s.innerHTML=STATIC.agents.map(a=>{const isLive=a.status==='Live';const dc=isLive?'dot-live':'dot-build';const sc=isLive?'var(--green)':'var(--amber)';const cc=isLive?'':'build';return `<div class="ac ${cc}"><div class="a-top"><div class="a-name">${a.name}</div><div class="a-st"><span class="a-dot ${dc}"></span><span class="a-stxt" style="color:${sc}">${a.status}</span></div></div><div class="a-role">${a.role}</div><div class="a-met"><span class="a-val">${a.metric}</span><span class="a-mlbl">${a.label}</span></div>${isLive?`<div class="up-track"><div class="up-fill" style="width:0%" data-t="${a.uptime}"></div></div>`:`<div style="font-size:9px;color:var(--amber);font-family:'Space Mono',monospace;letter-spacing:0.5px;margin-top:2px;">Active development</div>`}</div>`;}).join('');setTimeout(()=>{document.querySelectorAll('.up-fill').forEach(el=>{el.style.width=el.dataset.t+'%';});},450);}
+
+/* ── PERIOD SWITCHER ─────────────────────────────────────────────── */
 function setPeriod(p,btn){document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const d=STATIC.kpis[p];const map=[['kv-rpc',d.rpc,false,false],['kd-rpc',d.rpcD,true,d.rpcDir],['kv-rev',d.rev,false,false],['kd-rev',d.revD,true,d.revDir],['kv-gp',d.gp,false,false],['kd-gp',d.gpD,true,d.gpDir],['kv-margin',d.margin+'<span class="unit">%</span>',true,false],['kd-margin',d.marginD,true,d.marginDir],['kv-fill',d.fill+'<span class="unit">%</span>',true,false],['kd-fill',d.fillD,true,d.fillDir],['kv-overflow',d.overflow,false,false],['kd-overflow',d.overflowD,true,d.overflowDir]];map.forEach(([id,val,isHtml,dir])=>{const el=document.getElementById(id);if(!el)return;if(isHtml)el.innerHTML=val;else el.textContent=val;if(dir)el.className=`kpi-badge ${dir}`;el.classList.remove('swapped');void el.offsetWidth;el.classList.add('swapped');});}
 
-/* === NOTION LIVE DATA === */
+/* ── TAB SWITCHER ────────────────────────────────────────────────── */
+function switchTab(id, btn){
+  document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+}
+
+/* ── NOTION PUBLISHER DATA ───────────────────────────────────────── */
 const AC_CFG={'Scale Eligible':{cls:'scale-eligible',tagCls:'action-scale'},'Maintain':{cls:'maintain',tagCls:'action-maintain'},'Monitor':{cls:'monitor',tagCls:'action-monitor'},'Throttle':{cls:'throttle',tagCls:'action-throttle'},'Pullback':{cls:'pullback',tagCls:'action-pullback'}};
 const TIER_CLR={'Scale Eligible':'#00E676','Maintain':'#00E5FF','Monitor':'#FFB547','Throttle':'rgba(255,181,71,0.45)','Pullback':'#FF5252'};
 const ORDER=['Scale Eligible','Maintain','Monitor','Throttle','Pullback'];
@@ -300,7 +460,7 @@ function cpaClr(v){if(!v)return '';if(v<300)return 'good';if(v<500)return '';ret
 function renderCards(recs){
   const grid=document.getElementById('publisherGrid');
   const cnt=document.getElementById('pubCount');
-  if(!recs||!recs.length){grid.innerHTML='<div style="grid-column:1/-1;padding:40px;text-align:center;color:var(--text-3);font-family:var(--font-m);font-size:11px;">No scorecard data &mdash; hit Sync Notion</div>';cnt.textContent='0 partners';return;}
+  if(!recs||!recs.length){grid.innerHTML='<div style="grid-column:1/-1;padding:40px;text-align:center;color:var(--text-3);font-family:var(--font-m);font-size:11px;">No scorecard data — hit Sync Notion</div>';cnt.textContent='0 partners';return;}
   cnt.textContent=recs.length+' partners';
   recs.sort((a,b)=>{const ai=ORDER.indexOf(a['Action Band']||'');const bi=ORDER.indexOf(b['Action Band']||'');return(ai<0?99:ai)-(bi<0?99:bi);});
   grid.innerHTML=recs.map(r=>{
@@ -329,41 +489,214 @@ function renderDist(recs){
   document.getElementById('mpqsLegend').innerHTML=ORDER.map(b=>{const c=counts[b];const pct=total?(c/total*100).toFixed(0):0;return `<div style="display:flex;align-items:center;gap:5px;"><span style="width:8px;height:8px;background:${TIER_CLR[b]};border-radius:2px;display:inline-block;"></span><span style="font-size:10px;color:var(--text-2);">${b}</span><span style="font-family:var(--font-m);font-size:10px;color:var(--text-3);">${c} (${pct}%)</span></div>`;}).join('');
 }
 
-const FALLBACK=[{"Report":"QM — Healthcare.com — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Scale Eligible","CPA":240,"Conv Rate (CR%)":0.194,"Effectuation %":0.667,"Duplicate Rate %":0.047,"Headline Metric":"MPQS 102.4 — #1 in portfolio. GPpTH $205. Scale Eligible.","Biggest Risk":"Over75 = 0.0% — confirm not a data gap before scaling","Top Opportunity":"Highest MPQS in portfolio — immediate scale candidate"},{"Report":"QM — RevRise Media — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Scale Eligible","CPA":231,"Conv Rate (CR%)":0.148,"Effectuation %":0.873,"Duplicate Rate %":0.047,"Headline Metric":"MPQS 97.3 — #2 in portfolio. GPpTH $135. Scale Eligible.","Biggest Risk":"Demo Mix 43.3% Over75 — nearly 3x benchmark.","Top Opportunity":"Strongest Effectuation % at 87.3%"},{"Report":"QM — GoldMineLeads — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Scale Eligible","CPA":233,"Conv Rate (CR%)":0.15,"Effectuation %":null,"Duplicate Rate %":null,"Headline Metric":"MPQS 93.5 — #3. GPpTH $143. Scale Eligible.","Biggest Risk":"Eff%, RDE%, Over75 all missing — floors applied.","Top Opportunity":"Strong economics — score would rise with confirmed data"},{"Report":"QM — Scalability.io — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Maintain","CPA":369,"Conv Rate (CR%)":0.106,"Effectuation %":0.784,"Duplicate Rate %":null,"Headline Metric":"MPQS 83.8 — #4. Maintain. Clean durability.","Biggest Risk":"GPpTH $57 below $75 benchmark","Top Opportunity":"7 points from Scale Eligible"},{"Report":"QM — Paragon Media — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Maintain","CPA":265,"Conv Rate (CR%)":0.096,"Effectuation %":0.704,"Duplicate Rate %":null,"Headline Metric":"MPQS 83.4 — #5. Maintain. High volume.","Biggest Risk":"Effectuation 70.4% — slightly below 72%","Top Opportunity":"Highest Net Sales in Maintain band"},{"Report":"QM — Quote Velocity — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Monitor","CPA":352,"Conv Rate (CR%)":0.1,"Effectuation %":0.753,"Duplicate Rate %":null,"Headline Metric":"MPQS 81.4 — #6. Monitor.","Biggest Risk":"GPpTH $53 below $75 benchmark","Top Opportunity":"Best Over75% in Monitor tier at 4.9%"},{"Report":"QM — Milestone Marketing — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Monitor","CPA":442,"Conv Rate (CR%)":0.11,"Effectuation %":0.789,"Duplicate Rate %":null,"Headline Metric":"MPQS 76.0 — #8. Monitor. Highest volume in Monitor.","Biggest Risk":"GPpTH $42 significantly below benchmark","Top Opportunity":"GPpTH improvement would have largest portfolio impact"},{"Report":"QM — Ring2Media — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Throttle","CPA":890,"Conv Rate (CR%)":0.091,"Effectuation %":0.775,"Duplicate Rate %":null,"Headline Metric":"MPQS 71.6 — #11. Throttle. GPpTH -$78.","Biggest Risk":"Negative GPpTH -$78 and Over75 34.2%","Top Opportunity":"CR and Effectuation at benchmark"},{"Report":"QM — EngageCX — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Throttle","CPA":413,"Conv Rate (CR%)":0.098,"Effectuation %":0.731,"Duplicate Rate %":null,"Headline Metric":"MPQS 69.5 — #15. Throttle. 950 sales.","Biggest Risk":"GPpTH $36 on highest-volume Throttle partner","Top Opportunity":"950 net sales — largest volume outside Maintain/Scale"},{"Report":"QM — Adolent Marketing — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Throttle","CPA":294,"Conv Rate (CR%)":0.062,"Effectuation %":0.706,"Duplicate Rate %":null,"Headline Metric":"MPQS 69.6 — #14. Throttle. Over75 66.9%.","Biggest Risk":"Over75 66.9% — compliance escalation required","Top Opportunity":"High volume — compliance fix unlocks expansion"},{"Report":"QM — Elijay / VitalCareWorks — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Pullback","CPA":663,"Conv Rate (CR%)":0.049,"Effectuation %":0.364,"Duplicate Rate %":null,"Headline Metric":"MPQS 56.3 — last. Pullback.","Biggest Risk":"Lowest MPQS. Eff% 36.4%, all components flagged.","Top Opportunity":"None — full program review required"},{"Report":"QM — Direct Agents — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Pullback","CPA":0,"Conv Rate (CR%)":0,"Effectuation %":null,"Duplicate Rate %":null,"Headline Metric":"MPQS 59.3. Pullback. Zero CR.","Biggest Risk":"Zero CR, negative GPpTH — no sales","Top Opportunity":"None — full review required before reinstatement"}];
+/* ── RENDER NOTION SCORECARDS ────────────────────────────────────── */
+function renderScorecards(data){
+  // MPQS
+  document.getElementById('sc-mpqs-count').textContent = data.mpqsCount || '—';
+  document.getElementById('sc-mpqs-avg').textContent = data.avgMpqs || '—';
+  const mpqsFeed = document.getElementById('mpqs-feed');
+  if(data.recentMpqs && data.recentMpqs.length){
+    mpqsFeed.innerHTML = data.recentMpqs.map(e => {
+      const score = e.mpqsScore;
+      const clr = !score ? 'rgba(255,255,255,0.1)' : score >= 80 ? 'rgba(0,230,118,0.15)' : score >= 60 ? 'rgba(0,229,255,0.15)' : 'rgba(255,181,71,0.15)';
+      const txtClr = !score ? 'var(--text-3)' : score >= 80 ? 'var(--green)' : score >= 60 ? 'var(--cyan)' : 'var(--amber)';
+      return `<div class="sc-item">
+        <div class="sc-score" style="background:${clr};color:${txtClr}">${score ?? '—'}</div>
+        <div class="sc-content">
+          <div class="sc-label">${e.publisherName || 'MPQS Evaluation'}</div>
+          <div class="sc-meta">${e.date || ''} · ${e.season || ''} · ${e.periodType || ''}</div>
+        </div>
+      </div>`;
+    }).join('');
+  } else {
+    mpqsFeed.innerHTML = '<div style="color:var(--text-3);font-size:12px;text-align:center;padding:30px;">No MPQS data yet — run your first evaluation</div>';
+  }
+
+  // QM
+  document.getElementById('sc-qm-count').textContent = data.qmCount || '—';
+  document.getElementById('sc-qm-avg').textContent = data.avgQmScore || '—';
+  const qmFeed = document.getElementById('qm-feed');
+  if(data.recentQm && data.recentQm.length){
+    qmFeed.innerHTML = data.recentQm.map(e => {
+      const score = e.crScore;
+      const clr = !score ? 'rgba(255,255,255,0.1)' : score >= 80 ? 'rgba(0,230,118,0.15)' : score >= 60 ? 'rgba(255,181,71,0.15)' : 'rgba(255,82,82,0.15)';
+      const txtClr = !score ? 'var(--text-3)' : score >= 80 ? 'var(--green)' : score >= 60 ? 'var(--amber)' : 'var(--red)';
+      return `<div class="sc-item">
+        <div class="sc-score" style="background:${clr};color:${txtClr}">${score ?? '—'}</div>
+        <div class="sc-content">
+          <div class="sc-label">${e.agent || 'QM Review'}</div>
+          <div class="sc-meta">${e.date || ''} · ${e.season || ''} · ${e.status || ''}</div>
+        </div>
+      </div>`;
+    }).join('');
+  } else {
+    qmFeed.innerHTML = '<div style="color:var(--text-3);font-size:12px;text-align:center;padding:30px;">No QM scorecard data yet</div>';
+  }
+}
+
+/* ── RENDER AI ACTIVITY ──────────────────────────────────────────── */
+function renderAIActivity(data){
+  document.getElementById('ai-total').textContent = data.totalEntries || '—';
+  document.getElementById('ai-avg').textContent = data.avgQuality || '—';
+  document.getElementById('ai-saved').textContent = data.outputsSaved || '—';
+  document.getElementById('ai-flags').textContent = data.flagCount || '0';
+
+  if(data.totalEntries > 0){
+    const rate = Math.round((data.outputsSaved / data.totalEntries) * 100);
+    document.getElementById('ai-saved-badge').textContent = rate + '% save rate';
+    document.getElementById('ai-flags-badge').textContent = data.flagCount > 0 ? 'review needed' : 'all clear ✓';
+    document.getElementById('ai-avg-badge').textContent = data.avgQuality >= 8 ? '↑ strong' : data.avgQuality >= 6 ? '→ adequate' : '↓ needs work';
+  }
+
+  // Quality bars
+  const barsEl = document.getElementById('ai-quality-bars');
+  if(data.qualityByTask && data.qualityByTask.length){
+    barsEl.innerHTML = data.qualityByTask.map(item => {
+      const pct = (item.avg / 10) * 100;
+      const clr = item.avg >= 8 ? '#00E676' : item.avg >= 6 ? '#00E5FF' : '#FFB547';
+      return `<div class="score-bar-row">
+        <span class="score-bar-label">${item.type}</span>
+        <div class="score-bar-track"><div class="score-bar-fill" style="width:${pct}%;background:${clr};"></div></div>
+        <span class="score-bar-val">${item.avg}</span>
+        <span class="score-bar-ct">(${item.count})</span>
+      </div>`;
+    }).join('');
+  } else {
+    barsEl.innerHTML = '<div style="color:var(--text-3);font-size:12px;padding:20px;text-align:center;">No scored entries yet</div>';
+  }
+
+  // Activity feed
+  const feedEl = document.getElementById('ai-feed');
+  if(data.recentActivity && data.recentActivity.length){
+    feedEl.innerHTML = data.recentActivity.map(e => {
+      const score = e.qualityScore;
+      const clr = !score ? 'rgba(255,255,255,0.06)' : score >= 8 ? 'rgba(0,230,118,0.15)' : score >= 6 ? 'rgba(0,229,255,0.15)' : 'rgba(255,181,71,0.15)';
+      const txtClr = !score ? 'var(--text-3)' : score >= 8 ? 'var(--green)' : score >= 6 ? 'var(--cyan)' : 'var(--amber)';
+      return `<div class="ai-item">
+        <div class="ai-score" style="background:${clr};color:${txtClr}">${score ?? '—'}</div>
+        <div class="ai-content">
+          <div class="ai-task">${e.taskType || 'Session'}${e.projectContext ? ' · ' + e.projectContext : ''}</div>
+          <div class="ai-meta">${e.teamMember || ''} · ${e.date || ''} · ${e.timeInvested || 0}min</div>
+          ${e.whatWorkedWell ? `<div class="ai-note">${e.whatWorkedWell}</div>` : ''}
+        </div>
+        ${e.outputSaved ? '<span class="ai-saved">Saved</span>' : ''}
+      </div>`;
+    }).join('');
+  } else {
+    feedEl.innerHTML = '<div style="color:var(--text-3);font-size:12px;text-align:center;padding:30px;">No AI activity logged yet</div>';
+  }
+
+  // Flags
+  const flagsEl = document.getElementById('ai-flags-feed');
+  if(data.flags && data.flags.length){
+    flagsEl.innerHTML = data.flags.map(e => {
+      return `<div class="ai-item">
+        <div class="ai-score" style="background:rgba(255,82,82,0.15);color:var(--red)">${e.qualityScore}</div>
+        <div class="ai-content">
+          <div class="ai-task">${e.taskType || 'Session'}${e.projectContext ? ' · ' + e.projectContext : ''}</div>
+          <div class="ai-meta">${e.teamMember || ''} · ${e.date || ''}</div>
+          ${e.whatToImprove ? `<div class="ai-note" style="color:rgba(255,82,82,0.7)">${e.whatToImprove}</div>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+  } else {
+    flagsEl.innerHTML = '<div style="color:var(--text-3);font-size:12px;text-align:center;padding:20px;">No flags — all scores above 6 ✓</div>';
+  }
+}
+
+/* ── RENDER SEASON STRIP ─────────────────────────────────────────── */
+function renderSeasons(data){
+  const counts = {OEP:0, SEP:0, AEP:0};
+  if(data.seasonBreakdown){
+    data.seasonBreakdown.forEach(s => { if(counts[s.name] !== undefined) counts[s.name] = s.value; });
+  }
+  const strip = document.getElementById('seasonStrip');
+  const seasons = [
+    {key:'OEP', label:'OEP', sub:'Jan 1 – Mar 31', clr:'rgba(0,229,255,0.6)'},
+    {key:'SEP', label:'SEP', sub:'Apr 1 – Oct 14', clr:'rgba(0,230,118,0.6)'},
+    {key:'AEP', label:'AEP', sub:'Oct 15 – Nov 7', clr:'rgba(255,181,71,0.6)'},
+  ];
+  strip.innerHTML = seasons.map(s => `
+    <div class="season-pill">
+      <div class="season-pill-label" style="color:${s.clr}">${s.label}</div>
+      <div class="season-pill-val">${counts[s.key] || '0'}</div>
+      <div class="season-pill-sub">${s.sub}</div>
+    </div>
+  `).join('');
+}
+
+/* ── NOTION API CALL ─────────────────────────────────────────────── */
+const FALLBACK=[{"Report":"QM — Healthcare.com — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Scale Eligible","CPA":240,"Conv Rate (CR%)":0.194,"Effectuation %":0.667,"Duplicate Rate %":0.047,"Headline Metric":"MPQS 102.4 — #1 in portfolio. GPpTH $205. Scale Eligible.","Biggest Risk":"Over75 = 0.0% — confirm not a data gap before scaling","Top Opportunity":"Highest MPQS in portfolio — immediate scale candidate"},{"Report":"QM — RevRise Media — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Scale Eligible","CPA":231,"Conv Rate (CR%)":0.148,"Effectuation %":0.873,"Duplicate Rate %":0.047,"Headline Metric":"MPQS 97.3 — #2 in portfolio. GPpTH $135. Scale Eligible.","Biggest Risk":"Demo Mix 43.3% Over75 — nearly 3x benchmark.","Top Opportunity":"Strongest Effectuation % at 87.3%"},{"Report":"QM — Scalability.io — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Maintain","CPA":369,"Conv Rate (CR%)":0.106,"Effectuation %":0.784,"Duplicate Rate %":null,"Headline Metric":"MPQS 83.8 — #4. Maintain.","Biggest Risk":"GPpTH $57 below $75 benchmark","Top Opportunity":"7 points from Scale Eligible"},{"Report":"QM — Quote Velocity — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Monitor","CPA":352,"Conv Rate (CR%)":0.1,"Effectuation %":0.753,"Duplicate Rate %":null,"Headline Metric":"MPQS 81.4 — #6. Monitor.","Biggest Risk":"GPpTH $53 below benchmark","Top Opportunity":"Best Over75% in Monitor tier"},{"Report":"QM — Ring2Media — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Throttle","CPA":890,"Conv Rate (CR%)":0.091,"Effectuation %":0.775,"Duplicate Rate %":null,"Headline Metric":"MPQS 71.6 — Throttle. GPpTH -$78.","Biggest Risk":"Negative GPpTH","Top Opportunity":"CR and Effectuation at benchmark"},{"Report":"QM — Elijay / VitalCareWorks — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Pullback","CPA":663,"Conv Rate (CR%)":0.049,"Effectuation %":0.364,"Duplicate Rate %":null,"Headline Metric":"MPQS 56.3 — Pullback.","Biggest Risk":"Lowest MPQS. All components flagged.","Top Opportunity":"Full program review required"}];
 
 async function loadNotionData(){
   const btn=document.getElementById('refreshBtn');
-  const icon=document.getElementById('refreshIcon');
   const lbl=document.getElementById('refreshLabel');
   const dot=document.getElementById('syncDot');
   const syncLbl=document.getElementById('syncLabel');
-  const grid=document.getElementById('publisherGrid');
   btn.classList.add('loading');lbl.textContent='Syncing...';dot.className='sync-dot stale';syncLbl.textContent='Syncing...';
-  grid.innerHTML=Array(8).fill(0).map(()=>'<div class="pub-card" style="height:180px;"><div class="skeleton" style="height:100%;border-radius:8px;"></div></div>').join('');
+
+  // Load publisher scorecards from Notion via Claude API
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,system:'Return ONLY a raw JSON array. No markdown, no explanation. Query the Notion database and return the results as a JSON array of objects.',messages:[{role:'user',content:'Use the notion-query-data-sources tool to query this database: collection://337cb15b-3901-80f2-8500-000ba6ddf12e with this SQL: SELECT "Report", "date:Date:start", "Action Band", "CPA", "Conv Rate (CR%)", "Effectuation %", "Duplicate Rate %", "Headline Metric", "Biggest Risk", "Top Opportunity", "Status" FROM "collection://337cb15b-3901-80f2-8500-000ba6ddf12e" ORDER BY "date:Date:start" DESC LIMIT 30. Return ONLY the JSON array of results, nothing else.'}],mcp_servers:[{type:'url',url:'https://mcp.notion.com/mcp',name:'notion-mcp'}]})});
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,system:'Return ONLY a raw JSON array. No markdown, no explanation.',messages:[{role:'user',content:'Use the notion-query-data-sources tool to query database collection://337cb15b-3901-80f2-8500-000ba6ddf12e with SQL: SELECT "Report", "date:Date:start", "Action Band", "CPA", "Conv Rate (CR%)", "Effectuation %", "Duplicate Rate %", "Headline Metric", "Biggest Risk", "Top Opportunity", "Status" FROM "collection://337cb15b-3901-80f2-8500-000ba6ddf12e" ORDER BY "date:Date:start" DESC LIMIT 30. Return ONLY the JSON array.'}],mcp_servers:[{type:'url',url:'https://mcp.notion.com/mcp',name:'notion-mcp'}]})});
     const data=await res.json();
     let txt='';
     if(data.content){for(const b of data.content){if(b.type==='text')txt+=b.text;else if(b.type==='mcp_tool_result'&&Array.isArray(b.content)){for(const c of b.content){if(c.text)txt+=c.text;}}}}
     const m=txt.match(/\[[\s\S]*\]/);
-    if(m){
-      const recs=JSON.parse(m[0]);
-      if(recs&&recs.length){
-        renderCards(recs);renderDist(recs);
-        const now=new Date();
-        dot.className='sync-dot';syncLbl.textContent='Synced '+now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-        btn.classList.remove('loading');lbl.textContent='Sync Notion';return;
+    if(m){const recs=JSON.parse(m[0]);if(recs&&recs.length){renderCards(recs);renderDist(recs);}}
+    else{renderCards(FALLBACK);renderDist(FALLBACK);}
+  }catch(e){renderCards(FALLBACK);renderDist(FALLBACK);}
+
+  // Load Joanie AI Activity + Scorecards from Vercel API
+  try{
+    const res = await fetch('https://joanie-dashboard-qbta.vercel.app/api/notion');
+    if(res.ok){
+      const data = await res.json();
+      if(!data.error){
+        renderAIActivity(data);
+        renderScorecards(data);
+        renderSeasons(data);
       }
     }
-    throw new Error('parse fail');
-  }catch(e){
-    renderCards(FALLBACK);renderDist(FALLBACK);
-    dot.className='sync-dot stale';syncLbl.textContent='Cached data';
-  }
-  btn.classList.remove('loading');lbl.textContent='Sync Notion';
+  }catch(e){console.log('Joanie API unavailable',e);}
+
+  const now=new Date();
+  dot.className='sync-dot';
+  syncLbl.textContent='Synced '+now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  btn.classList.remove('loading');
+  lbl.textContent='Sync Notion';
+  resetCountdown();
 }
 
-window.addEventListener('DOMContentLoaded',()=>{buildRevChart();buildRoutePie();buildCallVolChart();buildFunnel();buildCpaChart();buildClientTable();buildRpcChart();buildOverflowChart();buildMarginChart();buildAgents();loadNotionData();});
+/* ── AUTO-REFRESH COUNTDOWN ──────────────────────────────────────── */
+let countdown = 60;
+let countdownTimer;
+function resetCountdown(){
+  clearInterval(countdownTimer);
+  countdown = 60;
+  countdownTimer = setInterval(()=>{
+    countdown--;
+    const el = document.getElementById('countdown');
+    if(el) el.textContent = `Next refresh in ${countdown}s`;
+    if(countdown <= 0){ loadNotionData(); }
+  }, 1000);
+}
+
+/* ── INIT ────────────────────────────────────────────────────────── */
+window.addEventListener('DOMContentLoaded',()=>{
+  buildRevChart();
+  buildRoutePie();
+  buildCallVolChart('callVolChart');
+  buildFunnel('funnelEl');
+  buildCpaChart();
+  buildClientTable();
+  buildRpcChart();
+  buildOverflowChart();
+  buildMarginChart();
+  buildAgents();
+  buildCallVolChart('callVolChart2');
+  buildFunnel('funnelEl2');
+  loadNotionData();
+});
 </script>
 </body>
 </html>
