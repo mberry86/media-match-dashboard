@@ -157,7 +157,33 @@ body::after{content:'';position:fixed;inset:0;z-index:0;background-image:repeati
 .pub-opp{display:flex;align-items:flex-start;gap:5px;font-size:10px;color:rgba(0,230,118,0.7);margin-top:4px;line-height:1.35;}
 .pub-opp::before{content:'+';font-family:var(--font-m);font-size:10px;font-weight:700;flex-shrink:0;}
 
-/* AGENT STRIP */
+/* REPORTING CARDS */
+.report-card{background:var(--surface);border:1px solid var(--edge);border-radius:var(--r-lg);padding:20px;margin-bottom:12px;transition:border-color 0.2s;}
+.report-card:hover{border-color:var(--edge2);}
+.report-card-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;gap:12px;}
+.report-title{font-family:var(--font-d);font-size:15px;font-weight:700;color:var(--text);letter-spacing:-0.2px;}
+.report-date{font-family:var(--font-m);font-size:9px;color:var(--text-3);margin-top:3px;}
+.report-scores{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.rscore{display:flex;flex-direction:column;gap:3px;padding:10px 14px;background:var(--surface2);border-radius:var(--r-md);min-width:80px;}
+.rscore-label{font-family:var(--font-m);font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--text-3);}
+.rscore-val{font-family:var(--font-num);font-size:20px;font-weight:300;color:var(--text);line-height:1;}
+.rscore-val.good{color:var(--green);}
+.rscore-val.warn{color:var(--amber);}
+.rscore-val.bad{color:var(--red);}
+.report-meta{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px;}
+.report-meta-item{display:flex;flex-direction:column;gap:4px;}
+.report-meta-label{font-family:var(--font-m);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--text-3);}
+.report-meta-val{font-size:12px;color:var(--text-2);line-height:1.4;}
+.report-divider{height:1px;background:var(--edge);margin:10px 0;}
+.report-risk{display:flex;align-items:flex-start;gap:6px;font-size:11px;color:rgba(255,82,82,0.75);line-height:1.4;}
+.report-risk::before{content:'!';font-family:var(--font-m);font-size:9px;font-weight:700;flex-shrink:0;background:var(--red-dim);border-radius:50%;width:14px;height:14px;display:flex;align-items:center;justify-content:center;}
+.report-opp{display:flex;align-items:flex-start;gap:6px;font-size:11px;color:rgba(0,230,118,0.7);margin-top:5px;line-height:1.4;}
+.report-opp::before{content:'+';font-family:var(--font-m);font-size:11px;font-weight:700;flex-shrink:0;}
+.report-status{font-family:var(--font-m);font-size:9px;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:0.5px;white-space:nowrap;}
+.status-published{background:var(--green-dim);color:var(--green);}
+.status-review{background:var(--amber-dim);color:var(--amber);}
+.status-draft{background:var(--surface2);color:var(--text-3);}
+
 .agent-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:28px;animation:riseIn 0.6s cubic-bezier(0.16,1,0.3,1) both;}
 .ac{background:var(--surface);border:1px solid var(--edge);border-radius:var(--r-md);padding:16px 14px;display:flex;flex-direction:column;gap:8px;transition:all 0.2s;position:relative;overflow:hidden;}
 .ac:hover{border-color:var(--edge2);background:var(--surface2);transform:translateY(-1px);}
@@ -266,6 +292,9 @@ body::after{content:'';position:fixed;inset:0;z-index:0;background-image:repeati
 <!-- NAV TABS -->
 <nav class="nav-tabs">
   <button class="nav-tab active" onclick="switchTab('overview',this)">Overview</button>
+  <button class="nav-tab" onclick="switchTab('rp',this)">Right Pricing</button>
+  <button class="nav-tab" onclick="switchTab('subid',this)">Sub ID Intel</button>
+  <button class="nav-tab" onclick="switchTab('reporting',this)">Joanie Reporting</button>
   <button class="nav-tab" onclick="switchTab('publishers',this)">Publisher Scorecards</button>
   <button class="nav-tab" onclick="switchTab('scorecards',this)">QM &amp; MP Scorecards</button>
   <button class="nav-tab" onclick="switchTab('ai',this)">Joanie AI Activity</button>
@@ -276,9 +305,10 @@ body::after{content:'';position:fixed;inset:0;z-index:0;background-image:repeati
 <div id="tab-overview" class="tab-panel active">
   <div class="notion-banner">
     <span style="font-size:16px;">&#9672;</span>
-    <div><strong>Live Data Source</strong> &nbsp;&middot;&nbsp; Publisher scorecards, scorecards &amp; AI activity pulled from Notion on demand</div>
-    <span class="notion-source-pill">Joanie QM Scorecards</span>
+    <div><strong>Live Data Source</strong> &nbsp;&middot;&nbsp; Publisher scorecards, scorecards, reporting &amp; AI activity pulled from Notion on demand</div>
+    <span class="notion-source-pill">Joanie Reporting</span>
     <span class="notion-source-pill">Joanie MPQS</span>
+    <span class="notion-source-pill">Joanie QM Scorecards</span>
     <span class="notion-source-pill">Joanie AI Activity Log</span>
     <div style="margin-left:auto;font-size:11px;color:var(--text-3);">Auto-refreshes every <strong style="color:var(--cyan)">60s</strong></div>
   </div>
@@ -311,6 +341,111 @@ body::after{content:'';position:fixed;inset:0;z-index:0;background-image:repeati
     <div class="panel"><div class="p-head"><div><div class="p-title">Daily Call Volume</div><div class="p-sub">QM filled vs. marketplace overflow &middot; 14 days</div></div><span class="pill pill-c">Stacked</span></div><div class="chart-wrap" style="height:210px"><canvas id="callVolChart"></canvas></div></div>
     <div class="panel"><div class="p-head"><div><div class="p-title">Routing Funnel</div><div class="p-sub">Inbound &#8594; Answered &#8594; Routed &#8594; Converted</div></div><span class="pill pill-g">Live Logic</span></div><div class="funnel" id="funnelEl" style="margin-top:6px;"></div></div>
   </div>
+</div>
+
+<!-- RIGHT PRICING TAB -->
+<div id="tab-rp" class="tab-panel">
+  <div class="notion-banner">
+    <span style="font-size:16px;">&#9672;</span>
+    <div><strong>Right Pricing Engine</strong> &nbsp;&middot;&nbsp; Enhanced RP Formula: Base × MPQS Multiplier × Sub ID Quality Index</div>
+    <span class="notion-source-pill">QM RP Hub Data</span>
+    <div style="display:flex;gap:8px;margin-left:auto;align-items:center;">
+      <div style="display:flex;gap:4px;">
+        <button id="rp-sep" onclick="setRPSeason('SEP',this)" style="padding:5px 12px;font-family:var(--font-m);font-size:10px;border-radius:3px;border:1px solid var(--edge2);background:var(--cyan);color:var(--ink);font-weight:700;cursor:pointer;">SEP</button>
+        <button id="rp-oep" onclick="setRPSeason('OEP',this)" style="padding:5px 12px;font-family:var(--font-m);font-size:10px;border-radius:3px;border:1px solid var(--edge2);background:var(--surface);color:var(--text-3);cursor:pointer;">OEP</button>
+        <button id="rp-aep" onclick="setRPSeason('AEP',this)" style="padding:5px 12px;font-family:var(--font-m);font-size:10px;border-radius:3px;border:1px solid var(--edge2);background:var(--surface);color:var(--text-3);cursor:pointer;">AEP</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="kpi-grid" style="margin-bottom:20px;" id="rp-kpi-grid">
+    <!-- filled by JS -->
+  </div>
+
+  <div class="sec"><div class="sec-tag">Formula Reference</div><div class="sec-line"></div></div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;">
+    <div class="panel" style="border-left:2px solid var(--cyan);">
+      <div class="p-title" style="font-size:11px;margin-bottom:6px;">Base Bid</div>
+      <div style="font-family:var(--font-m);font-size:10px;color:var(--text-2);">LTV × Eff% × LTV% × CR%</div>
+      <div style="font-size:10px;color:var(--text-3);margin-top:4px;">Anchored to economic reality</div>
+    </div>
+    <div class="panel" style="border-left:2px solid var(--amber);">
+      <div class="p-title" style="font-size:11px;margin-bottom:6px;">MPQS Multiplier</div>
+      <div style="font-family:var(--font-m);font-size:10px;color:var(--text-2);">A=×1.15 · B=×1.00 · C=×0.85 · D=×0.70</div>
+      <div style="font-size:10px;color:var(--text-3);margin-top:4px;">D-grade = 26% discount vs A</div>
+    </div>
+    <div class="panel" style="border-left:2px solid var(--blue);">
+      <div class="p-title" style="font-size:11px;margin-bottom:6px;">Sub ID Quality Index</div>
+      <div style="font-family:var(--font-m);font-size:10px;color:var(--text-2);">0.75–1.10 based on CR, Eff, RDE</div>
+      <div style="font-size:10px;color:var(--text-3);margin-top:4px;">FLEX-CARD earns premium; TRANSPORT discounted</div>
+    </div>
+  </div>
+
+  <div class="sec"><div class="sec-tag">Publisher Right Pricing</div><div class="sec-line"></div></div>
+  <div style="overflow-x:auto;border-radius:var(--r-md);border:1px solid var(--edge);">
+    <table style="width:100%;border-collapse:collapse;font-size:11px;">
+      <thead>
+        <tr style="border-bottom:1px solid var(--edge2);">
+          <th style="font-family:var(--font-m);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);padding:8px 12px;text-align:left;background:var(--surface);white-space:nowrap;">Publisher</th>
+          <th style="font-family:var(--font-m);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);padding:8px 12px;text-align:center;background:var(--surface);white-space:nowrap;">MPQS</th>
+          <th style="font-family:var(--font-m);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);padding:8px 12px;text-align:right;background:var(--surface);white-space:nowrap;">Actual CPA</th>
+          <th style="font-family:var(--font-m);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);padding:8px 12px;text-align:right;background:var(--surface);white-space:nowrap;">Target CPA</th>
+          <th style="font-family:var(--font-m);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);padding:8px 12px;text-align:right;background:var(--surface);white-space:nowrap;">Delta</th>
+          <th style="font-family:var(--font-m);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);padding:8px 12px;text-align:right;background:var(--surface);white-space:nowrap;">Eff%</th>
+          <th style="font-family:var(--font-m);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);padding:8px 12px;text-align:right;background:var(--surface);white-space:nowrap;">RDE%</th>
+          <th style="font-family:var(--font-m);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);padding:8px 12px;text-align:right;background:var(--surface);white-space:nowrap;">Age75+</th>
+          <th style="font-family:var(--font-m);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);padding:8px 12px;text-align:right;background:var(--surface);white-space:nowrap;">Enh. Bid</th>
+          <th style="font-family:var(--font-m);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);padding:8px 12px;text-align:left;background:var(--surface);white-space:nowrap;">RP Action</th>
+        </tr>
+      </thead>
+      <tbody id="rp-table-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SUB ID INTEL TAB -->
+<div id="tab-subid" class="tab-panel">
+  <div class="notion-banner">
+    <span style="font-size:16px;">&#9672;</span>
+    <div><strong>Sub ID Intelligence</strong> &nbsp;&middot;&nbsp; Marketing angle performance scored vs season targets · QI drives bid multiplier</div>
+    <span class="notion-source-pill">QM RP Hub Data</span>
+  </div>
+
+  <div class="sec"><div class="sec-tag">Sub ID Quality Index</div><div class="sec-line"></div></div>
+  <div id="subid-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-bottom:24px;"></div>
+
+  <div class="sec"><div class="sec-tag">Season Targets Reference</div><div class="sec-line"></div></div>
+  <div id="subid-targets" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px;"></div>
+</div>
+
+<!-- JOANIE REPORTING TAB -->
+<div id="tab-reporting" class="tab-panel">
+  <div class="notion-banner">
+    <span style="font-size:16px;">&#9672;</span>
+    <div><strong>Joanie Reporting</strong> &nbsp;&middot;&nbsp; Master rolled-up view — MPQS + QM + MP scores combined by period</div>
+    <span class="notion-source-pill">Joanie Reporting</span>
+    <span class="notion-source-pill">Joanie MPQS</span>
+    <span class="notion-source-pill">Joanie QM Scorecards</span>
+    <span class="notion-source-pill">Joanie MP Scorecards</span>
+    <div style="margin-left:auto;font-size:11px;color:var(--text-3);">Auto-refreshes every <strong style="color:var(--cyan)">60s</strong></div>
+  </div>
+
+  <div class="kpi-grid-4" style="margin-bottom:20px;">
+    <div class="kpi green-accent"><div class="kpi-accent"></div><div class="kpi-label">Reporting Periods</div><div class="kpi-val" id="rpt-count">—</div><span class="kpi-badge flat">All time</span></div>
+    <div class="kpi green-accent"><div class="kpi-accent"></div><div class="kpi-label">Avg MPQS Score</div><div class="kpi-val" id="rpt-mpqs-avg">—</div><span class="kpi-badge flat" id="rpt-mpqs-badge">All periods</span></div>
+    <div class="kpi amber-accent"><div class="kpi-accent"></div><div class="kpi-label">Avg QM Score</div><div class="kpi-val" id="rpt-qm-avg">—</div><span class="kpi-badge flat" id="rpt-qm-badge">All periods</span></div>
+    <div class="kpi violet-accent"><div class="kpi-accent"></div><div class="kpi-label">Avg MP Score</div><div class="kpi-val" id="rpt-mp-avg">—</div><span class="kpi-badge flat" id="rpt-mp-badge">All periods</span></div>
+  </div>
+
+  <div class="sec"><div class="sec-tag amber">Season Activity</div><div class="sec-line"></div></div>
+  <div class="season-strip" id="reportingSeasonStrip">
+    <div class="season-pill"><div class="season-pill-label" style="color:rgba(0,229,255,0.6);">OEP</div><div class="season-pill-val">—</div><div class="season-pill-sub">Jan 1 – Mar 31</div></div>
+    <div class="season-pill"><div class="season-pill-label" style="color:rgba(0,230,118,0.6);">SEP</div><div class="season-pill-val">—</div><div class="season-pill-sub">Apr 1 – Oct 14</div></div>
+    <div class="season-pill"><div class="season-pill-label" style="color:rgba(255,181,71,0.6);">AEP</div><div class="season-pill-val">—</div><div class="season-pill-sub">Oct 15 – Nov 7</div></div>
+  </div>
+
+  <div class="sec"><div class="sec-tag">Period Reports</div><div class="sec-line"></div><span class="pill pill-notion" style="font-size:8px;padding:3px 9px;">&#9672; Live from Notion</span></div>
+  <div id="reportingFeed"><div style="color:var(--text-3);font-size:12px;text-align:center;padding:40px;">Loading Joanie Reporting data...</div></div>
 </div>
 
 <!-- PUBLISHERS TAB -->
@@ -625,8 +760,253 @@ function renderSeasons(data){
   `).join('');
 }
 
+/* ── RENDER JOANIE REPORTING ─────────────────────────────────────── */
+function renderReporting(data){
+  if(!data || !data.reportingEntries) return;
+  const entries = data.reportingEntries;
+
+  // KPI cards
+  document.getElementById('rpt-count').textContent = entries.length || '—';
+
+  // Avg scores across all periods
+  const mpqsScores = entries.filter(e => e.mpqsScore).map(e => e.mpqsScore);
+  const qmScores = entries.filter(e => e.qmScore).map(e => e.qmScore);
+  const mpScores = entries.filter(e => e.mpScore).map(e => e.mpScore);
+
+  const avg = arr => arr.length ? (arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(1) : '—';
+  document.getElementById('rpt-mpqs-avg').textContent = avg(mpqsScores);
+  document.getElementById('rpt-qm-avg').textContent = avg(qmScores);
+  document.getElementById('rpt-mp-avg').textContent = avg(mpScores);
+
+  // Season strip
+  const seasonCounts = {OEP:0, SEP:0, AEP:0};
+  entries.forEach(e => { if(seasonCounts[e.season] !== undefined) seasonCounts[e.season]++; });
+  const strip = document.getElementById('reportingSeasonStrip');
+  const seasons = [
+    {key:'OEP', label:'OEP', sub:'Jan 1 – Mar 31', clr:'rgba(0,229,255,0.6)'},
+    {key:'SEP', label:'SEP', sub:'Apr 1 – Oct 14', clr:'rgba(0,230,118,0.6)'},
+    {key:'AEP', label:'AEP', sub:'Oct 15 – Nov 7', clr:'rgba(255,181,71,0.6)'},
+  ];
+  strip.innerHTML = seasons.map(s => `
+    <div class="season-pill">
+      <div class="season-pill-label" style="color:${s.clr}">${s.label}</div>
+      <div class="season-pill-val">${seasonCounts[s.key] || '0'}</div>
+      <div class="season-pill-sub">${s.sub}</div>
+    </div>
+  `).join('');
+
+  // Report cards feed
+  const feed = document.getElementById('reportingFeed');
+  if(!entries.length){
+    feed.innerHTML = '<div style="color:var(--text-3);font-size:12px;text-align:center;padding:40px;">No reporting periods yet — create your first entry in Joanie Reporting</div>';
+    return;
+  }
+
+  feed.innerHTML = entries.map(e => {
+    const mpqsClr = !e.mpqsScore ? '' : e.mpqsScore >= 80 ? 'good' : e.mpqsScore >= 60 ? '' : 'warn';
+    const qmClr = !e.qmScore ? '' : e.qmScore >= 80 ? 'good' : e.qmScore >= 60 ? '' : 'warn';
+    const mpClr = !e.mpScore ? '' : e.mpScore >= 80 ? 'good' : e.mpScore >= 60 ? '' : 'warn';
+    const statusCls = e.status === 'Published' ? 'status-published' : e.status === 'In Review' ? 'status-review' : 'status-draft';
+    return `<div class="report-card">
+      <div class="report-card-header">
+        <div>
+          <div class="report-title">${e.reportName || 'Reporting Period'}</div>
+          <div class="report-date">${e.date || ''}${e.periodType ? ' · ' + e.periodType : ''}${e.season ? ' · ' + e.season : ''}</div>
+        </div>
+        <span class="report-status ${statusCls}">${e.status || 'Draft'}</span>
+      </div>
+      <div class="report-scores">
+        <div class="rscore"><div class="rscore-label">MPQS</div><div class="rscore-val ${mpqsClr}">${e.mpqsScore ?? '—'}</div></div>
+        <div class="rscore"><div class="rscore-label">QM Score</div><div class="rscore-val ${qmClr}">${e.qmScore ?? '—'}</div></div>
+        <div class="rscore"><div class="rscore-label">MP Score</div><div class="rscore-val ${mpClr}">${e.mpScore ?? '—'}</div></div>
+      </div>
+      ${e.headlineMetric ? `<div class="report-meta-item" style="margin-bottom:10px;"><div class="report-meta-label">Headline</div><div class="report-meta-val">${e.headlineMetric}</div></div>` : ''}
+      <div class="report-divider"></div>
+      ${e.biggestRisk ? `<div class="report-risk">${e.biggestRisk}</div>` : ''}
+      ${e.topOpportunity ? `<div class="report-opp">${e.topOpportunity}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+/* ── QM RP HUB DATA ──────────────────────────────────────────────── */
+const RP_SEASONS = {
+  SEP:{ cr:9.0,  cpa:325, eff:73, rde:10, age75:15, ltv:730, ltvPct:0.45, label:'SEP — Special Enrollment' },
+  OEP:{ cr:10.0, cpa:325, eff:72, rde:15, age75:15, ltv:730, ltvPct:0.45, label:'OEP — Open Enrollment' },
+  AEP:{ cr:16.0, cpa:275, eff:74, rde:15, age75:15, ltv:730, ltvPct:0.45, label:'AEP — Annual Enrollment' },
+};
+const MPQS_MULT = { A:1.15, B:1.00, C:0.85, D:0.70 };
+let activeRPSeason = 'SEP';
+
+const SUBID_DATA = [
+  { id:'FLEX-CARD', angle:'Flex card / allowance benefit',  cr:9.4, gpth:92, eff:74, rde:8,  age75:13, qi:1.10 },
+  { id:'GROCERY',   angle:'Grocery / food allowance',       cr:8.8, gpth:85, eff:72, rde:9,  age75:16, qi:1.05 },
+  { id:'DENTAL',    angle:'Dental coverage emphasis',       cr:7.9, gpth:78, eff:69, rde:11, age75:14, qi:0.95 },
+  { id:'OTC',       angle:'OTC / pharmacy benefit',         cr:7.2, gpth:71, eff:67, rde:13, age75:17, qi:0.88 },
+  { id:'VISION',    angle:'Vision + dental combo',          cr:8.1, gpth:80, eff:70, rde:10, age75:15, qi:0.92 },
+  { id:'TRANSPORT', angle:'Transportation benefit',         cr:6.4, gpth:63, eff:64, rde:15, age75:19, qi:0.80 },
+];
+const SUBID_MAP = Object.fromEntries(SUBID_DATA.map(s=>[s.id,s]));
+
+const RP_NOTION_DATA = [
+  {Publisher:"Adolent Marketing",Season:"SEP",MPQS:"B",actualCpa:328,targetCpa:325,eff:71,rde:9,age75:17,cr:8.2,subIds:["FLEX-CARD","GROCERY"],rpAction:"On Target",actionBand:"Maintain",baseBid:18},
+  {Publisher:"Barrington Media Group",Season:"SEP",MPQS:"D",actualCpa:765,targetCpa:325,eff:68,rde:14,age75:21,cr:6.1,subIds:["FLEX-CARD"],rpAction:"Cut Bid",actionBand:"Pullback",baseBid:null},
+  {Publisher:"DigiPeak LLC",Season:"SEP",MPQS:"B",actualCpa:387,targetCpa:325,eff:73,rde:8,age75:14,cr:7.0,subIds:["GROCERY","DENTAL"],rpAction:"Reduce Bid",actionBand:"Monitor",baseBid:25},
+  {Publisher:"EngageCX",Season:"SEP",MPQS:"C",actualCpa:442,targetCpa:325,eff:70,rde:11,age75:18,cr:7.8,subIds:["FLEX-CARD","OTC"],rpAction:"Reduce Bid",actionBand:"Throttle",baseBid:38},
+  {Publisher:"Healthcare.com",Season:"SEP",MPQS:"B",actualCpa:348,targetCpa:325,eff:74,rde:9,age75:15,cr:8.5,subIds:["FLEX-CARD","GROCERY","DENTAL"],rpAction:"Reduce Bid",actionBand:"Maintain",baseBid:40},
+  {Publisher:"HLG Solutions",Season:"SEP",MPQS:"C",actualCpa:274,targetCpa:325,eff:69,rde:12,age75:20,cr:9.8,subIds:["OTC"],rpAction:"Reduce Bid",actionBand:"Monitor",baseBid:22},
+  {Publisher:"Insurco",Season:"SEP",MPQS:"B",actualCpa:425,targetCpa:325,eff:75,rde:7,age75:12,cr:8.1,subIds:["GROCERY"],rpAction:"Reduce Bid",actionBand:"Monitor",baseBid:40},
+  {Publisher:"Milestone Marketing Solutions",Season:"SEP",MPQS:"B",actualCpa:480,targetCpa:325,eff:72,rde:9,age75:16,cr:7.2,subIds:["FLEX-CARD","GROCERY"],rpAction:"Reduce Bid",actionBand:"Throttle",baseBid:45},
+  {Publisher:"MyHealthAngel",Season:"SEP",MPQS:"D",actualCpa:421,targetCpa:325,eff:66,rde:15,age75:23,cr:6.5,subIds:["GROCERY"],rpAction:"Cut Bid",actionBand:"Pullback",baseBid:null},
+  {Publisher:"Paragon",Season:"SEP",MPQS:"B",actualCpa:null,targetCpa:325,eff:73,rde:8,age75:13,cr:0,subIds:["FLEX-CARD"],rpAction:"No Spend",actionBand:"Maintain",baseBid:30},
+  {Publisher:"Quote Velocity",Season:"SEP",MPQS:"B",actualCpa:264,targetCpa:325,eff:72,rde:10,age75:15,cr:9.1,subIds:["DENTAL","OTC"],rpAction:"On Target",actionBand:"Maintain",baseBid:35},
+  {Publisher:"RateQuote",Season:"SEP",MPQS:"B",actualCpa:367,targetCpa:325,eff:70,rde:8,age75:12,cr:7.5,subIds:["GROCERY"],rpAction:"Reduce Bid",actionBand:"Monitor",baseBid:18},
+  {Publisher:"RevRise Media",Season:"SEP",MPQS:"C",actualCpa:null,targetCpa:325,eff:74,rde:11,age75:18,cr:0,subIds:["FLEX-CARD","GROCERY"],rpAction:"No Spend",actionBand:"Maintain",baseBid:35},
+  {Publisher:"Scalability.io",Season:"SEP",MPQS:"B",actualCpa:289,targetCpa:325,eff:71,rde:9,age75:16,cr:8.8,subIds:["DENTAL"],rpAction:"Reduce Bid",actionBand:"Monitor",baseBid:27},
+  {Publisher:"The Wisdom Companies LLC",Season:"SEP",MPQS:"C",actualCpa:346,targetCpa:325,eff:68,rde:10,age75:19,cr:7.8,subIds:["GROCERY","OTC"],rpAction:"Reduce Bid",actionBand:"Monitor",baseBid:20},
+  {Publisher:"UAB Inulti",Season:"SEP",MPQS:"B",actualCpa:304,targetCpa:325,eff:70,rde:8,age75:14,cr:8.4,subIds:["FLEX-CARD"],rpAction:"On Target",actionBand:"Maintain",baseBid:18},
+  // OEP
+  {Publisher:"Adolent Marketing",Season:"OEP",MPQS:"B",actualCpa:null,targetCpa:325,eff:71,rde:9,age75:17,cr:6.2,subIds:["FLEX-CARD","GROCERY"],rpAction:"No Spend",actionBand:"Maintain",baseBid:null},
+  {Publisher:"Healthcare.com",Season:"OEP",MPQS:"B",actualCpa:240,targetCpa:325,eff:66.7,rde:9,age75:0,cr:19.4,subIds:["FLEX-CARD","GROCERY","DENTAL"],rpAction:"Scale Up",actionBand:"Scale Eligible",baseBid:45},
+  {Publisher:"Insurco",Season:"OEP",MPQS:"A",actualCpa:null,targetCpa:325,eff:75,rde:7,age75:12,cr:8.2,subIds:["GROCERY"],rpAction:"No Spend",actionBand:"Scale Eligible",baseBid:45},
+  {Publisher:"Paragon",Season:"OEP",MPQS:"A",actualCpa:null,targetCpa:325,eff:73,rde:8,age75:13,cr:9.6,subIds:["FLEX-CARD"],rpAction:"No Spend",actionBand:"Scale Eligible",baseBid:30},
+  {Publisher:"RevRise Media",Season:"OEP",MPQS:"B",actualCpa:231,targetCpa:325,eff:87.3,rde:11,age75:43.3,cr:14.8,subIds:["FLEX-CARD","GROCERY"],rpAction:"Scale Up",actionBand:"Scale Eligible",baseBid:35},
+  {Publisher:"Scalability.io",Season:"OEP",MPQS:"B",actualCpa:369,targetCpa:325,eff:78.4,rde:9,age75:9.6,cr:10.6,subIds:["DENTAL"],rpAction:"Reduce Bid",actionBand:"Maintain",baseBid:27},
+  {Publisher:"Quote Velocity",Season:"OEP",MPQS:"B",actualCpa:352,targetCpa:325,eff:75.3,rde:10,age75:4.9,cr:10.0,subIds:["DENTAL","OTC"],rpAction:"Reduce Bid",actionBand:"Monitor",baseBid:35},
+];
+
+const RP_SCORECARD_DATA = [
+  {pub:"Quote Velocity",season:"OEP",rawCalls:1147,netSales:446,cpa:352,eff:0.753,age75:0.049,talkHours:1355.6,actionBand:"Monitor",status:"Watch",biggestRisk:"GPpTH $53 below $75 benchmark",topOpp:"Lowest Over75% in Monitor — compliance-clean partner with scale potential",date:"2026-02-28"},
+  {pub:"Elijay Marketing Solutions",season:"OEP",rawCalls:41,netSales:2,cpa:663,eff:0.364,age75:0.670,talkHours:59.3,actionBand:"Pullback",status:"At Risk",biggestRisk:"Lowest MPQS. Negative GPpTH, Eff% 36.4%, Over75 67.0% — all components flagged",topOpp:"None — full program review required",date:"2026-02-28"},
+  {pub:"The Wisdom Companies LLC",season:"OEP",rawCalls:1147,netSales:133,cpa:316,eff:0.851,age75:0.141,talkHours:562.5,actionBand:"Monitor",status:"Watch",biggestRisk:"CR 7.9% below 9% benchmark",topOpp:"Effectuation 85.1% — highest durability in Monitor. CR coaching would unlock Maintain.",date:"2026-02-28"},
+  {pub:"Scalability.io",season:"OEP",rawCalls:1147,netSales:117,cpa:369,eff:0.784,age75:0.096,talkHours:809.9,actionBand:"Maintain",status:"Healthy",biggestRisk:"GPpTH $57 below $75 benchmark",topOpp:"7 points from Scale Eligible — GPpTH improvement is the single lever",date:"2026-02-28"},
+  {pub:"RevRise Media",season:"OEP",rawCalls:1147,billableCalls:null,billableRate:0.256,netSales:59,cpa:231,eff:0.873,age75:0.433,talkHours:75.7,actionBand:"Scale Eligible",status:"Healthy",biggestRisk:"Demo Mix 43.3% Over75 — nearly 3× the 15% benchmark",topOpp:"Strongest Eff% in portfolio at 87.3%",date:"2026-02-28"},
+  {pub:"Milestone Marketing Solutions",season:"OEP",rawCalls:1147,netSales:361,cpa:442,eff:0.789,age75:0.184,talkHours:1403.7,actionBand:"Monitor",status:"Watch",biggestRisk:"GPpTH $42 significantly below $75 benchmark",topOpp:"Highest volume in Monitor — GPpTH improvement would have largest portfolio impact",date:"2026-02-28"},
+  {pub:"Paragon",season:"OEP",rawCalls:1147,netSales:548,cpa:265,eff:0.704,age75:0.129,talkHours:2483.9,actionBand:"Maintain",status:"Healthy",biggestRisk:"Effectuation 70.4% — slightly below 72% benchmark",topOpp:"Highest Net Sales in Maintain — scale upside significant if GPpTH improves",date:"2026-02-28"},
+  {pub:"Healthcare.com",season:"OEP",rawCalls:1147,billableCalls:464,billableRate:0.256,netSales:6,cpa:240,eff:0.667,age75:0.000,talkHours:6.7,actionBand:"Scale Eligible",status:"Healthy",biggestRisk:"Over75 = 0.0% — confirm not a data gap before scaling",topOpp:"Highest MPQS in portfolio — immediate scale candidate",date:"2026-02-28"},
+  {pub:"EngageCX",season:"OEP",rawCalls:1147,netSales:950,cpa:413,eff:0.731,age75:0.274,talkHours:3168.9,actionBand:"Throttle",status:"Watch",biggestRisk:"GPpTH $36 and Over75 27.4% on highest-volume Throttle partner",topOpp:"950 sold policies — largest volume opportunity outside Maintain/Scale",date:"2026-02-28"},
+  {pub:"Adolent Marketing",season:"OEP",rawCalls:1147,netSales:284,cpa:294,eff:0.706,age75:0.669,talkHours:1990.1,actionBand:"Throttle",status:"Watch",biggestRisk:"Over75 66.9% — highest in portfolio. Immediate compliance escalation required.",topOpp:"284 sold policies at strong CPA — compliance resolution must precede volume",date:"2026-02-28"},
+];
+
+function calcRPEnhancedBid(d) {
+  const t = RP_SEASONS[activeRPSeason];
+  const ltv = 730, ltvPct = 0.45;
+  const cr = d.cr || t.cr;
+  const eff = d.eff || t.eff;
+  const baseBid = ltv * (eff/100) * ltvPct * (cr/100);
+  const mpqsMult = MPQS_MULT[d.MPQS] || 1.0;
+  const qis = (d.subIds||[]).map(id => SUBID_MAP[id]?.qi || 1.0);
+  const qi = qis.length ? qis.reduce((a,b)=>a+b,0)/qis.length : 1.0;
+  return +(baseBid * mpqsMult * qi).toFixed(0);
+}
+
+function rpBadgeColor(action) {
+  const map = {'Scale Up':'#00E676','On Target':'#00E676','Slight ↑':'#4FC3F7','Reduce Bid':'#FFB547','Cut Bid':'#FF5252','No Spend':'rgba(255,255,255,0.2)'};
+  return map[action] || 'rgba(255,255,255,0.2)';
+}
+
+function mpqsBadgeColor(grade) {
+  return grade==='A'?'#00E676':grade==='B'?'#4FC3F7':grade==='C'?'#FFB547':'#FF5252';
+}
+
+function setRPSeason(s, btn) {
+  activeRPSeason = s;
+  ['SEP','OEP','AEP'].forEach(season => {
+    const el = document.getElementById('rp-'+season.toLowerCase());
+    if(el) { el.style.background = season===s ? 'var(--cyan)' : 'var(--surface)'; el.style.color = season===s ? 'var(--ink)' : 'var(--text-3)'; }
+  });
+  renderRPTab();
+}
+
+function renderRPTab() {
+  const t = RP_SEASONS[activeRPSeason];
+  const pubs = RP_NOTION_DATA.filter(d => d.Season === activeRPSeason);
+
+  // KPI grid
+  const active = pubs.filter(d => d.actualCpa);
+  const avgCpa = active.length ? Math.round(active.reduce((s,d)=>s+d.actualCpa,0)/active.length) : null;
+  const onTarget = active.filter(d => d.actualCpa <= t.cpa).length;
+  const scaleEligible = pubs.filter(d => d.actionBand === 'Scale Eligible').length;
+  const pullback = pubs.filter(d => d.actionBand === 'Pullback').length;
+  document.getElementById('rp-kpi-grid').innerHTML = `
+    <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">Season Target CPA</div><div class="kpi-val">$${t.cpa}</div><span class="kpi-badge flat">${activeRPSeason} · ${t.label.split(' — ')[0]}</span></div>
+    <div class="kpi green-accent"><div class="kpi-accent"></div><div class="kpi-label">Avg Actual CPA</div><div class="kpi-val" style="color:${avgCpa&&avgCpa<=t.cpa?'var(--green)':'var(--amber)'}">${avgCpa?'$'+avgCpa:'—'}</div><span class="kpi-badge flat">${active.length} active pubs</span></div>
+    <div class="kpi green-accent"><div class="kpi-accent"></div><div class="kpi-label">On / Under Target</div><div class="kpi-val">${onTarget}</div><span class="kpi-badge up">of ${active.length} active</span></div>
+    <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">Scale Eligible</div><div class="kpi-val" style="color:var(--green)">${scaleEligible}</div><span class="kpi-badge up">publishers</span></div>
+    <div class="kpi amber-accent"><div class="kpi-accent"></div><div class="kpi-label">CR Target</div><div class="kpi-val">${t.cr}%</div><span class="kpi-badge flat">${activeRPSeason}</span></div>
+    <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">Pullback</div><div class="kpi-val" style="color:var(--red)">${pullback}</div><span class="kpi-badge down">publishers</span></div>
+  `;
+
+  // Table
+  document.getElementById('rp-table-body').innerHTML = pubs.map(d => {
+    const enhBid = calcRPEnhancedBid(d);
+    const delta = d.actualCpa ? Math.round(d.actualCpa - t.cpa) : null;
+    const deltaColor = !delta ? 'var(--text-3)' : delta > 50 ? 'var(--red)' : delta > 0 ? 'var(--amber)' : 'var(--green)';
+    const cpaColor = !d.actualCpa ? 'var(--text-3)' : d.actualCpa <= t.cpa ? 'var(--green)' : 'var(--amber)';
+    const actionColor = rpBadgeColor(d.rpAction);
+    const mpqsColor = mpqsBadgeColor(d.MPQS);
+    const effColor = d.eff >= t.eff ? 'var(--green)' : 'var(--amber)';
+    const rdeColor = d.rde <= t.rde ? 'var(--green)' : 'var(--red)';
+    const age75Color = d.age75 <= t.age75 ? 'var(--text-2)' : 'var(--red)';
+    return `<tr style="border-bottom:1px solid var(--edge);">
+      <td style="padding:9px 12px;color:var(--text);font-family:var(--font-s);font-size:12px;font-weight:500;">${d.Publisher}</td>
+      <td style="padding:9px 12px;text-align:center;"><span style="font-family:var(--font-m);font-size:10px;font-weight:700;color:${mpqsColor};padding:2px 8px;border-radius:3px;background:${mpqsColor}22;">${d.MPQS}</span></td>
+      <td style="padding:9px 12px;text-align:right;font-family:var(--font-m);font-size:11px;color:${cpaColor};">${d.actualCpa?'$'+d.actualCpa:'—'}</td>
+      <td style="padding:9px 12px;text-align:right;font-family:var(--font-m);font-size:11px;color:var(--text-3);">$${t.cpa}</td>
+      <td style="padding:9px 12px;text-align:right;font-family:var(--font-m);font-size:11px;color:${deltaColor};">${delta!=null?(delta>0?'+$'+delta:'-$'+Math.abs(delta)):'—'}</td>
+      <td style="padding:9px 12px;text-align:right;font-family:var(--font-m);font-size:11px;color:${effColor};">${d.eff}%</td>
+      <td style="padding:9px 12px;text-align:right;font-family:var(--font-m);font-size:11px;color:${rdeColor};">${d.rde}%</td>
+      <td style="padding:9px 12px;text-align:right;font-family:var(--font-m);font-size:11px;color:${age75Color};">${d.age75}%</td>
+      <td style="padding:9px 12px;text-align:right;font-family:var(--font-m);font-size:11px;color:var(--green);">${enhBid>0?'$'+enhBid:'—'}</td>
+      <td style="padding:9px 12px;"><span style="font-family:var(--font-m);font-size:9px;font-weight:700;padding:3px 8px;border-radius:3px;background:${actionColor}22;color:${actionColor};border:1px solid ${actionColor}44;">${d.rpAction}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderSubIDTab() {
+  const t = RP_SEASONS[activeRPSeason];
+
+  document.getElementById('subid-cards').innerHTML = SUBID_DATA.map(si => {
+    const qiColor = si.qi >= 1.05 ? 'var(--green)' : si.qi >= 0.95 ? 'var(--amber)' : 'var(--red)';
+    const crOk = si.cr >= t.cr, gpthOk = si.gpth >= 90, effOk = si.eff >= t.eff, rdeOk = si.rde <= t.rde, age75Ok = si.age75 <= t.age75;
+    let pts = [crOk?2:si.cr>=t.cr-2?1:0, gpthOk?2:si.gpth>=70?1:0, effOk?2:si.eff>=t.eff-8?1:0, rdeOk?2:si.rde<=t.rde+3?1:0, age75Ok?2:si.age75<=t.age75+5?1:0].reduce((a,b)=>a+b,0);
+    const grade = pts>=9?'A':pts>=7?'B':pts>=4?'C':'D';
+    const gradeColor = mpqsBadgeColor(grade);
+    return `<div class="panel">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+        <div>
+          <div style="font-family:var(--font-num);font-size:15px;font-weight:400;color:var(--text);">${si.id}</div>
+          <div style="font-size:10px;color:var(--text-3);margin-top:2px;">${si.angle}</div>
+        </div>
+        <span style="font-family:var(--font-m);font-size:10px;font-weight:700;padding:3px 8px;border-radius:3px;background:${gradeColor}22;color:${gradeColor};">${grade}</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:5px;margin-top:10px;padding-top:10px;border-top:1px solid var(--edge);">
+        ${[
+          ['Conv. Rate', si.cr+'%', crOk?'var(--green)':'var(--amber)'],
+          ['GP/TH', '$'+si.gpth, gpthOk?'var(--green)':'var(--amber)'],
+          ['Effectuation', si.eff+'%', effOk?'var(--green)':'var(--amber)'],
+          ['RDE', si.rde+'%', rdeOk?'var(--green)':'var(--red)'],
+          ['Age 75+', si.age75+'%', age75Ok?'var(--text-2)':'var(--red)'],
+        ].map(([l,v,c])=>`<div style="display:flex;justify-content:space-between;"><span style="font-size:10px;color:var(--text-3);font-family:var(--font-m);">${l}</span><span style="font-size:10px;font-family:var(--font-m);font-weight:600;color:${c};">${v}</span></div>`).join('')}
+        <div style="display:flex;justify-content:space-between;margin-top:5px;padding-top:5px;border-top:1px solid var(--edge);">
+          <span style="font-size:10px;color:var(--text-3);font-family:var(--font-m);">Bid QI Index</span>
+          <span style="font-size:12px;font-family:var(--font-num);font-weight:400;color:${qiColor};">×${si.qi.toFixed(2)}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('subid-targets').innerHTML = Object.entries(RP_SEASONS).map(([s,t]) => `
+    <div class="panel" style="flex:1;min-width:200px;">
+      <div style="font-family:var(--font-m);font-size:9px;color:var(--cyan);font-weight:700;letter-spacing:1.5px;margin-bottom:10px;">${s} — ${t.label.split(' — ')[1]}</div>
+      ${[['Target CPA','$'+t.cpa],['CR Target',t.cr+'%'],['Effectuation',t.eff+'%'],['Max RDE',t.rde+'%'],['Age 75+ Max',t.age75+'%'],['LTV','$'+t.ltv]].map(([l,v])=>
+        `<div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:10px;color:var(--text-3);">${l}</span><span style="font-size:10px;font-family:var(--font-m);color:var(--text-2);">${v}</span></div>`
+      ).join('')}
+    </div>
+  `).join('');
+}
+
 /* ── NOTION API CALL ─────────────────────────────────────────────── */
-const FALLBACK=[{"Report":"QM — Healthcare.com — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Scale Eligible","CPA":240,"Conv Rate (CR%)":0.194,"Effectuation %":0.667,"Duplicate Rate %":0.047,"Headline Metric":"MPQS 102.4 — #1 in portfolio. GPpTH $205. Scale Eligible.","Biggest Risk":"Over75 = 0.0% — confirm not a data gap before scaling","Top Opportunity":"Highest MPQS in portfolio — immediate scale candidate"},{"Report":"QM — RevRise Media — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Scale Eligible","CPA":231,"Conv Rate (CR%)":0.148,"Effectuation %":0.873,"Duplicate Rate %":0.047,"Headline Metric":"MPQS 97.3 — #2 in portfolio. GPpTH $135. Scale Eligible.","Biggest Risk":"Demo Mix 43.3% Over75 — nearly 3x benchmark.","Top Opportunity":"Strongest Effectuation % at 87.3%"},{"Report":"QM — Scalability.io — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Maintain","CPA":369,"Conv Rate (CR%)":0.106,"Effectuation %":0.784,"Duplicate Rate %":null,"Headline Metric":"MPQS 83.8 — #4. Maintain.","Biggest Risk":"GPpTH $57 below $75 benchmark","Top Opportunity":"7 points from Scale Eligible"},{"Report":"QM — Quote Velocity — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Monitor","CPA":352,"Conv Rate (CR%)":0.1,"Effectuation %":0.753,"Duplicate Rate %":null,"Headline Metric":"MPQS 81.4 — #6. Monitor.","Biggest Risk":"GPpTH $53 below benchmark","Top Opportunity":"Best Over75% in Monitor tier"},{"Report":"QM — Ring2Media — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Throttle","CPA":890,"Conv Rate (CR%)":0.091,"Effectuation %":0.775,"Duplicate Rate %":null,"Headline Metric":"MPQS 71.6 — Throttle. GPpTH -$78.","Biggest Risk":"Negative GPpTH","Top Opportunity":"CR and Effectuation at benchmark"},{"Report":"QM — Elijay / VitalCareWorks — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Pullback","CPA":663,"Conv Rate (CR%)":0.049,"Effectuation %":0.364,"Duplicate Rate %":null,"Headline Metric":"MPQS 56.3 — Pullback.","Biggest Risk":"Lowest MPQS. All components flagged.","Top Opportunity":"Full program review required"}];
+const FALLBACK=[{"Report":"QM — Healthcare.com — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Scale Eligible","CPA":240,"Conv Rate (CR%)":0.194,"Effectuation %":0.667,"Duplicate Rate %":0.047,"Headline Metric":"MPQS 102.4 — #1 in portfolio. GPpTH $205. Scale Eligible.","Biggest Risk":"Over75 = 0.0% — confirm not a data gap before scaling","Top Opportunity":"Highest MPQS in portfolio — immediate scale candidate"},{"Report":"QM — RevRise Media — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Scale Eligible","CPA":231,"Conv Rate (CR%)":0.148,"Effectuation %":0.873,"Duplicate Rate %":0.047,"Headline Metric":"MPQS 97.3 — #2 in portfolio. GPpTH $135. Scale Eligible.","Biggest Risk":"Demo Mix 43.3% Over75 — nearly 3x benchmark.","Top Opportunity":"Strongest Effectuation % at 87.3%"},{"Report":"QM — Scalability.io — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Maintain","CPA":369,"Conv Rate (CR%)":0.106,"Effectuation %":0.784,"Duplicate Rate %":null,"Headline Metric":"MPQS 83.8 — #4. Maintain.","Biggest Risk":"GPpTH $57 below $75 benchmark","Top Opportunity":"7 points from Scale Eligible"},{"Report":"QM — Quote Velocity — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Monitor","CPA":352,"Conv Rate (CR%)":0.1,"Effectuation %":0.753,"Duplicate Rate %":null,"Headline Metric":"MPQS 81.4 — #6. Monitor.","Biggest Risk":"GPpTH $53 below benchmark","Top Opportunity":"Best Over75% in Monitor tier"},{"Report":"QM — Milestone Marketing — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Monitor","CPA":442,"Conv Rate (CR%)":0.11,"Effectuation %":0.789,"Duplicate Rate %":null,"Headline Metric":"MPQS 76.0. Monitor. Highest volume in Monitor.","Biggest Risk":"GPpTH $42 significantly below benchmark","Top Opportunity":"GPpTH improvement would have largest portfolio impact"},{"Report":"QM — EngageCX — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Throttle","CPA":413,"Conv Rate (CR%)":0.098,"Effectuation %":0.731,"Duplicate Rate %":0.042,"Headline Metric":"MPQS 69.5. Throttle. 950 sales.","Biggest Risk":"GPpTH $36 on highest-volume Throttle partner","Top Opportunity":"950 net sales — largest volume outside Maintain/Scale"},{"Report":"QM — Adolent Marketing — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Throttle","CPA":294,"Conv Rate (CR%)":0.062,"Effectuation %":0.706,"Duplicate Rate %":null,"Headline Metric":"MPQS 69.6. Throttle. Over75 66.9%.","Biggest Risk":"Over75 66.9% — compliance escalation required","Top Opportunity":"High volume — compliance fix unlocks expansion"},{"Report":"QM — Elijay / VitalCareWorks — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Pullback","CPA":663,"Conv Rate (CR%)":0.049,"Effectuation %":0.364,"Duplicate Rate %":null,"Headline Metric":"MPQS 56.3 — Pullback.","Biggest Risk":"Lowest MPQS. All components flagged.","Top Opportunity":"Full program review required"},{"Report":"QM — Paragon — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Maintain","CPA":265,"Conv Rate (CR%)":0.096,"Effectuation %":0.704,"Duplicate Rate %":0.029,"Headline Metric":"MPQS 83.4. Maintain. High volume.","Biggest Risk":"Effectuation 70.4% slightly below 72%","Top Opportunity":"Highest Net Sales in Maintain band"},{"Report":"QM — Insurco — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Monitor","CPA":564,"Conv Rate (CR%)":0.082,"Effectuation %":0.813,"Duplicate Rate %":0.033,"Headline Metric":"MPQS Monitor. GPpTH negative.","Biggest Risk":"Negative GPpTH — entire score drag is economics","Top Opportunity":"If GPpTH turns positive, Maintain band is within reach"},{"Report":"QM — MyHealthAngel — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Pullback","CPA":421,"Conv Rate (CR%)":0.065,"Effectuation %":0.660,"Duplicate Rate %":null,"Headline Metric":"Pullback. Low LTV, elevated RDE and demo age over 75.","Biggest Risk":"Durability profile unacceptable at current spend","Top Opportunity":"None — program review required"},{"Report":"QM — Barrington Media Group — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Pullback","CPA":765,"Conv Rate (CR%)":0.061,"Effectuation %":0.680,"Duplicate Rate %":0.058,"Headline Metric":"Pullback. GPpTH -$117, Over75 37.5%.","Biggest Risk":"Economics and compliance both flagged simultaneously","Top Opportunity":"CR 17.2% is a genuine strength if CPA corrected"}];
 
 async function loadNotionData(){
   const btn=document.getElementById('refreshBtn');
@@ -658,6 +1038,22 @@ async function loadNotionData(){
       }
     }
   }catch(e){console.log('Joanie API unavailable',e);}
+
+  // Load Joanie Reporting from Notion via Claude API
+  try{
+    const res = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',
+      max_tokens:4000,
+      system:'Return ONLY a raw JSON array. No markdown, no explanation.',
+      messages:[{role:'user',content:'Use the notion-query-data-sources tool to query database 33ecb15b390180c1ba65cc3887668019. Return all entries as a JSON array with these fields for each row: reportName (title field), date, periodType, season, status, headlineMetric, biggestRisk, topOpportunity, mpqsScore (from MPQS Score rollup), qmScore (from QM Score rollup), mpScore (from MP Score rollup). Return ONLY the JSON array.'}],
+      mcp_servers:[{type:'url',url:'https://mcp.notion.com/mcp',name:'notion-mcp'}]
+    })});
+    const data = await res.json();
+    let txt = '';
+    if(data.content){for(const b of data.content){if(b.type==='text')txt+=b.text;else if(b.type==='mcp_tool_result'&&Array.isArray(b.content)){for(const c of b.content){if(c.text)txt+=c.text;}}}}
+    const m = txt.match(/\[[\s\S]*\]/);
+    if(m){ const recs = JSON.parse(m[0]); if(recs) renderReporting({reportingEntries: recs}); }
+  }catch(e){console.log('Joanie Reporting unavailable',e);}
 
   const now=new Date();
   dot.className='sync-dot';
@@ -695,6 +1091,8 @@ window.addEventListener('DOMContentLoaded',()=>{
   buildAgents();
   buildCallVolChart('callVolChart2');
   buildFunnel('funnelEl2');
+  renderRPTab();
+  renderSubIDTab();
   loadNotionData();
 });
 </script>
