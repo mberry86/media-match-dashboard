@@ -157,7 +157,44 @@ body::after{content:'';position:fixed;inset:0;z-index:0;background-image:repeati
 .pub-opp{display:flex;align-items:flex-start;gap:5px;font-size:10px;color:rgba(0,230,118,0.7);margin-top:4px;line-height:1.35;}
 .pub-opp::before{content:'+';font-family:var(--font-m);font-size:10px;font-weight:700;flex-shrink:0;}
 
-/* REPORTING CARDS */
+/* DISPOSITION TAB */
+.disp-publisher-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(520px,1fr));gap:14px;margin-bottom:24px;}
+.disp-card{background:var(--surface);border:1px solid var(--edge);border-radius:var(--r-lg);overflow:hidden;transition:border-color 0.2s;}
+.disp-card:hover{border-color:var(--edge2);}
+.disp-card-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--edge);}
+.disp-card-header.healthy{border-left:3px solid var(--green);}
+.disp-card-header.watch{border-left:3px solid var(--amber);}
+.disp-card-header.risk{border-left:3px solid var(--red);}
+.disp-pub-name{font-family:var(--font-num);font-size:14px;font-weight:400;color:var(--text);}
+.disp-pub-meta{font-family:var(--font-m);font-size:9px;color:var(--text-3);margin-top:2px;}
+.disp-band{font-family:var(--font-m);font-size:9px;font-weight:700;padding:3px 8px;border-radius:20px;letter-spacing:0.5px;white-space:nowrap;}
+.disp-kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border-bottom:1px solid var(--edge);}
+.disp-kpi{padding:10px 14px;border-right:1px solid var(--edge);display:flex;flex-direction:column;gap:3px;}
+.disp-kpi:last-child{border-right:none;}
+.disp-kpi-label{font-family:var(--font-m);font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--text-3);}
+.disp-kpi-val{font-family:var(--font-num);font-size:18px;font-weight:300;color:var(--text);line-height:1;}
+.disp-kpi-sub{font-family:var(--font-m);font-size:8px;color:var(--text-3);}
+.disp-flow-row{display:flex;align-items:stretch;padding:12px 16px;gap:0;background:rgba(255,255,255,0.01);}
+.disp-step{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;padding:0 4px;}
+.disp-step::after{content:'→';position:absolute;right:-8px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--text-3);font-family:var(--font-m);}
+.disp-step:last-child::after{display:none;}
+.disp-step-box{background:var(--surface2);border:1px solid var(--edge);border-radius:6px;padding:8px 6px;width:100%;margin-bottom:4px;}
+.disp-step-num{font-family:var(--font-num);font-size:16px;font-weight:300;line-height:1;margin-bottom:2px;}
+.disp-step-label{font-family:var(--font-m);font-size:7px;letter-spacing:0.5px;text-transform:uppercase;color:var(--text-3);}
+.disp-step-rate{font-family:var(--font-m);font-size:8px;color:var(--text-3);}
+.disp-bars-section{padding:12px 16px;border-top:1px solid var(--edge);}
+.disp-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+.disp-bar-row:last-child{margin-bottom:0;}
+.disp-bar-label{font-family:var(--font-m);font-size:9px;color:var(--text-2);width:120px;flex-shrink:0;text-align:right;}
+.disp-bar-track{flex:1;height:12px;background:rgba(255,255,255,0.04);border-radius:3px;overflow:hidden;}
+.disp-bar-fill{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(0.16,1,0.3,1);}
+.disp-bar-val{font-family:var(--font-m);font-size:9px;font-weight:600;width:50px;flex-shrink:0;}
+.disp-bar-pct{font-family:var(--font-m);font-size:9px;color:var(--text-3);width:36px;flex-shrink:0;text-align:right;}
+.disp-intel{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 16px;border-top:1px solid var(--edge);}
+.disp-intel-box{padding:8px 10px;border-radius:6px;font-size:10px;line-height:1.5;}
+.disp-intel-box.risk{background:rgba(255,82,82,0.06);border:1px solid rgba(255,82,82,0.2);color:rgba(255,82,82,0.75);}
+.disp-intel-box.opp{background:rgba(0,230,118,0.05);border:1px solid rgba(0,230,118,0.2);color:rgba(0,230,118,0.7);}
+.disp-intel-label{font-family:var(--font-m);font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;}
 .report-card{background:var(--surface);border:1px solid var(--edge);border-radius:var(--r-lg);padding:20px;margin-bottom:12px;transition:border-color 0.2s;}
 .report-card:hover{border-color:var(--edge2);}
 .report-card-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;gap:12px;}
@@ -239,7 +276,55 @@ body::after{content:'';position:fixed;inset:0;z-index:0;background-image:repeati
 .season-pill-val{font-family:var(--font-num);font-size:24px;font-weight:300;color:var(--text);line-height:1;}
 .season-pill-sub{font-size:10px;color:var(--text-3);}
 
-/* SKELETON */
+/* GLOBAL SEASON TOGGLE */
+.global-season{display:flex;gap:2px;background:var(--surface);border:1px solid var(--edge);border-radius:var(--r-sm);padding:3px;}
+.gstab{padding:5px 14px;font-family:var(--font-m);font-size:11px;font-weight:700;color:var(--text-3);background:transparent;border:none;border-radius:3px;cursor:pointer;transition:all 0.15s;letter-spacing:0.5px;}
+.gstab.active{color:var(--ink);font-weight:700;}
+.gstab.sep.active{background:var(--green);}
+.gstab.oep.active{background:var(--cyan);}
+.gstab.aep.active{background:var(--amber);}
+.gstab:hover:not(.active){color:var(--text);background:var(--surface2);}
+.season-context-bar{display:flex;align-items:center;gap:12px;padding:7px 0;border-bottom:1px solid var(--edge);margin-bottom:0;font-family:var(--font-m);font-size:10px;color:var(--text-3);}
+.season-context-pill{padding:3px 10px;border-radius:20px;font-size:9px;font-weight:700;letter-spacing:1px;}
+.season-context-item{display:flex;align-items:center;gap:5px;}
+.season-context-item strong{color:var(--text-2);}
+
+/* ALERTS — COLLAPSED GROUPED CALLOUT SYSTEM */
+.alerts-header{display:flex;align-items:center;gap:12px;cursor:pointer;padding:12px 18px;border-radius:var(--r-md);border:1px solid var(--edge);background:var(--surface);transition:border-color 0.2s,background 0.2s;user-select:none;margin-bottom:20px;}
+.alerts-header:hover{border-color:var(--edge2);background:var(--surface2);}
+.alerts-header.has-critical{border-color:rgba(255,82,82,0.3);background:rgba(255,82,82,0.05);}
+.alerts-header.has-critical:hover{background:rgba(255,82,82,0.08);}
+.alerts-header.has-warning{border-color:rgba(255,181,71,0.25);background:rgba(255,181,71,0.04);}
+.alerts-header.all-clear{border-color:rgba(0,230,118,0.25);background:rgba(0,230,118,0.04);}
+.alerts-dot-row{display:flex;gap:5px;align-items:center;}
+.alerts-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.alerts-summary-text{font-family:var(--font-m);font-size:11px;flex:1;}
+.alerts-chevron{font-size:12px;color:var(--text-3);transition:transform 0.25s;margin-left:4px;}
+.alerts-chevron.open{transform:rotate(180deg);}
+.alerts-badge{font-family:var(--font-m);font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:0.5px;}
+.alerts-badge.critical{background:rgba(255,82,82,0.15);color:var(--red);border:1px solid rgba(255,82,82,0.3);}
+.alerts-badge.warning{background:rgba(255,181,71,0.15);color:var(--amber);border:1px solid rgba(255,181,71,0.3);}
+.alerts-badge.clear{background:rgba(0,230,118,0.12);color:var(--green);border:1px solid rgba(0,230,118,0.25);}
+
+.alerts-body{display:none;margin-bottom:20px;animation:riseIn 0.25s ease both;}
+.alerts-body.open{display:block;}
+.alert-group{margin-bottom:12px;}
+.alert-group-label{font-family:var(--font-m);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 12px;border-radius:4px 4px 0 0;border:1px solid;border-bottom:none;}
+.alert-group-label.critical{color:var(--red);background:rgba(255,82,82,0.08);border-color:rgba(255,82,82,0.25);}
+.alert-group-label.warning{color:var(--amber);background:rgba(255,181,71,0.06);border-color:rgba(255,181,71,0.22);}
+.alert-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px;padding:12px;border-radius:0 0 var(--r-md) var(--r-md);border:1px solid;}
+.alert-cards.critical{background:rgba(255,82,82,0.04);border-color:rgba(255,82,82,0.2);}
+.alert-cards.warning{background:rgba(255,181,71,0.03);border-color:rgba(255,181,71,0.18);}
+.alert-card{background:var(--surface2);border-radius:var(--r-sm);padding:10px 12px;display:flex;flex-direction:column;gap:5px;border:1px solid var(--edge);}
+.alert-card-pub{font-family:var(--font-num);font-size:13px;font-weight:400;color:var(--text);}
+.alert-card-msg{font-size:10px;color:var(--text-2);line-height:1.45;}
+.alert-card-metric{font-family:var(--font-m);font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;align-self:flex-start;margin-top:2px;}
+.alert-card-metric.critical{background:rgba(255,82,82,0.15);color:var(--red);}
+.alert-card-metric.warning{background:rgba(255,181,71,0.15);color:var(--amber);}
+
+/* TREND CHARTS */
+.trend-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+
 .skeleton{background:linear-gradient(90deg,var(--surface) 25%,var(--surface2) 50%,var(--surface) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;}
 
 /* FOOTER */
@@ -273,6 +358,11 @@ body::after{content:'';position:fixed;inset:0;z-index:0;background-image:repeati
     <div class="header-sub">Performance Dashboard &nbsp;&middot;&nbsp; AI-Powered Media Distribution Engine</div>
   </div>
   <div class="header-right">
+    <div class="global-season" id="globalSeasonToggle">
+      <button class="gstab sep active" onclick="setGlobalSeason('SEP',this)">SEP</button>
+      <button class="gstab oep" onclick="setGlobalSeason('OEP',this)">OEP</button>
+      <button class="gstab aep" onclick="setGlobalSeason('AEP',this)">AEP</button>
+    </div>
     <div class="period-tabs">
       <button class="ptab" onclick="setPeriod('WTD',this)">WTD</button>
       <button class="ptab active" onclick="setPeriod('MTD',this)">MTD</button>
@@ -289,11 +379,29 @@ body::after{content:'';position:fixed;inset:0;z-index:0;background-image:repeati
   </div>
 </header>
 
+<!-- GLOBAL SEASON CONTEXT BAR -->
+<div class="season-context-bar" id="seasonContextBar">
+  <span class="season-context-pill" id="seasonContextPill" style="background:rgba(0,230,118,0.15);color:var(--green);border:1px solid rgba(0,230,118,0.3);">SEP</span>
+  <span class="season-context-item">Target CPA: <strong id="sctx-cpa">$325</strong></span>
+  <span style="color:var(--edge2)">·</span>
+  <span class="season-context-item">CR Target: <strong id="sctx-cr">9.0%</strong></span>
+  <span style="color:var(--edge2)">·</span>
+  <span class="season-context-item">Effectuation: <strong id="sctx-eff">73%</strong></span>
+  <span style="color:var(--edge2)">·</span>
+  <span class="season-context-item">Max RDE: <strong id="sctx-rde">10%</strong></span>
+  <span style="color:var(--edge2)">·</span>
+  <span class="season-context-item">Age 75+ Max: <strong id="sctx-age">15%</strong></span>
+  <span style="color:var(--edge2)">·</span>
+  <span class="season-context-item">LTV: <strong id="sctx-ltv">$730</strong></span>
+  <span style="margin-left:auto;" id="sctx-label" style="font-style:italic;color:var(--text-3);">SEP — Special Enrollment · Apr 1 – Oct 14</span>
+</div>
+
 <!-- NAV TABS -->
 <nav class="nav-tabs">
   <button class="nav-tab active" onclick="switchTab('overview',this)">Overview</button>
   <button class="nav-tab" onclick="switchTab('rp',this)">Right Pricing</button>
   <button class="nav-tab" onclick="switchTab('subid',this)">Sub ID Intel</button>
+  <button class="nav-tab" onclick="switchTab('dispositions',this)">Dispositions</button>
   <button class="nav-tab" onclick="switchTab('reporting',this)">Joanie Reporting</button>
   <button class="nav-tab" onclick="switchTab('publishers',this)">Publisher Scorecards</button>
   <button class="nav-tab" onclick="switchTab('scorecards',this)">QM &amp; MP Scorecards</button>
@@ -303,6 +411,16 @@ body::after{content:'';position:fixed;inset:0;z-index:0;background-image:repeati
 
 <!-- OVERVIEW TAB -->
 <div id="tab-overview" class="tab-panel active">
+
+  <!-- ALERTS — COLLAPSED BY DEFAULT -->
+  <div class="alerts-header" id="alertsHeader" onclick="toggleAlerts()">
+    <div class="alerts-dot-row" id="alertsDots"></div>
+    <div class="alerts-summary-text" id="alertsSummaryText">Scanning alerts...</div>
+    <div id="alertsBadges" style="display:flex;gap:6px;"></div>
+    <span class="alerts-chevron" id="alertsChevron">▼</span>
+  </div>
+  <div class="alerts-body" id="alertsBody"></div>
+
   <div class="notion-banner">
     <span style="font-size:16px;">&#9672;</span>
     <div><strong>Live Data Source</strong> &nbsp;&middot;&nbsp; Publisher scorecards, scorecards, reporting &amp; AI activity pulled from Notion on demand</div>
@@ -341,6 +459,50 @@ body::after{content:'';position:fixed;inset:0;z-index:0;background-image:repeati
     <div class="panel"><div class="p-head"><div><div class="p-title">Daily Call Volume</div><div class="p-sub">QM filled vs. marketplace overflow &middot; 14 days</div></div><span class="pill pill-c">Stacked</span></div><div class="chart-wrap" style="height:210px"><canvas id="callVolChart"></canvas></div></div>
     <div class="panel"><div class="p-head"><div><div class="p-title">Routing Funnel</div><div class="p-sub">Inbound &#8594; Answered &#8594; Routed &#8594; Converted</div></div><span class="pill pill-g">Live Logic</span></div><div class="funnel" id="funnelEl" style="margin-top:6px;"></div></div>
   </div>
+</div>
+
+<!-- DISPOSITIONS TAB -->
+<div id="tab-dispositions" class="tab-panel">
+  <div class="notion-banner">
+    <span style="font-size:16px;">&#9672;</span>
+    <div><strong>Call Dispositions</strong> &nbsp;&middot;&nbsp; Full call flow per publisher — Raw → Transferred → Billable → Sold → Effectuated</div>
+    <span class="notion-source-pill">QM Scorecard Data</span>
+    <span class="notion-source-pill">OEP 2026</span>
+  </div>
+
+  <div class="kpi-grid-4" style="margin-bottom:20px;" id="disp-summary-kpis">
+    <!-- filled by JS -->
+  </div>
+
+  <div class="sec"><div class="sec-tag">Portfolio Call Flow</div><div class="sec-line"></div></div>
+  <div class="panel" style="margin-bottom:20px;">
+    <div class="p-head"><div><div class="p-title">Portfolio-Level Disposition Funnel</div><div class="p-sub">Aggregate across all active publishers · OEP 2026</div></div><span class="pill pill-c">All Publishers</span></div>
+    <div id="disp-portfolio-funnel" style="display:flex;align-items:stretch;gap:0;padding:8px 0;"></div>
+    <div id="disp-portfolio-bars" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--edge);"></div>
+  </div>
+
+  <div class="sec"><div class="sec-tag">Publisher Breakdown</div><div class="sec-line"></div><div class="sec-count" id="disp-pub-count">— publishers</div></div>
+
+  <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;">
+    <span style="font-family:var(--font-m);font-size:9px;color:var(--text-3);">Sort:</span>
+    <select id="disp-sort" onchange="renderDispositionsTab()" style="font-family:var(--font-m);font-size:10px;padding:5px 10px;border-radius:6px;border:1px solid var(--edge2);background:var(--surface2);color:var(--text-2);cursor:pointer;outline:none;">
+      <option value="name">A–Z</option>
+      <option value="rawcalls">Raw Calls ↓</option>
+      <option value="netsales">Net Sales ↓</option>
+      <option value="eff">Effectuation ↓</option>
+      <option value="status">Status</option>
+    </select>
+    <span style="font-family:var(--font-m);font-size:9px;color:var(--text-3);margin-left:8px;">Filter:</span>
+    <select id="disp-filter" onchange="renderDispositionsTab()" style="font-family:var(--font-m);font-size:10px;padding:5px 10px;border-radius:6px;border:1px solid var(--edge2);background:var(--surface2);color:var(--text-2);cursor:pointer;outline:none;">
+      <option value="all">All publishers</option>
+      <option value="healthy">Healthy only</option>
+      <option value="watch">Watch only</option>
+      <option value="risk">At Risk only</option>
+      <option value="scale">Scale Eligible</option>
+    </select>
+  </div>
+
+  <div id="disp-publisher-grid" class="disp-publisher-grid"></div>
 </div>
 
 <!-- RIGHT PRICING TAB -->
@@ -446,6 +608,16 @@ body::after{content:'';position:fixed;inset:0;z-index:0;background-image:repeati
 
   <div class="sec"><div class="sec-tag">Period Reports</div><div class="sec-line"></div><span class="pill pill-notion" style="font-size:8px;padding:3px 9px;">&#9672; Live from Notion</span></div>
   <div id="reportingFeed"><div style="color:var(--text-3);font-size:12px;text-align:center;padding:40px;">Loading Joanie Reporting data...</div></div>
+
+  <div class="sec" style="margin-top:24px;"><div class="sec-tag amber">Period-over-Period Trends</div><div class="sec-line"></div></div>
+  <div class="trend-grid">
+    <div class="panel"><div class="p-head"><div><div class="p-title">MPQS Score Trend</div><div class="p-sub">Average MPQS across reporting periods</div></div><span class="pill pill-g">Trend</span></div><div class="chart-wrap" style="height:180px"><canvas id="trendMpqsChart"></canvas></div></div>
+    <div class="panel"><div class="p-head"><div><div class="p-title">QM &amp; MP Score Trend</div><div class="p-sub">QM vs MP scores period-over-period</div></div><span class="pill pill-c">Comparative</span></div><div class="chart-wrap" style="height:180px"><canvas id="trendQmMpChart"></canvas></div></div>
+  </div>
+  <div class="trend-grid">
+    <div class="panel"><div class="p-head"><div><div class="p-title">CPA Trend</div><div class="p-sub">Cost per acquisition across periods vs target</div></div><span class="pill pill-a">vs Target</span></div><div class="chart-wrap" style="height:180px"><canvas id="trendCpaChart"></canvas></div></div>
+    <div class="panel"><div class="p-head"><div><div class="p-title">Score Distribution</div><div class="p-sub">MPQS · QM · MP latest period breakdown</div></div><span class="pill pill-v">Latest</span></div><div class="chart-wrap" style="height:180px"><canvas id="trendDistChart"></canvas></div></div>
+  </div>
 </div>
 
 <!-- PUBLISHERS TAB -->
@@ -826,6 +998,187 @@ function renderReporting(data){
       ${e.topOpportunity ? `<div class="report-opp">${e.topOpportunity}</div>` : ''}
     </div>`;
   }).join('');
+
+  // Render trend charts with live entries
+  renderTrendCharts(entries);
+}
+
+/* ── DISPOSITIONS TAB ────────────────────────────────────────────── */
+function renderDispositionsTab() {
+  const sortVal   = (document.getElementById('disp-sort')   || {}).value || 'name';
+  const filterVal = (document.getElementById('disp-filter') || {}).value || 'all';
+
+  let data = [...RP_SCORECARD_DATA];
+
+  // Filter
+  if (filterVal === 'healthy') data = data.filter(d => d.status === 'Healthy');
+  else if (filterVal === 'watch') data = data.filter(d => d.status === 'Watch');
+  else if (filterVal === 'risk')  data = data.filter(d => d.status === 'At Risk');
+  else if (filterVal === 'scale') data = data.filter(d => d.actionBand === 'Scale Eligible');
+
+  // Sort
+  if (sortVal === 'rawcalls')  data.sort((a,b) => (b.rawCalls||0)-(a.rawCalls||0));
+  else if (sortVal === 'netsales') data.sort((a,b) => (b.netSales||0)-(a.netSales||0));
+  else if (sortVal === 'eff')  data.sort((a,b) => (b.eff||0)-(a.eff||0));
+  else if (sortVal === 'status') data.sort((a,b) => {
+    const ord = {'Healthy':0,'Watch':1,'At Risk':2};
+    return (ord[a.status]||1) - (ord[b.status]||1);
+  });
+  else data.sort((a,b) => a.pub.localeCompare(b.pub));
+
+  // Summary KPIs
+  const totalRaw   = data.reduce((s,d) => s+(d.rawCalls||0), 0);
+  const totalSales = data.reduce((s,d) => s+(d.netSales||0), 0);
+  const totalHours = data.reduce((s,d) => s+(d.talkHours||0), 0);
+  const avgEff     = data.filter(d=>d.eff).length
+    ? (data.filter(d=>d.eff).reduce((s,d)=>s+d.eff,0) / data.filter(d=>d.eff).length * 100).toFixed(1)
+    : '—';
+  const billableTotal = data.reduce((s,d) => s+(d.billableCalls||0), 0);
+  const billableRate  = totalRaw > 0 ? (billableTotal/totalRaw*100).toFixed(1)+'%' : '—';
+
+  document.getElementById('disp-summary-kpis').innerHTML = `
+    <div class="kpi green-accent"><div class="kpi-accent"></div><div class="kpi-label">Total Raw Calls</div><div class="kpi-val">${totalRaw.toLocaleString()}</div><span class="kpi-badge flat">${data.length} publishers</span></div>
+    <div class="kpi green-accent"><div class="kpi-accent"></div><div class="kpi-label">Total Net Sales</div><div class="kpi-val">${totalSales.toLocaleString()}</div><span class="kpi-badge up">Sold policies</span></div>
+    <div class="kpi amber-accent"><div class="kpi-accent"></div><div class="kpi-label">Avg Effectuation</div><div class="kpi-val">${avgEff}<span class="unit">%</span></div><span class="kpi-badge flat">Target: 72%</span></div>
+    <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">Total Talk Hours</div><div class="kpi-val">${Math.round(totalHours).toLocaleString()}</div><span class="kpi-badge flat">hrs</span></div>
+  `;
+
+  document.getElementById('disp-pub-count').textContent = data.length + ' publishers';
+
+  // Portfolio funnel
+  const portFunnel = [
+    { label:'Raw Calls',   val:totalRaw,   color:'var(--cyan)' },
+    { label:'Net Sales',   val:totalSales, color:'var(--green)' },
+    { label:'Talk Hrs',    val:Math.round(totalHours), color:'var(--violet)' },
+  ];
+  const maxPortVal = Math.max(...portFunnel.map(f=>f.val));
+  document.getElementById('disp-portfolio-funnel').innerHTML = portFunnel.map((f,i) => `
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;padding:0 8px;">
+      ${i < portFunnel.length-1 ? `<div style="position:absolute;right:-8px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--text-3);z-index:1;">→</div>` : ''}
+      <div style="background:var(--surface2);border:1px solid var(--edge);border-radius:8px;padding:14px 10px;width:100%;margin-bottom:6px;">
+        <div style="font-family:var(--font-num);font-size:26px;font-weight:300;color:${f.color};line-height:1;margin-bottom:3px;">${f.val.toLocaleString()}</div>
+        <div style="font-family:var(--font-m);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--text-3);">${f.label}</div>
+      </div>
+      <div style="height:4px;width:${Math.round(f.val/maxPortVal*100)}%;background:${f.color};border-radius:2px;opacity:0.5;transition:width 1s ease;"></div>
+    </div>
+  `).join('');
+
+  // Portfolio bars by publisher (net sales)
+  const barMax = Math.max(...data.map(d=>d.netSales||0));
+  document.getElementById('disp-portfolio-bars').innerHTML = data.map(d => {
+    const pct = barMax > 0 ? Math.round((d.netSales||0)/barMax*100) : 0;
+    const statusColor = d.status==='Healthy'?'var(--green)':d.status==='At Risk'?'var(--red)':'var(--amber)';
+    return `<div class="disp-bar-row">
+      <div class="disp-bar-label">${d.pub.length>18?d.pub.slice(0,18)+'…':d.pub}</div>
+      <div class="disp-bar-track"><div class="disp-bar-fill" style="width:0%;background:${statusColor};opacity:0.7;" data-w="${pct}"></div></div>
+      <div class="disp-bar-val" style="color:${statusColor};">${(d.netSales||0).toLocaleString()}</div>
+      <div class="disp-bar-pct">${d.eff?(d.eff*100).toFixed(0)+'% eff':'—'}</div>
+    </div>`;
+  }).join('');
+
+  // Animate bars
+  setTimeout(() => {
+    document.querySelectorAll('.disp-bar-fill[data-w]').forEach(el => {
+      el.style.width = el.dataset.w + '%';
+    });
+  }, 100);
+
+  // Publisher cards
+  document.getElementById('disp-publisher-grid').innerHTML = data.map(d => buildDispCard(d)).join('');
+
+  // Animate card bars
+  setTimeout(() => {
+    document.querySelectorAll('.disp-card-bar-fill[data-w]').forEach(el => {
+      el.style.width = el.dataset.w + '%';
+    });
+  }, 200);
+}
+
+function buildDispCard(d) {
+  const statusCls  = d.status==='Healthy'?'healthy':d.status==='At Risk'?'risk':'watch';
+  const statusColor = d.status==='Healthy'?'var(--green)':d.status==='At Risk'?'var(--red)':'var(--amber)';
+  const bandColor   = d.actionBand==='Scale Eligible'?'var(--green)':d.actionBand==='Maintain'?'var(--cyan)':d.actionBand==='Monitor'?'var(--amber)':d.actionBand==='Throttle'?'var(--amber)':'var(--red)';
+  const bandBg      = d.actionBand==='Scale Eligible'?'rgba(0,230,118,0.12)':d.actionBand==='Maintain'?'rgba(0,229,255,0.12)':d.actionBand==='Monitor'?'rgba(255,181,71,0.12)':d.actionBand==='Throttle'?'rgba(255,181,71,0.08)':'rgba(255,82,82,0.12)';
+
+  // Core metrics
+  const raw        = d.rawCalls || 0;
+  const billable   = d.billableCalls || null;
+  const sales      = d.netSales || 0;
+  const effPct     = d.eff ? (d.eff * 100).toFixed(1) + '%' : '—';
+  const effColor   = !d.eff ? 'var(--text-3)' : d.eff >= 0.72 ? 'var(--green)' : d.eff >= 0.65 ? 'var(--amber)' : 'var(--red)';
+  const age75Pct   = d.age75 ? (d.age75 * 100).toFixed(1) + '%' : '—';
+  const age75Color = !d.age75 ? 'var(--text-3)' : d.age75 <= 0.15 ? 'var(--text-2)' : d.age75 <= 0.25 ? 'var(--amber)' : 'var(--red)';
+  const crPct      = d.cr ? (d.cr * 100).toFixed(1) + '%' : '—';
+  const crColor    = !d.cr ? 'var(--text-3)' : d.cr >= 0.10 ? 'var(--green)' : d.cr >= 0.08 ? 'var(--amber)' : 'var(--red)';
+  const hours      = d.talkHours ? d.talkHours.toLocaleString() : '—';
+  const cpa        = d.cpa ? '$' + Math.round(d.cpa) : '—';
+  const cpaColor   = !d.cpa ? 'var(--text-3)' : d.cpa <= 325 ? 'var(--green)' : d.cpa <= 450 ? 'var(--amber)' : 'var(--red)';
+
+  // Disposition flow steps
+  const flowSteps = [
+    { label:'Raw Calls',  val:raw,      color:'var(--cyan)',   rate:'entry' },
+    { label:'Net Sales',  val:sales,    color:'var(--green)',  rate:'CR: '+crPct },
+    { label:'Effectuated',val:d.eff && sales ? Math.round(sales*d.eff) : null, color:'var(--violet)', rate:'Eff: '+effPct },
+  ];
+  if (billable) {
+    flowSteps.splice(1, 0, { label:'Billable', val:billable, color:'var(--amber)', rate:(raw>0?(billable/raw*100).toFixed(0)+'% of raw':'—') });
+  }
+
+  const flowHTML = flowSteps.filter(s=>s.val!=null).map((s,i,arr) => `
+    <div class="disp-step">
+      <div class="disp-step-box">
+        <div class="disp-step-num" style="color:${s.color};">${typeof s.val==='number'?s.val.toLocaleString():s.val}</div>
+        <div class="disp-step-label">${s.label}</div>
+      </div>
+      <div class="disp-step-rate">${s.rate}</div>
+    </div>
+  `).join('');
+
+  // Disposition bars
+  const dispBuckets = [
+    { label:'Net Sales',    val:sales,                                          color:'var(--green)' },
+    { label:'Effectuated',  val:d.eff && sales ? Math.round(sales*d.eff) : null, color:'var(--violet)' },
+    { label:'Duplicate',    val:d.dupRate ? Math.round(raw*d.dupRate) : null,   color:'var(--amber)' },
+    { label:'Not Qualified',val:raw - sales - (d.dupRate?Math.round(raw*d.dupRate):0) > 0 ? raw - sales - (d.dupRate?Math.round(raw*d.dupRate):0) : null, color:'rgba(255,82,82,0.6)' },
+  ].filter(b => b.val != null && b.val > 0);
+
+  const bMax = Math.max(...dispBuckets.map(b=>b.val), 1);
+  const barsHTML = dispBuckets.map(b => {
+    const bPct = Math.round(b.val/bMax*100);
+    const ofRaw = raw > 0 ? (b.val/raw*100).toFixed(1)+'%' : '—';
+    return `<div class="disp-bar-row">
+      <div class="disp-bar-label">${b.label}</div>
+      <div class="disp-bar-track"><div class="disp-bar-fill disp-card-bar-fill" style="width:0%;background:${b.color};opacity:0.75;" data-w="${bPct}"></div></div>
+      <div class="disp-bar-val" style="color:${b.color};">${b.val.toLocaleString()}</div>
+      <div class="disp-bar-pct">${ofRaw}</div>
+    </div>`;
+  }).join('');
+
+  return `<div class="disp-card">
+    <div class="disp-card-header ${statusCls}">
+      <div>
+        <div class="disp-pub-name">${d.pub}</div>
+        <div class="disp-pub-meta">${d.season} · ${d.date} · ${raw.toLocaleString()} raw calls</div>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <span class="disp-band" style="color:${bandColor};background:${bandBg};border:1px solid ${bandColor}33;">${d.actionBand}</span>
+        <span class="disp-band" style="color:${statusColor};background:${statusColor}15;border:1px solid ${statusColor}33;">${d.status}</span>
+      </div>
+    </div>
+    <div class="disp-kpi-row">
+      <div class="disp-kpi"><div class="disp-kpi-label">CPA</div><div class="disp-kpi-val" style="color:${cpaColor};">${cpa}</div><div class="disp-kpi-sub">Target $325</div></div>
+      <div class="disp-kpi"><div class="disp-kpi-label">Net Sales</div><div class="disp-kpi-val">${sales.toLocaleString()}</div><div class="disp-kpi-sub">Sold policies</div></div>
+      <div class="disp-kpi"><div class="disp-kpi-label">Conv Rate</div><div class="disp-kpi-val" style="color:${crColor};">${crPct}</div><div class="disp-kpi-sub">Target 10%</div></div>
+      <div class="disp-kpi"><div class="disp-kpi-label">Effectuation</div><div class="disp-kpi-val" style="color:${effColor};">${effPct}</div><div class="disp-kpi-sub">Target 72%</div></div>
+      <div class="disp-kpi"><div class="disp-kpi-label">Age 75+</div><div class="disp-kpi-val" style="color:${age75Color};">${age75Pct}</div><div class="disp-kpi-sub">Max 15%</div></div>
+    </div>
+    <div class="disp-flow-row">${flowHTML}</div>
+    <div class="disp-bars-section">${barsHTML}</div>
+    ${(d.biggestRisk || d.topOpp) ? `<div class="disp-intel">
+      ${d.biggestRisk ? `<div class="disp-intel-box risk"><div class="disp-intel-label">⚠ Biggest Risk</div>${d.biggestRisk}</div>` : '<div></div>'}
+      ${d.topOpp ? `<div class="disp-intel-box opp"><div class="disp-intel-label">↑ Top Opportunity</div>${d.topOpp}</div>` : ''}
+    </div>` : ''}
+  </div>`;
 }
 
 /* ── QM RP HUB DATA ──────────────────────────────────────────────── */
@@ -1005,6 +1358,254 @@ function renderSubIDTab() {
   `).join('');
 }
 
+/* ── GLOBAL SEASON TOGGLE ────────────────────────────────────────── */
+let globalSeason = 'SEP';
+
+const SEASON_META = {
+  SEP:{ cpa:325, cr:9.0, eff:73, rde:10, age75:15, ltv:730, label:'SEP — Special Enrollment', dates:'Apr 1 – Oct 14', color:'var(--green)', pillBg:'rgba(0,230,118,0.15)', pillBorder:'rgba(0,230,118,0.3)' },
+  OEP:{ cpa:325, cr:10.0, eff:72, rde:15, age75:15, ltv:730, label:'OEP — Open Enrollment',    dates:'Jan 1 – Mar 31', color:'var(--cyan)',  pillBg:'rgba(0,229,255,0.15)',  pillBorder:'rgba(0,229,255,0.3)' },
+  AEP:{ cpa:275, cr:16.0, eff:74, rde:15, age75:15, ltv:730, label:'AEP — Annual Enrollment',   dates:'Oct 15 – Nov 7', color:'var(--amber)', pillBg:'rgba(255,181,71,0.15)',  pillBorder:'rgba(255,181,71,0.3)' },
+};
+
+function setGlobalSeason(s, btn) {
+  globalSeason = s;
+  activeRPSeason = s;
+
+  // Update toggle button styles
+  document.querySelectorAll('.gstab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+
+  // Update context bar
+  const m = SEASON_META[s];
+  document.getElementById('sctx-cpa').textContent  = '$' + m.cpa;
+  document.getElementById('sctx-cr').textContent   = m.cr + '%';
+  document.getElementById('sctx-eff').textContent  = m.eff + '%';
+  document.getElementById('sctx-rde').textContent  = m.rde + '%';
+  document.getElementById('sctx-age').textContent  = m.age75 + '%';
+  document.getElementById('sctx-ltv').textContent  = '$' + m.ltv;
+  document.getElementById('sctx-label').textContent = m.label + ' · ' + m.dates;
+  const pill = document.getElementById('seasonContextPill');
+  pill.textContent    = s;
+  pill.style.color    = m.color;
+  pill.style.background = m.pillBg;
+  pill.style.border   = '1px solid ' + m.pillBorder;
+
+  // Re-render all season-aware tabs
+  renderRPTab();
+  renderSubIDTab();
+  renderDispositionsTab();
+  renderAlerts();
+}
+
+/* ── ALERT ENGINE ────────────────────────────────────────────────── */
+const ALERT_THRESHOLDS = {
+  cpaOverPct:  0.20,
+  age75Max:    15,
+  effMin:      0.68,
+  rdeMax:      12,
+  dupRateMax:  0.05,
+};
+
+let alertsOpen = false;
+
+function toggleAlerts() {
+  alertsOpen = !alertsOpen;
+  document.getElementById('alertsBody').classList.toggle('open', alertsOpen);
+  document.getElementById('alertsChevron').classList.toggle('open', alertsOpen);
+}
+
+function renderAlerts() {
+  const t = SEASON_META[globalSeason];
+  const alerts = [];
+
+  // Scan RP publisher data
+  const pubs = RP_NOTION_DATA.filter(d => d.Season === globalSeason);
+  pubs.forEach(d => {
+    if (d.actualCpa && d.actualCpa > t.cpa * (1 + ALERT_THRESHOLDS.cpaOverPct)) {
+      const over = Math.round(d.actualCpa - t.cpa);
+      alerts.push({ type:'critical', pub:d.Publisher, msg:`CPA $${d.actualCpa} is $${over} above the $${t.cpa} target`, metric:`+$${over} over target`, cat:'CPA' });
+    }
+    if (d.age75 > ALERT_THRESHOLDS.age75Max) {
+      alerts.push({ type: d.age75 > 30 ? 'critical' : 'warning', pub:d.Publisher, msg:`Age 75+ at ${d.age75}% — exceeds ${ALERT_THRESHOLDS.age75Max}% compliance threshold`, metric:`${d.age75}% vs 15% max`, cat:'Compliance' });
+    }
+    if (d.eff && d.eff < ALERT_THRESHOLDS.effMin * 100) {
+      alerts.push({ type:'warning', pub:d.Publisher, msg:`Effectuation ${d.eff}% is below ${Math.round(ALERT_THRESHOLDS.effMin*100)}% minimum`, metric:`${d.eff}% eff`, cat:'Effectuation' });
+    }
+    if (d.rde > t.rde) {
+      alerts.push({ type: d.rde > t.rde * 1.3 ? 'critical' : 'warning', pub:d.Publisher, msg:`RDE ${d.rde}% exceeds ${t.rde}% ${globalSeason} maximum`, metric:`${d.rde}% RDE`, cat:'RDE' });
+    }
+    if (d.actionBand === 'Pullback') {
+      alerts.push({ type:'critical', pub:d.Publisher, msg:`Action band is PULLBACK — immediate bid review required`, metric:'Pullback', cat:'Action Band' });
+    }
+  });
+
+  // Scan scorecard data
+  RP_SCORECARD_DATA.forEach(d => {
+    if (d.age75 && d.age75 > 0.40) {
+      if (!alerts.find(a => a.pub===d.pub && a.cat==='Compliance'))
+        alerts.push({ type:'critical', pub:d.pub, msg:`Age 75+ at ${(d.age75*100).toFixed(1)}% — critical compliance risk`, metric:`${(d.age75*100).toFixed(1)}% over75`, cat:'Compliance' });
+    }
+    if (d.eff && d.eff < 0.65) {
+      if (!alerts.find(a => a.pub===d.pub && a.cat==='Effectuation'))
+        alerts.push({ type:'warning', pub:d.pub, msg:`Effectuation ${(d.eff*100).toFixed(1)}% well below 72% benchmark`, metric:`${(d.eff*100).toFixed(1)}% eff`, cat:'Effectuation' });
+    }
+    if (d.dupRate && d.dupRate > ALERT_THRESHOLDS.dupRateMax) {
+      alerts.push({ type:'warning', pub:d.pub, msg:`Duplicate rate ${(d.dupRate*100).toFixed(1)}% exceeds 5% threshold`, metric:`${(d.dupRate*100).toFixed(1)}% dup`, cat:'Duplicates' });
+    }
+  });
+
+  // Deduplicate
+  const seen = new Set();
+  const deduped = alerts.filter(a => {
+    const key = a.pub + '|' + a.cat;
+    if (seen.has(key)) return false;
+    seen.add(key); return true;
+  });
+
+  const criticals = deduped.filter(a => a.type === 'critical');
+  const warnings  = deduped.filter(a => a.type === 'warning');
+  const header    = document.getElementById('alertsHeader');
+  const dotsEl    = document.getElementById('alertsDots');
+  const summaryEl = document.getElementById('alertsSummaryText');
+  const badgesEl  = document.getElementById('alertsBadges');
+  const body      = document.getElementById('alertsBody');
+
+  // All clear
+  if (!deduped.length) {
+    header.className = 'alerts-header all-clear';
+    dotsEl.innerHTML = `<div class="alerts-dot" style="background:var(--green);box-shadow:0 0 6px var(--green);"></div>`;
+    summaryEl.innerHTML = `<span style="color:var(--green);font-weight:600;">All clear</span> <span style="color:var(--text-3);">— all publishers within thresholds for ${globalSeason}</span>`;
+    badgesEl.innerHTML  = `<span class="alerts-badge clear">✓ No alerts</span>`;
+    body.innerHTML = '';
+    return;
+  }
+
+  // Header state
+  header.className = criticals.length ? 'alerts-header has-critical' : 'alerts-header has-warning';
+  const dotHTML = [
+    ...criticals.slice(0,5).map(()=>`<div class="alerts-dot" style="background:var(--red);box-shadow:0 0 5px var(--red);"></div>`),
+    ...warnings.slice(0,5).map(()=>`<div class="alerts-dot" style="background:var(--amber);box-shadow:0 0 5px var(--amber);"></div>`),
+  ].join('');
+  dotsEl.innerHTML = dotHTML;
+
+  const topPub = criticals[0]?.pub || warnings[0]?.pub;
+  summaryEl.innerHTML = criticals.length
+    ? `<span style="color:var(--red);font-weight:600;">${criticals.length} critical</span><span style="color:var(--text-3);"> · ${warnings.length} warning · lead issue: </span><span style="color:var(--text-2);">${topPub}</span>`
+    : `<span style="color:var(--amber);font-weight:600;">${warnings.length} warnings</span><span style="color:var(--text-3);"> · lead issue: </span><span style="color:var(--text-2);">${topPub}</span>`;
+
+  badgesEl.innerHTML = [
+    criticals.length ? `<span class="alerts-badge critical">${criticals.length} Critical</span>` : '',
+    warnings.length  ? `<span class="alerts-badge warning">${warnings.length} Warning</span>`   : '',
+  ].join('');
+
+  // Group cards by category
+  const categories = [...new Set(deduped.map(a => a.cat))];
+  const groupsHTML = [
+    criticals.length ? buildAlertGroup('critical', criticals) : '',
+    warnings.length  ? buildAlertGroup('warning',  warnings)  : '',
+  ].join('');
+
+  body.innerHTML = `
+    <div style="margin-bottom:8px;display:flex;gap:8px;flex-wrap:wrap;">
+      ${categories.map(cat => {
+        const count = deduped.filter(a=>a.cat===cat).length;
+        const hasCrit = deduped.some(a=>a.cat===cat&&a.type==='critical');
+        return `<span style="font-family:var(--font-m);font-size:9px;padding:3px 9px;border-radius:20px;background:var(--surface2);border:1px solid var(--edge2);color:${hasCrit?'var(--red)':'var(--amber)'};">${cat} · ${count}</span>`;
+      }).join('')}
+    </div>
+    ${groupsHTML}
+  `;
+}
+
+function buildAlertGroup(type, alerts) {
+  const label   = type === 'critical' ? '🔴 Critical' : '🟡 Warning';
+  const cards   = alerts.map(a => `
+    <div class="alert-card">
+      <div class="alert-card-pub">${a.pub}</div>
+      <div class="alert-card-msg">${a.msg}</div>
+      <span class="alert-card-metric ${type}">${a.metric}</span>
+    </div>
+  `).join('');
+  return `<div class="alert-group">
+    <div class="alert-group-label ${type}">${label} · ${alerts.length} publisher${alerts.length>1?'s':''}</div>
+    <div class="alert-cards ${type}">${cards}</div>
+  </div>`;
+}
+
+
+/* ── TREND CHARTS ────────────────────────────────────────────────── */
+let trendCharts = {};
+
+function renderTrendCharts(entries) {
+  if (!entries || entries.length < 1) {
+    // Show placeholder charts with sample data shape
+    entries = [
+      { reportName:'Period 1', mpqsScore:null, qmScore:null, mpScore:null, date:'—' },
+    ];
+  }
+
+  const labels   = entries.map(e => e.reportName || e.date || 'Period');
+  const mpqs     = entries.map(e => e.mpqsScore || null);
+  const qm       = entries.map(e => e.qmScore || null);
+  const mp       = entries.map(e => e.mpScore || null);
+  const t        = SEASON_META[globalSeason];
+  const cpaVals  = entries.map(e => e.cpa || null);
+  const chartOpts = {
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ display:true, labels:{ color:'rgba(240,244,255,0.5)', font:{ size:9, family:'Space Mono' }, boxWidth:10, padding:14 }}},
+    scales:{
+      x:{ ticks:{ color:'rgba(240,244,255,0.35)', font:{ size:9, family:'Space Mono' }, maxRotation:30 }, grid:{ color:'rgba(255,255,255,0.04)' }},
+      y:{ ticks:{ color:'rgba(240,244,255,0.35)', font:{ size:9, family:'Space Mono' }}, grid:{ color:'rgba(255,255,255,0.04)' }, min:0 }
+    }
+  };
+
+  // MPQS Trend
+  if (trendCharts.mpqs) trendCharts.mpqs.destroy();
+  trendCharts.mpqs = new Chart(document.getElementById('trendMpqsChart'), {
+    type:'line',
+    data:{ labels, datasets:[{ label:'MPQS Score', data:mpqs, borderColor:'rgba(0,230,118,0.8)', backgroundColor:'rgba(0,230,118,0.08)', tension:0.3, pointBackgroundColor:'rgba(0,230,118,0.9)', pointRadius:4, fill:true }]},
+    options:{ ...chartOpts, plugins:{ ...chartOpts.plugins, annotation:{ annotations:{ target:{ type:'line', yMin:80, yMax:80, borderColor:'rgba(0,230,118,0.3)', borderDash:[4,4], label:{ content:'Target 80', enabled:true }}}}}}
+  });
+
+  // QM vs MP
+  if (trendCharts.qmmp) trendCharts.qmmp.destroy();
+  trendCharts.qmmp = new Chart(document.getElementById('trendQmMpChart'), {
+    type:'line',
+    data:{ labels, datasets:[
+      { label:'QM Score', data:qm, borderColor:'rgba(0,229,255,0.8)', backgroundColor:'rgba(0,229,255,0.06)', tension:0.3, pointBackgroundColor:'rgba(0,229,255,0.9)', pointRadius:4 },
+      { label:'MP Score', data:mp, borderColor:'rgba(179,136,255,0.8)', backgroundColor:'rgba(179,136,255,0.06)', tension:0.3, pointBackgroundColor:'rgba(179,136,255,0.9)', pointRadius:4 },
+    ]},
+    options:chartOpts
+  });
+
+  // CPA Trend
+  if (trendCharts.cpa) trendCharts.cpa.destroy();
+  trendCharts.cpa = new Chart(document.getElementById('trendCpaChart'), {
+    type:'line',
+    data:{ labels, datasets:[
+      { label:'CPA', data:cpaVals, borderColor:'rgba(255,181,71,0.8)', backgroundColor:'rgba(255,181,71,0.08)', tension:0.3, pointBackgroundColor:'rgba(255,181,71,0.9)', pointRadius:4, fill:true },
+      { label:'Target $'+t.cpa, data:entries.map(()=>t.cpa), borderColor:'rgba(255,255,255,0.15)', borderDash:[4,4], pointRadius:0 },
+    ]},
+    options:{ ...chartOpts, scales:{ ...chartOpts.scales, y:{ ...chartOpts.scales.y, ticks:{ ...chartOpts.scales.y.ticks, callback:v=>'$'+v }}}}
+  });
+
+  // Score Distribution (latest period)
+  const latest = entries[entries.length - 1];
+  if (trendCharts.dist) trendCharts.dist.destroy();
+  trendCharts.dist = new Chart(document.getElementById('trendDistChart'), {
+    type:'radar',
+    data:{
+      labels:['MPQS','QM Score','MP Score'],
+      datasets:[{ label:'Latest Period', data:[latest.mpqsScore||0, latest.qmScore||0, latest.mpScore||0], borderColor:'rgba(0,229,255,0.7)', backgroundColor:'rgba(0,229,255,0.08)', pointBackgroundColor:'rgba(0,229,255,0.9)', pointRadius:4 }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ labels:{ color:'rgba(240,244,255,0.5)', font:{ size:9, family:'Space Mono' }}}},
+      scales:{ r:{ min:0, max:100, ticks:{ color:'rgba(240,244,255,0.3)', font:{ size:8 }, backdropColor:'transparent' }, grid:{ color:'rgba(255,255,255,0.06)' }, pointLabels:{ color:'rgba(240,244,255,0.5)', font:{ size:10 }}}}
+    }
+  });
+}
+
 /* ── NOTION API CALL ─────────────────────────────────────────────── */
 const FALLBACK=[{"Report":"QM — Healthcare.com — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Scale Eligible","CPA":240,"Conv Rate (CR%)":0.194,"Effectuation %":0.667,"Duplicate Rate %":0.047,"Headline Metric":"MPQS 102.4 — #1 in portfolio. GPpTH $205. Scale Eligible.","Biggest Risk":"Over75 = 0.0% — confirm not a data gap before scaling","Top Opportunity":"Highest MPQS in portfolio — immediate scale candidate"},{"Report":"QM — RevRise Media — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Scale Eligible","CPA":231,"Conv Rate (CR%)":0.148,"Effectuation %":0.873,"Duplicate Rate %":0.047,"Headline Metric":"MPQS 97.3 — #2 in portfolio. GPpTH $135. Scale Eligible.","Biggest Risk":"Demo Mix 43.3% Over75 — nearly 3x benchmark.","Top Opportunity":"Strongest Effectuation % at 87.3%"},{"Report":"QM — Scalability.io — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Maintain","CPA":369,"Conv Rate (CR%)":0.106,"Effectuation %":0.784,"Duplicate Rate %":null,"Headline Metric":"MPQS 83.8 — #4. Maintain.","Biggest Risk":"GPpTH $57 below $75 benchmark","Top Opportunity":"7 points from Scale Eligible"},{"Report":"QM — Quote Velocity — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Monitor","CPA":352,"Conv Rate (CR%)":0.1,"Effectuation %":0.753,"Duplicate Rate %":null,"Headline Metric":"MPQS 81.4 — #6. Monitor.","Biggest Risk":"GPpTH $53 below benchmark","Top Opportunity":"Best Over75% in Monitor tier"},{"Report":"QM — Milestone Marketing — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Monitor","CPA":442,"Conv Rate (CR%)":0.11,"Effectuation %":0.789,"Duplicate Rate %":null,"Headline Metric":"MPQS 76.0. Monitor. Highest volume in Monitor.","Biggest Risk":"GPpTH $42 significantly below benchmark","Top Opportunity":"GPpTH improvement would have largest portfolio impact"},{"Report":"QM — EngageCX — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Throttle","CPA":413,"Conv Rate (CR%)":0.098,"Effectuation %":0.731,"Duplicate Rate %":0.042,"Headline Metric":"MPQS 69.5. Throttle. 950 sales.","Biggest Risk":"GPpTH $36 on highest-volume Throttle partner","Top Opportunity":"950 net sales — largest volume outside Maintain/Scale"},{"Report":"QM — Adolent Marketing — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Throttle","CPA":294,"Conv Rate (CR%)":0.062,"Effectuation %":0.706,"Duplicate Rate %":null,"Headline Metric":"MPQS 69.6. Throttle. Over75 66.9%.","Biggest Risk":"Over75 66.9% — compliance escalation required","Top Opportunity":"High volume — compliance fix unlocks expansion"},{"Report":"QM — Elijay / VitalCareWorks — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Pullback","CPA":663,"Conv Rate (CR%)":0.049,"Effectuation %":0.364,"Duplicate Rate %":null,"Headline Metric":"MPQS 56.3 — Pullback.","Biggest Risk":"Lowest MPQS. All components flagged.","Top Opportunity":"Full program review required"},{"Report":"QM — Paragon — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Maintain","CPA":265,"Conv Rate (CR%)":0.096,"Effectuation %":0.704,"Duplicate Rate %":0.029,"Headline Metric":"MPQS 83.4. Maintain. High volume.","Biggest Risk":"Effectuation 70.4% slightly below 72%","Top Opportunity":"Highest Net Sales in Maintain band"},{"Report":"QM — Insurco — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Monitor","CPA":564,"Conv Rate (CR%)":0.082,"Effectuation %":0.813,"Duplicate Rate %":0.033,"Headline Metric":"MPQS Monitor. GPpTH negative.","Biggest Risk":"Negative GPpTH — entire score drag is economics","Top Opportunity":"If GPpTH turns positive, Maintain band is within reach"},{"Report":"QM — MyHealthAngel — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Pullback","CPA":421,"Conv Rate (CR%)":0.065,"Effectuation %":0.660,"Duplicate Rate %":null,"Headline Metric":"Pullback. Low LTV, elevated RDE and demo age over 75.","Biggest Risk":"Durability profile unacceptable at current spend","Top Opportunity":"None — program review required"},{"Report":"QM — Barrington Media Group — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Pullback","CPA":765,"Conv Rate (CR%)":0.061,"Effectuation %":0.680,"Duplicate Rate %":0.058,"Headline Metric":"Pullback. GPpTH -$117, Over75 37.5%.","Biggest Risk":"Economics and compliance both flagged simultaneously","Top Opportunity":"CR 17.2% is a genuine strength if CPA corrected"}];
 
@@ -1093,6 +1694,9 @@ window.addEventListener('DOMContentLoaded',()=>{
   buildFunnel('funnelEl2');
   renderRPTab();
   renderSubIDTab();
+  renderDispositionsTab();
+  renderAlerts();
+  renderTrendCharts([]);
   loadNotionData();
 });
 </script>
