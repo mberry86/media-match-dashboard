@@ -340,8 +340,106 @@ body::after{content:'';position:fixed;inset:0;z-index:0;background-image:repeati
 @keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
 @keyframes swap{0%{color:var(--cyan);}100%{color:var(--text);}}
 .swapped{animation:swap 0.4s ease;}
-.chart-wrap{position:relative;}
-</style>
+/* ── SNAPSHOT MODE ── */
+.snapshot-btn{display:flex;align-items:center;gap:7px;padding:7px 14px;background:var(--surface);border:1px solid var(--edge2);border-radius:var(--r-sm);cursor:pointer;transition:all 0.2s;font-family:var(--font-m);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--violet);}
+.snapshot-btn:hover{background:var(--violet-dim);border-color:rgba(179,136,255,0.4);}
+.snapshot-btn.active{background:var(--violet-dim);border-color:rgba(179,136,255,0.5);}
+body.snapshot-mode .nav-tab[data-working]{display:none;}
+
+/* EXEC SNAPSHOT OVERLAY */
+#execSnapshot{display:none;position:fixed;inset:0;z-index:9000;background:var(--ink);overflow-y:auto;padding:40px 48px 60px;}
+#execSnapshot.open{display:block;}
+.exec-close{position:fixed;top:20px;right:28px;font-family:var(--font-m);font-size:10px;font-weight:700;letter-spacing:1px;padding:7px 16px;border-radius:var(--r-sm);background:var(--surface2);border:1px solid var(--edge2);color:var(--text-2);cursor:pointer;z-index:9001;transition:all 0.15s;}
+.exec-close:hover{background:var(--surface);color:var(--text);}
+.exec-print{position:fixed;top:20px;right:130px;font-family:var(--font-m);font-size:10px;font-weight:700;letter-spacing:1px;padding:7px 16px;border-radius:var(--r-sm);background:var(--cyan-dim);border:1px solid rgba(0,229,255,0.3);color:var(--cyan);cursor:pointer;z-index:9001;transition:all 0.15s;}
+.exec-print:hover{background:rgba(0,229,255,0.2);}
+.exec-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:32px;padding-bottom:20px;border-bottom:2px solid var(--edge2);}
+.exec-logo{display:flex;align-items:center;gap:14px;}
+.exec-logo-mark{width:48px;height:48px;background:linear-gradient(135deg,var(--cyan),rgba(0,229,255,0.3));border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-family:var(--font-m);font-size:13px;font-weight:700;color:var(--ink);}
+.exec-title{font-family:var(--font-d);font-size:22px;font-weight:800;color:var(--text);letter-spacing:-0.3px;}
+.exec-subtitle{font-family:var(--font-m);font-size:10px;color:var(--text-3);margin-top:3px;letter-spacing:1px;}
+.exec-meta{text-align:right;font-family:var(--font-m);font-size:10px;color:var(--text-3);}
+.exec-meta strong{color:var(--text-2);display:block;font-size:12px;margin-bottom:2px;}
+.exec-section{margin-bottom:28px;}
+.exec-section-title{font-family:var(--font-m);font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan);margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--edge2);}
+.exec-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.exec-kpi{background:var(--surface);border:1px solid var(--edge);border-radius:var(--r-md);padding:16px 18px;position:relative;overflow:hidden;}
+.exec-kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.exec-kpi.cyan::before{background:var(--cyan);}
+.exec-kpi.green::before{background:var(--green);}
+.exec-kpi.amber::before{background:var(--amber);}
+.exec-kpi.red::before{background:var(--red);}
+.exec-kpi-label{font-family:var(--font-m);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);margin-bottom:8px;}
+.exec-kpi-val{font-family:var(--font-num);font-size:26px;font-weight:300;color:var(--text);line-height:1;margin-bottom:4px;}
+.exec-kpi-sub{font-size:10px;color:var(--text-3);}
+.exec-action-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:0;}
+.exec-action-card{background:var(--surface);border:1px solid var(--edge);border-radius:var(--r-md);padding:14px;text-align:center;}
+.exec-action-count{font-family:var(--font-num);font-size:28px;font-weight:300;line-height:1;margin-bottom:4px;}
+.exec-action-label{font-family:var(--font-m);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--text-3);}
+.exec-pub-table{width:100%;border-collapse:collapse;}
+.exec-pub-table th{font-family:var(--font-m);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);text-align:left;padding:6px 10px;border-bottom:1px solid var(--edge2);}
+.exec-pub-table th:not(:first-child){text-align:right;}
+.exec-pub-table td{padding:9px 10px;border-bottom:1px solid var(--edge);font-size:12px;color:var(--text-2);}
+.exec-pub-table td:not(:first-child){text-align:right;font-family:var(--font-m);font-size:11px;}
+.exec-pub-table tr:last-child td{border-bottom:none;}
+.exec-alert-row{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;margin-bottom:6px;font-size:11px;}
+.exec-alert-row.critical{background:rgba(255,82,82,0.07);border:1px solid rgba(255,82,82,0.2);color:rgba(255,82,82,0.85);}
+.exec-alert-row.warning{background:rgba(255,181,71,0.07);border:1px solid rgba(255,181,71,0.2);color:rgba(255,181,71,0.85);}
+.exec-footer{margin-top:32px;padding-top:16px;border-top:1px solid var(--edge);display:flex;justify-content:space-between;font-family:var(--font-m);font-size:9px;color:var(--text-3);}
+.exec-two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.exec-insight-box{background:var(--surface);border:1px solid var(--edge);border-radius:var(--r-md);padding:14px 16px;}
+.exec-insight-title{font-family:var(--font-m);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;}
+.exec-insight-item{display:flex;align-items:flex-start;gap:8px;font-size:11px;color:var(--text-2);margin-bottom:7px;line-height:1.45;}
+.exec-insight-item:last-child{margin-bottom:0;}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  .shell{padding:0 12px 40px;}
+  .header{flex-direction:column;align-items:flex-start;gap:10px;padding:12px 0 0;}
+  .header-right{width:100%;flex-wrap:wrap;gap:6px;padding-bottom:8px;}
+  .global-season{order:-1;}
+  .period-tabs{display:none;}
+  .hdivider,.header-sub{display:none;}
+  .snapshot-btn span:last-child{display:none;}
+  .nav-tabs{overflow-x:auto;gap:0;padding-bottom:2px;scrollbar-width:none;-ms-overflow-style:none;flex-wrap:nowrap;margin-bottom:16px;}
+  .nav-tabs::-webkit-scrollbar{display:none;}
+  .nav-tab{padding:9px 12px;font-size:11px;white-space:nowrap;flex-shrink:0;}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)!important;}
+  .kpi-grid-4{grid-template-columns:repeat(2,1fr)!important;}
+  .kpi-grid-3{grid-template-columns:1fr 1fr!important;}
+  .g6040,.g5050,.g4060,.g3333{grid-template-columns:1fr!important;}
+  .publisher-grid{grid-template-columns:1fr!important;}
+  .disp-publisher-grid{grid-template-columns:1fr!important;}
+  .disp-kpi-row{grid-template-columns:repeat(3,1fr)!important;}
+  .disp-flow-row{overflow-x:auto;gap:4px;}
+  .disp-step{min-width:72px;}
+  .trend-grid{grid-template-columns:1fr!important;}
+  .exec-kpi-row{grid-template-columns:repeat(2,1fr)!important;}
+  .exec-action-grid{grid-template-columns:repeat(3,1fr)!important;}
+  .exec-two-col{grid-template-columns:1fr!important;}
+  .season-context-bar{overflow-x:auto;flex-wrap:nowrap;gap:8px;scrollbar-width:none;padding-bottom:6px;}
+  .season-context-bar::-webkit-scrollbar{display:none;}
+  .panel{padding:12px!important;}
+  .report-meta{grid-template-columns:1fr 1fr!important;}
+  #execSnapshot{padding:16px 14px 40px;}
+  .exec-header{flex-direction:column;gap:10px;}
+  .exec-close{top:auto;bottom:20px;right:14px;position:fixed;}
+  .exec-print{top:auto;bottom:20px;right:110px;position:fixed;}
+  .alert-cards{grid-template-columns:1fr!important;}
+}
+
+/* ── PRINT ── */
+@media print{
+  body{background:#fff!important;color:#111!important;}
+  body::before,body::after{display:none!important;}
+  .shell,.header,.nav-tabs,.season-context-bar,.alerts-header,.alerts-body,.notion-banner,.refresh-btn,.exec-close,.exec-print{display:none!important;}
+  #execSnapshot{display:block!important;position:static!important;background:#fff!important;padding:20px!important;}
+  .exec-title,.exec-subtitle,.exec-section-title,.exec-kpi-label,.exec-action-label{color:#333!important;}
+  .exec-kpi-val,.exec-action-count{color:#111!important;}
+  .exec-kpi,.exec-action-card,.exec-insight-box{background:#f5f5f5!important;border-color:#ddd!important;}
+  .exec-pub-table td,.exec-pub-table th{border-color:#ddd!important;color:#333!important;}
+}
+
 </head>
 <body>
 <div class="shell">
@@ -376,6 +474,8 @@ body::after{content:'';position:fixed;inset:0;z-index:0;background-image:repeati
       <span class="refresh-icon" id="refreshIcon">&#10227;</span>
       <span id="refreshLabel">Sync Notion</span>
     </button>
+    <button class="snapshot-btn" id="snapshotModeBtn" onclick="toggleSnapshotMode()">&#9670; <span>Leadership</span></button>
+    <button class="snapshot-btn" style="color:var(--cyan);border-color:rgba(0,229,255,0.25);" onclick="openExecSnapshot()">&#8682; <span>Export</span></button>
   </div>
 </header>
 
@@ -400,13 +500,13 @@ body::after{content:'';position:fixed;inset:0;z-index:0;background-image:repeati
 <nav class="nav-tabs">
   <button class="nav-tab active" onclick="switchTab('overview',this)">Overview</button>
   <button class="nav-tab" onclick="switchTab('rp',this)">Right Pricing</button>
-  <button class="nav-tab" onclick="switchTab('subid',this)">Sub ID Intel</button>
-  <button class="nav-tab" onclick="switchTab('dispositions',this)">Dispositions</button>
+  <button class="nav-tab" data-working onclick="switchTab('subid',this)">Sub ID Intel</button>
+  <button class="nav-tab" data-working onclick="switchTab('dispositions',this)">Dispositions</button>
   <button class="nav-tab" onclick="switchTab('reporting',this)">Joanie Reporting</button>
   <button class="nav-tab" onclick="switchTab('publishers',this)">Publisher Scorecards</button>
-  <button class="nav-tab" onclick="switchTab('scorecards',this)">QM &amp; MP Scorecards</button>
-  <button class="nav-tab" onclick="switchTab('ai',this)">Joanie AI Activity</button>
-  <button class="nav-tab" onclick="switchTab('agents',this)">Agent Health</button>
+  <button class="nav-tab" data-working onclick="switchTab('scorecards',this)">QM &amp; MP Scorecards</button>
+  <button class="nav-tab" data-working onclick="switchTab('ai',this)">Joanie AI Activity</button>
+  <button class="nav-tab" data-working onclick="switchTab('agents',this)">Agent Health</button>
 </nav>
 
 <!-- OVERVIEW TAB -->
@@ -1606,6 +1706,186 @@ function renderTrendCharts(entries) {
   });
 }
 
+/* ── SNAPSHOT MODE ───────────────────────────────────────────────── */
+let snapshotModeOn = false;
+
+function toggleSnapshotMode() {
+  snapshotModeOn = !snapshotModeOn;
+  document.body.classList.toggle('snapshot-mode', snapshotModeOn);
+  const btn = document.getElementById('snapshotModeBtn');
+  btn.classList.toggle('active', snapshotModeOn);
+  btn.innerHTML = snapshotModeOn
+    ? '&#9670; <span>Full View</span>'
+    : '&#9670; <span>Leadership</span>';
+
+  // If active working tab gets hidden, switch to overview
+  const activeTab = document.querySelector('.nav-tab.active');
+  if (snapshotModeOn && activeTab && activeTab.dataset.working !== undefined) {
+    const overviewBtn = document.querySelector('.nav-tab:first-child');
+    switchTab('overview', overviewBtn);
+  }
+}
+
+/* ── EXEC SNAPSHOT ───────────────────────────────────────────────── */
+function openExecSnapshot() {
+  buildExecSnapshot();
+  document.getElementById('execSnapshot').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeExecSnapshot() {
+  document.getElementById('execSnapshot').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function buildExecSnapshot() {
+  const t      = SEASON_META[globalSeason];
+  const pubs   = RP_NOTION_DATA.filter(d => d.Season === globalSeason);
+  const active = pubs.filter(d => d.actualCpa);
+  const now    = new Date();
+
+  // KPI calculations
+  const avgCpa     = active.length ? Math.round(active.reduce((s,d)=>s+d.actualCpa,0)/active.length) : null;
+  const onTarget   = active.filter(d => d.actualCpa <= t.cpa).length;
+  const totalSales = RP_SCORECARD_DATA.reduce((s,d)=>s+(d.netSales||0),0);
+  const avgEff     = RP_SCORECARD_DATA.filter(d=>d.eff).length
+    ? (RP_SCORECARD_DATA.filter(d=>d.eff).reduce((s,d)=>s+d.eff,0)/RP_SCORECARD_DATA.filter(d=>d.eff).length*100).toFixed(1)
+    : '—';
+
+  // Action band counts
+  const bandCounts = {
+    'Scale Eligible': pubs.filter(d=>d.actionBand==='Scale Eligible').length,
+    'Maintain':       pubs.filter(d=>d.actionBand==='Maintain').length,
+    'Monitor':        pubs.filter(d=>d.actionBand==='Monitor').length,
+    'Throttle':       pubs.filter(d=>d.actionBand==='Throttle').length,
+    'Pullback':       pubs.filter(d=>d.actionBand==='Pullback').length,
+  };
+  const bandColors = {
+    'Scale Eligible':'var(--green)','Maintain':'var(--cyan)',
+    'Monitor':'var(--amber)','Throttle':'rgba(255,181,71,0.6)','Pullback':'var(--red)'
+  };
+
+  // Alerts for exec report
+  const alertItems = buildExecAlerts(t, pubs);
+
+  // Top opportunities and risks from scorecard
+  const scaleEligible = RP_SCORECARD_DATA.filter(d=>d.actionBand==='Scale Eligible');
+  const atRisk        = RP_SCORECARD_DATA.filter(d=>d.status==='At Risk');
+
+  // Publisher table — active publishers sorted by CPA
+  const pubRows = active.sort((a,b)=>a.actualCpa-b.actualCpa).map(d => {
+    const cpaColor = d.actualCpa <= t.cpa ? '#00E676' : d.actualCpa <= t.cpa*1.2 ? '#FFB547' : '#FF5252';
+    const sc = RP_SCORECARD_DATA.find(s=>s.pub===d.Publisher||s.pub.toLowerCase().includes(d.Publisher.split(' ')[0].toLowerCase()));
+    return `<tr>
+      <td style="color:var(--text);font-weight:500;">${d.Publisher}</td>
+      <td><span style="font-family:var(--font-m);font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;background:${bandColors[d.actionBand]}22;color:${bandColors[d.actionBand]};">${d.actionBand}</span></td>
+      <td style="color:var(--text-3);">${d.MPQS}</td>
+      <td style="color:${cpaColor};">$${d.actualCpa}</td>
+      <td style="color:var(--text-2);">${d.eff}%</td>
+      <td style="color:${d.age75>15?'var(--red)':'var(--text-2)'};">${d.age75}%</td>
+      <td style="color:var(--text-3);">${sc?Math.round(sc.netSales||0).toLocaleString():'—'}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('execSnapshotContent').innerHTML = `
+    <div class="exec-header">
+      <div class="exec-logo">
+        <div class="exec-logo-mark">MM</div>
+        <div>
+          <div class="exec-title">Media Match</div>
+          <div class="exec-subtitle">CENTERFIELD HEALTH &amp; MEDICARE · EXECUTIVE SUMMARY</div>
+        </div>
+      </div>
+      <div class="exec-meta">
+        <strong>${now.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}</strong>
+        Season: ${globalSeason} — ${t.label.split(' — ')[1]}<br>
+        Target CPA: $${t.cpa} · CR: ${t.cr}% · Eff: ${t.eff}%
+      </div>
+    </div>
+
+    <div class="exec-section">
+      <div class="exec-section-title">Portfolio KPIs</div>
+      <div class="exec-kpi-row">
+        <div class="exec-kpi cyan"><div class="exec-kpi-label">Avg Actual CPA</div><div class="exec-kpi-val" style="color:${avgCpa&&avgCpa<=t.cpa?'var(--green)':'var(--amber)'};">${avgCpa?'$'+avgCpa:'—'}</div><div class="exec-kpi-sub">Target $${t.cpa} · ${active.length} active publishers</div></div>
+        <div class="exec-kpi green"><div class="exec-kpi-label">On / Under Target</div><div class="exec-kpi-val">${onTarget} <span style="font-size:14px;color:var(--text-3);">/ ${active.length}</span></div><div class="exec-kpi-sub">Publishers at or below $${t.cpa} CPA</div></div>
+        <div class="exec-kpi amber"><div class="exec-kpi-label">Total Net Sales</div><div class="exec-kpi-val">${totalSales.toLocaleString()}</div><div class="exec-kpi-sub">Sold policies across portfolio</div></div>
+        <div class="exec-kpi cyan"><div class="exec-kpi-label">Avg Effectuation</div><div class="exec-kpi-val">${avgEff}<span style="font-size:14px;">%</span></div><div class="exec-kpi-sub">Target ${t.eff}% · policy durability</div></div>
+      </div>
+    </div>
+
+    <div class="exec-section">
+      <div class="exec-section-title">Publisher Action Bands — ${globalSeason}</div>
+      <div class="exec-action-grid">
+        ${Object.entries(bandCounts).map(([band,count])=>`
+          <div class="exec-action-card">
+            <div class="exec-action-count" style="color:${bandColors[band]};">${count}</div>
+            <div class="exec-action-label">${band}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    ${alertItems.length ? `
+    <div class="exec-section">
+      <div class="exec-section-title">Active Alerts</div>
+      ${alertItems.map(a=>`<div class="exec-alert-row ${a.type}"><strong>${a.pub}</strong> — ${a.msg} <span style="margin-left:auto;font-family:var(--font-m);font-size:9px;opacity:0.7;">${a.metric}</span></div>`).join('')}
+    </div>` : ''}
+
+    <div class="exec-section">
+      <div class="exec-section-title">Publisher Performance — Active ${globalSeason} Publishers</div>
+      <table class="exec-pub-table">
+        <thead><tr>
+          <th>Publisher</th><th>Action Band</th><th>MPQS</th><th>CPA</th><th>Eff%</th><th>Age 75+</th><th>Net Sales</th>
+        </tr></thead>
+        <tbody>${pubRows}</tbody>
+      </table>
+    </div>
+
+    <div class="exec-section">
+      <div class="exec-section-title">Key Insights</div>
+      <div class="exec-two-col">
+        <div class="exec-insight-box">
+          <div class="exec-insight-title" style="color:var(--green);">↑ Scale Opportunities</div>
+          ${scaleEligible.length ? scaleEligible.map(d=>`
+            <div class="exec-insight-item">
+              <span style="color:var(--green);flex-shrink:0;">+</span>
+              <span><strong style="color:var(--text);">${d.pub}</strong> — ${d.topOpp}</span>
+            </div>`).join('') : '<div class="exec-insight-item" style="color:var(--text-3);">No scale eligible publishers this period</div>'}
+        </div>
+        <div class="exec-insight-box">
+          <div class="exec-insight-title" style="color:var(--red);">⚠ Priority Risks</div>
+          ${atRisk.length ? atRisk.map(d=>`
+            <div class="exec-insight-item">
+              <span style="color:var(--red);flex-shrink:0;">!</span>
+              <span><strong style="color:var(--text);">${d.pub}</strong> — ${d.biggestRisk}</span>
+            </div>`).join('') : '<div class="exec-insight-item" style="color:var(--text-3);">No at-risk publishers flagged</div>'}
+        </div>
+      </div>
+    </div>
+
+    <div class="exec-footer">
+      <span>Media Match · Centerfield Health &amp; Medicare · ${globalSeason} ${now.getFullYear()}</span>
+      <span>Generated ${now.toLocaleString()} · Confidential — Internal Use Only</span>
+    </div>
+  `;
+}
+
+function buildExecAlerts(t, pubs) {
+  const alerts = [];
+  pubs.forEach(d => {
+    if (d.actualCpa && d.actualCpa > t.cpa * 1.20)
+      alerts.push({ type:'critical', pub:d.Publisher, msg:`CPA $${d.actualCpa} is $${Math.round(d.actualCpa-t.cpa)} over target`, metric:`+${Math.round((d.actualCpa/t.cpa-1)*100)}%` });
+    if (d.age75 > 25)
+      alerts.push({ type:'critical', pub:d.Publisher, msg:`Age 75+ at ${d.age75}% — compliance risk`, metric:`${d.age75}% vs 15%` });
+    if (d.actionBand === 'Pullback')
+      alerts.push({ type:'critical', pub:d.Publisher, msg:`Pullback — immediate bid review required`, metric:'Pullback' });
+    if (d.rde > t.rde * 1.3)
+      alerts.push({ type:'warning', pub:d.Publisher, msg:`RDE ${d.rde}% exceeds ${t.rde}% maximum`, metric:`${d.rde}% RDE` });
+  });
+  const seen = new Set();
+  return alerts.filter(a=>{ const k=a.pub+'|'+a.msg.slice(0,20); if(seen.has(k))return false; seen.add(k); return true; })
+    .sort((a,b)=>(a.type==='critical'?0:1)-(b.type==='critical'?0:1));
+}
+
 /* ── NOTION API CALL ─────────────────────────────────────────────── */
 const FALLBACK=[{"Report":"QM — Healthcare.com — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Scale Eligible","CPA":240,"Conv Rate (CR%)":0.194,"Effectuation %":0.667,"Duplicate Rate %":0.047,"Headline Metric":"MPQS 102.4 — #1 in portfolio. GPpTH $205. Scale Eligible.","Biggest Risk":"Over75 = 0.0% — confirm not a data gap before scaling","Top Opportunity":"Highest MPQS in portfolio — immediate scale candidate"},{"Report":"QM — RevRise Media — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Scale Eligible","CPA":231,"Conv Rate (CR%)":0.148,"Effectuation %":0.873,"Duplicate Rate %":0.047,"Headline Metric":"MPQS 97.3 — #2 in portfolio. GPpTH $135. Scale Eligible.","Biggest Risk":"Demo Mix 43.3% Over75 — nearly 3x benchmark.","Top Opportunity":"Strongest Effectuation % at 87.3%"},{"Report":"QM — Scalability.io — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Maintain","CPA":369,"Conv Rate (CR%)":0.106,"Effectuation %":0.784,"Duplicate Rate %":null,"Headline Metric":"MPQS 83.8 — #4. Maintain.","Biggest Risk":"GPpTH $57 below $75 benchmark","Top Opportunity":"7 points from Scale Eligible"},{"Report":"QM — Quote Velocity — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Monitor","CPA":352,"Conv Rate (CR%)":0.1,"Effectuation %":0.753,"Duplicate Rate %":null,"Headline Metric":"MPQS 81.4 — #6. Monitor.","Biggest Risk":"GPpTH $53 below benchmark","Top Opportunity":"Best Over75% in Monitor tier"},{"Report":"QM — Milestone Marketing — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Monitor","CPA":442,"Conv Rate (CR%)":0.11,"Effectuation %":0.789,"Duplicate Rate %":null,"Headline Metric":"MPQS 76.0. Monitor. Highest volume in Monitor.","Biggest Risk":"GPpTH $42 significantly below benchmark","Top Opportunity":"GPpTH improvement would have largest portfolio impact"},{"Report":"QM — EngageCX — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Throttle","CPA":413,"Conv Rate (CR%)":0.098,"Effectuation %":0.731,"Duplicate Rate %":0.042,"Headline Metric":"MPQS 69.5. Throttle. 950 sales.","Biggest Risk":"GPpTH $36 on highest-volume Throttle partner","Top Opportunity":"950 net sales — largest volume outside Maintain/Scale"},{"Report":"QM — Adolent Marketing — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Throttle","CPA":294,"Conv Rate (CR%)":0.062,"Effectuation %":0.706,"Duplicate Rate %":null,"Headline Metric":"MPQS 69.6. Throttle. Over75 66.9%.","Biggest Risk":"Over75 66.9% — compliance escalation required","Top Opportunity":"High volume — compliance fix unlocks expansion"},{"Report":"QM — Elijay / VitalCareWorks — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Pullback","CPA":663,"Conv Rate (CR%)":0.049,"Effectuation %":0.364,"Duplicate Rate %":null,"Headline Metric":"MPQS 56.3 — Pullback.","Biggest Risk":"Lowest MPQS. All components flagged.","Top Opportunity":"Full program review required"},{"Report":"QM — Paragon — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Maintain","CPA":265,"Conv Rate (CR%)":0.096,"Effectuation %":0.704,"Duplicate Rate %":0.029,"Headline Metric":"MPQS 83.4. Maintain. High volume.","Biggest Risk":"Effectuation 70.4% slightly below 72%","Top Opportunity":"Highest Net Sales in Maintain band"},{"Report":"QM — Insurco — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Monitor","CPA":564,"Conv Rate (CR%)":0.082,"Effectuation %":0.813,"Duplicate Rate %":0.033,"Headline Metric":"MPQS Monitor. GPpTH negative.","Biggest Risk":"Negative GPpTH — entire score drag is economics","Top Opportunity":"If GPpTH turns positive, Maintain band is within reach"},{"Report":"QM — MyHealthAngel — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Pullback","CPA":421,"Conv Rate (CR%)":0.065,"Effectuation %":0.660,"Duplicate Rate %":null,"Headline Metric":"Pullback. Low LTV, elevated RDE and demo age over 75.","Biggest Risk":"Durability profile unacceptable at current spend","Top Opportunity":"None — program review required"},{"Report":"QM — Barrington Media Group — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Pullback","CPA":765,"Conv Rate (CR%)":0.061,"Effectuation %":0.680,"Duplicate Rate %":0.058,"Headline Metric":"Pullback. GPpTH -$117, Over75 37.5%.","Biggest Risk":"Economics and compliance both flagged simultaneously","Top Opportunity":"CR 17.2% is a genuine strength if CPA corrected"}];
 
@@ -1700,5 +1980,12 @@ window.addEventListener('DOMContentLoaded',()=>{
   loadNotionData();
 });
 </script>
+<!-- EXEC SNAPSHOT OVERLAY -->
+<div id="execSnapshot">
+  <button class="exec-print" onclick="window.print()">&#8682; Print / Save PDF</button>
+  <button class="exec-close" onclick="closeExecSnapshot()">✕ Close</button>
+  <div id="execSnapshotContent"></div>
+</div>
+
 </body>
 </html>
