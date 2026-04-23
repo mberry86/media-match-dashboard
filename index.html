@@ -819,6 +819,7 @@ body.snapshot-mode .nav-tab[data-working]{display:none;}
 
 </div><!-- /shell -->
 
+<script src="data.js"></script>
 <script>
 /* ── STATIC DATA ─────────────────────────────────────────────────── */
 const STATIC={kpis:{WTD:{rpc:'$16.20',rpcD:'&#9650; 8.4% vs prior',rpcDir:'up',rev:'$41K',revD:'&#9650; 5.2% WoW',revDir:'up',gp:'$11.8K',gpD:'&#9650; 4.1% WoW',gpDir:'up',margin:'28.8',marginD:'&#8212; flat',marginDir:'flat',fill:'72',fillD:'&#9660; 1.5% vs prior',fillDir:'down',overflow:'$6.1K',overflowD:'&#9650; NEW revenue',overflowDir:'up'},MTD:{rpc:'$18.40',rpcD:'&#9650; 12.3% vs prior',rpcDir:'up',rev:'$184K',revD:'&#9650; 8.1% MoM',revDir:'up',gp:'$52.4K',gpD:'&#9650; 6.7% MoM',gpDir:'up',margin:'28.5',marginD:'&#8212; vs 27.9% prior',marginDir:'flat',fill:'74',fillD:'&#9660; 2.1% vs prior',fillDir:'down',overflow:'$28.2K',overflowD:'&#9650; NEW revenue',overflowDir:'up'},QTD:{rpc:'$17.90',rpcD:'&#9650; 9.8% vs prior',rpcDir:'up',rev:'$521K',revD:'&#9650; 11.4% QoQ',revDir:'up',gp:'$146K',gpD:'&#9650; 9.2% QoQ',gpDir:'up',margin:'28.0',marginD:'&#9650; +0.4pp QoQ',marginDir:'up',fill:'75',fillD:'&#9650; 1.0% vs prior',fillDir:'up',overflow:'$78K',overflowD:'&#9650; NEW revenue',overflowDir:'up'}},revTrend:{labels:['4/1','4/2','4/3','4/4','4/5','4/6','4/7','4/8','4/9','4/10','4/11','4/12','4/13','4/14','4/15','4/16','4/17','4/18','4/19','4/20'],revenue:[7200,8100,6800,9400,10200,8700,7500,9800,11200,10500,9200,10800,11500,9700,10100,12300,11800,10400,9900,11000],gp:[2050,2310,1940,2680,2910,2480,2140,2800,3200,2990,2620,3080,3280,2770,2880,3510,3360,2970,2820,3140]},callVol:{labels:['4/7','4/8','4/9','4/10','4/11','4/12','4/13','4/14','4/15','4/16','4/17','4/18','4/19','4/20'],qm:[312,340,298,380,410,360,290,355,422,445,390,415,370,430],market:[88,95,82,120,130,105,80,115,148,155,130,140,120,150]},funnel:[{label:'Inbound Calls',val:10340,pct:100},{label:'Answered / IVR',val:9820,pct:95},{label:'Scored & Routed',val:9600,pct:92.8},{label:'QM — Filled',val:7130,pct:69.0},{label:'Marketplace',val:1960,pct:19.0},{label:'Converted',val:9090,pct:88.0}],clients:[{name:'Quote Manage',type:'Primary Buyer',calls:7130,cpa:142,target:150,status:'On Target'},{name:'Buyer A',type:'Marketplace',calls:820,cpa:168,target:160,status:'Over Target'},{name:'Buyer B',type:'Marketplace',calls:610,cpa:155,target:170,status:'On Target'},{name:'Buyer C',type:'Marketplace',calls:380,cpa:144,target:145,status:'On Target'},{name:'Buyer D',type:'Marketplace',calls:150,cpa:190,target:180,status:'Over Target'}],rpc:{labels:['W1','W2','W3','W4','W5','W6','W7','W8'],qm:[16.2,16.8,17.1,16.9,17.5,18.0,17.8,18.4],market:[14.8,15.2,15.5,15.1,15.9,16.4,16.1,16.8]},overflow:{labels:['W1','W2','W3','W4','W5','W6','W7','W8'],vals:[3200,4100,4800,5200,5800,6400,6100,6900]},margin:{labels:['W1','W2','W3','W4','W5','W6','W7','W8'],vals:[26.4,27.1,27.5,27.2,27.8,28.2,28.0,28.5]},agents:[{name:'Joanie',role:'Workflow Orchestrator',status:'Live',uptime:99.8,metric:'99.8%',label:'uptime'},{name:'MPQS',role:'Partner Quality Scoring',status:'Live',uptime:99.4,metric:'847',label:'partners scored'},{name:'Scoring',role:'Real-Time Call Quality',status:'Live',uptime:99.1,metric:'9,600',label:'calls scored MTD'},{name:'Data Agent',role:'Signal Aggregation',status:'Live',uptime:99.6,metric:'100%',label:'data freshness'},{name:'Right Pricing',role:'Dynamic Bid Optimization',status:'In Build',uptime:0,metric:"Q3 '26",label:'target launch'}]};
@@ -1281,613 +1282,202 @@ function buildDispCard(d) {
   </div>`;
 }
 
-/* ── QM RP HUB DATA ──────────────────────────────────────────────── */
-const RP_SEASONS = {
-  SEP:{ cr:9.0,  cpa:325, eff:73, rde:10, age75:15, ltv:730, ltvPct:0.45, label:'SEP — Special Enrollment' },
-  OEP:{ cr:10.0, cpa:325, eff:72, rde:15, age75:15, ltv:730, ltvPct:0.45, label:'OEP — Open Enrollment' },
-  AEP:{ cr:16.0, cpa:275, eff:74, rde:15, age75:15, ltv:730, ltvPct:0.45, label:'AEP — Annual Enrollment' },
-};
-const MPQS_MULT = { A:1.15, B:1.00, C:0.85, D:0.70 };
-let activeRPSeason = 'SEP';
+/* ── DATA LOADED FROM data.js ── */
 
-const SUBID_DATA = [
-  { id:'FLEX-CARD', angle:'Flex card / allowance benefit',  cr:9.4, gpth:92, eff:74, rde:8,  age75:13, qi:1.10 },
-  { id:'GROCERY',   angle:'Grocery / food allowance',       cr:8.8, gpth:85, eff:72, rde:9,  age75:16, qi:1.05 },
-  { id:'DENTAL',    angle:'Dental coverage emphasis',       cr:7.9, gpth:78, eff:69, rde:11, age75:14, qi:0.95 },
-  { id:'OTC',       angle:'OTC / pharmacy benefit',         cr:7.2, gpth:71, eff:67, rde:13, age75:17, qi:0.88 },
-  { id:'VISION',    angle:'Vision + dental combo',          cr:8.1, gpth:80, eff:70, rde:10, age75:15, qi:0.92 },
-  { id:'TRANSPORT', angle:'Transportation benefit',         cr:6.4, gpth:63, eff:64, rde:15, age75:19, qi:0.80 },
-];
-const SUBID_MAP = Object.fromEntries(SUBID_DATA.map(s=>[s.id,s]));
-
-const RP_NOTION_DATA = [
-  {Publisher:"Adolent Marketing",Season:"SEP",MPQS:"B",actualCpa:328,targetCpa:325,eff:71,rde:9,age75:17,cr:8.2,subIds:["FLEX-CARD","GROCERY"],rpAction:"On Target",actionBand:"Maintain",baseBid:18},
-  {Publisher:"Barrington Media Group",Season:"SEP",MPQS:"D",actualCpa:765,targetCpa:325,eff:68,rde:14,age75:21,cr:6.1,subIds:["FLEX-CARD"],rpAction:"Cut Bid",actionBand:"Pullback",baseBid:null},
-  {Publisher:"DigiPeak LLC",Season:"SEP",MPQS:"B",actualCpa:387,targetCpa:325,eff:73,rde:8,age75:14,cr:7.0,subIds:["GROCERY","DENTAL"],rpAction:"Reduce Bid",actionBand:"Monitor",baseBid:25},
-  {Publisher:"EngageCX",Season:"SEP",MPQS:"C",actualCpa:442,targetCpa:325,eff:70,rde:11,age75:18,cr:7.8,subIds:["FLEX-CARD","OTC"],rpAction:"Reduce Bid",actionBand:"Throttle",baseBid:38},
-  {Publisher:"Healthcare.com",Season:"SEP",MPQS:"B",actualCpa:348,targetCpa:325,eff:74,rde:9,age75:15,cr:8.5,subIds:["FLEX-CARD","GROCERY","DENTAL"],rpAction:"Reduce Bid",actionBand:"Maintain",baseBid:40},
-  {Publisher:"HLG Solutions",Season:"SEP",MPQS:"C",actualCpa:274,targetCpa:325,eff:69,rde:12,age75:20,cr:9.8,subIds:["OTC"],rpAction:"Reduce Bid",actionBand:"Monitor",baseBid:22},
-  {Publisher:"Insurco",Season:"SEP",MPQS:"B",actualCpa:425,targetCpa:325,eff:75,rde:7,age75:12,cr:8.1,subIds:["GROCERY"],rpAction:"Reduce Bid",actionBand:"Monitor",baseBid:40},
-  {Publisher:"Milestone Marketing Solutions",Season:"SEP",MPQS:"B",actualCpa:480,targetCpa:325,eff:72,rde:9,age75:16,cr:7.2,subIds:["FLEX-CARD","GROCERY"],rpAction:"Reduce Bid",actionBand:"Throttle",baseBid:45},
-  {Publisher:"MyHealthAngel",Season:"SEP",MPQS:"D",actualCpa:421,targetCpa:325,eff:66,rde:15,age75:23,cr:6.5,subIds:["GROCERY"],rpAction:"Cut Bid",actionBand:"Pullback",baseBid:null},
-  {Publisher:"Paragon",Season:"SEP",MPQS:"B",actualCpa:null,targetCpa:325,eff:73,rde:8,age75:13,cr:0,subIds:["FLEX-CARD"],rpAction:"No Spend",actionBand:"Maintain",baseBid:30},
-  {Publisher:"Quote Velocity",Season:"SEP",MPQS:"B",actualCpa:264,targetCpa:325,eff:72,rde:10,age75:15,cr:9.1,subIds:["DENTAL","OTC"],rpAction:"On Target",actionBand:"Maintain",baseBid:35},
-  {Publisher:"RateQuote",Season:"SEP",MPQS:"B",actualCpa:367,targetCpa:325,eff:70,rde:8,age75:12,cr:7.5,subIds:["GROCERY"],rpAction:"Reduce Bid",actionBand:"Monitor",baseBid:18},
-  {Publisher:"RevRise Media",Season:"SEP",MPQS:"C",actualCpa:null,targetCpa:325,eff:74,rde:11,age75:18,cr:0,subIds:["FLEX-CARD","GROCERY"],rpAction:"No Spend",actionBand:"Maintain",baseBid:35},
-  {Publisher:"Scalability.io",Season:"SEP",MPQS:"B",actualCpa:289,targetCpa:325,eff:71,rde:9,age75:16,cr:8.8,subIds:["DENTAL"],rpAction:"Reduce Bid",actionBand:"Monitor",baseBid:27},
-  {Publisher:"The Wisdom Companies LLC",Season:"SEP",MPQS:"C",actualCpa:346,targetCpa:325,eff:68,rde:10,age75:19,cr:7.8,subIds:["GROCERY","OTC"],rpAction:"Reduce Bid",actionBand:"Monitor",baseBid:20},
-  {Publisher:"UAB Inulti",Season:"SEP",MPQS:"B",actualCpa:304,targetCpa:325,eff:70,rde:8,age75:14,cr:8.4,subIds:["FLEX-CARD"],rpAction:"On Target",actionBand:"Maintain",baseBid:18},
-  // OEP
-  {Publisher:"Adolent Marketing",Season:"OEP",MPQS:"B",actualCpa:null,targetCpa:325,eff:71,rde:9,age75:17,cr:6.2,subIds:["FLEX-CARD","GROCERY"],rpAction:"No Spend",actionBand:"Maintain",baseBid:null},
-  {Publisher:"Healthcare.com",Season:"OEP",MPQS:"B",actualCpa:240,targetCpa:325,eff:66.7,rde:9,age75:0,cr:19.4,subIds:["FLEX-CARD","GROCERY","DENTAL"],rpAction:"Scale Up",actionBand:"Scale Eligible",baseBid:45},
-  {Publisher:"Insurco",Season:"OEP",MPQS:"A",actualCpa:null,targetCpa:325,eff:75,rde:7,age75:12,cr:8.2,subIds:["GROCERY"],rpAction:"No Spend",actionBand:"Scale Eligible",baseBid:45},
-  {Publisher:"Paragon",Season:"OEP",MPQS:"A",actualCpa:null,targetCpa:325,eff:73,rde:8,age75:13,cr:9.6,subIds:["FLEX-CARD"],rpAction:"No Spend",actionBand:"Scale Eligible",baseBid:30},
-  {Publisher:"RevRise Media",Season:"OEP",MPQS:"B",actualCpa:231,targetCpa:325,eff:87.3,rde:11,age75:43.3,cr:14.8,subIds:["FLEX-CARD","GROCERY"],rpAction:"Scale Up",actionBand:"Scale Eligible",baseBid:35},
-  {Publisher:"Scalability.io",Season:"OEP",MPQS:"B",actualCpa:369,targetCpa:325,eff:78.4,rde:9,age75:9.6,cr:10.6,subIds:["DENTAL"],rpAction:"Reduce Bid",actionBand:"Maintain",baseBid:27},
-  {Publisher:"Quote Velocity",Season:"OEP",MPQS:"B",actualCpa:352,targetCpa:325,eff:75.3,rde:10,age75:4.9,cr:10.0,subIds:["DENTAL","OTC"],rpAction:"Reduce Bid",actionBand:"Monitor",baseBid:35},
-];
-
-const RP_SCORECARD_DATA = [
-  {pub:"Quote Velocity",season:"OEP",rawCalls:1147,netSales:446,cpa:352,eff:0.753,age75:0.049,talkHours:1355.6,actionBand:"Monitor",status:"Watch",biggestRisk:"GPpTH $53 below $75 benchmark",topOpp:"Lowest Over75% in Monitor — compliance-clean partner with scale potential",date:"2026-02-28"},
-  {pub:"Elijay Marketing Solutions",season:"OEP",rawCalls:41,netSales:2,cpa:663,eff:0.364,age75:0.670,talkHours:59.3,actionBand:"Pullback",status:"At Risk",biggestRisk:"Lowest MPQS. Negative GPpTH, Eff% 36.4%, Over75 67.0% — all components flagged",topOpp:"None — full program review required",date:"2026-02-28"},
-  {pub:"The Wisdom Companies LLC",season:"OEP",rawCalls:1147,netSales:133,cpa:316,eff:0.851,age75:0.141,talkHours:562.5,actionBand:"Monitor",status:"Watch",biggestRisk:"CR 7.9% below 9% benchmark",topOpp:"Effectuation 85.1% — highest durability in Monitor. CR coaching would unlock Maintain.",date:"2026-02-28"},
-  {pub:"Scalability.io",season:"OEP",rawCalls:1147,netSales:117,cpa:369,eff:0.784,age75:0.096,talkHours:809.9,actionBand:"Maintain",status:"Healthy",biggestRisk:"GPpTH $57 below $75 benchmark",topOpp:"7 points from Scale Eligible — GPpTH improvement is the single lever",date:"2026-02-28"},
-  {pub:"RevRise Media",season:"OEP",rawCalls:1147,billableCalls:null,billableRate:0.256,netSales:59,cpa:231,eff:0.873,age75:0.433,talkHours:75.7,actionBand:"Scale Eligible",status:"Healthy",biggestRisk:"Demo Mix 43.3% Over75 — nearly 3× the 15% benchmark",topOpp:"Strongest Eff% in portfolio at 87.3%",date:"2026-02-28"},
-  {pub:"Milestone Marketing Solutions",season:"OEP",rawCalls:1147,netSales:361,cpa:442,eff:0.789,age75:0.184,talkHours:1403.7,actionBand:"Monitor",status:"Watch",biggestRisk:"GPpTH $42 significantly below $75 benchmark",topOpp:"Highest volume in Monitor — GPpTH improvement would have largest portfolio impact",date:"2026-02-28"},
-  {pub:"Paragon",season:"OEP",rawCalls:1147,netSales:548,cpa:265,eff:0.704,age75:0.129,talkHours:2483.9,actionBand:"Maintain",status:"Healthy",biggestRisk:"Effectuation 70.4% — slightly below 72% benchmark",topOpp:"Highest Net Sales in Maintain — scale upside significant if GPpTH improves",date:"2026-02-28"},
-  {pub:"Healthcare.com",season:"OEP",rawCalls:1147,billableCalls:464,billableRate:0.256,netSales:6,cpa:240,eff:0.667,age75:0.000,talkHours:6.7,actionBand:"Scale Eligible",status:"Healthy",biggestRisk:"Over75 = 0.0% — confirm not a data gap before scaling",topOpp:"Highest MPQS in portfolio — immediate scale candidate",date:"2026-02-28"},
-  {pub:"EngageCX",season:"OEP",rawCalls:1147,netSales:950,cpa:413,eff:0.731,age75:0.274,talkHours:3168.9,actionBand:"Throttle",status:"Watch",biggestRisk:"GPpTH $36 and Over75 27.4% on highest-volume Throttle partner",topOpp:"950 sold policies — largest volume opportunity outside Maintain/Scale",date:"2026-02-28"},
-  {pub:"Adolent Marketing",season:"OEP",rawCalls:1147,netSales:284,cpa:294,eff:0.706,age75:0.669,talkHours:1990.1,actionBand:"Throttle",status:"Watch",biggestRisk:"Over75 66.9% — highest in portfolio. Immediate compliance escalation required.",topOpp:"284 sold policies at strong CPA — compliance resolution must precede volume",date:"2026-02-28"},
-];
-
-function calcRPEnhancedBid(d) {
-  const t = RP_SEASONS[activeRPSeason];
-  const ltv = 730, ltvPct = 0.45;
-  const cr = d.cr || t.cr;
-  const eff = d.eff || t.eff;
-  const baseBid = ltv * (eff/100) * ltvPct * (cr/100);
-  const mpqsMult = MPQS_MULT[d.MPQS] || 1.0;
-  const qis = (d.subIds||[]).map(id => SUBID_MAP[id]?.qi || 1.0);
-  const qi = qis.length ? qis.reduce((a,b)=>a+b,0)/qis.length : 1.0;
-  return +(baseBid * mpqsMult * qi).toFixed(0);
+/* ── GLOBAL SEASON TOGGLE ── */
+function setGlobalSeason(s,btn){
+  globalSeason=s; activeRPSeason=s;
+  document.querySelectorAll('.gstab').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  const m=SEASON_META[s];
+  document.getElementById('sctx-cpa').textContent='$'+m.cpa;
+  document.getElementById('sctx-cr').textContent=m.cr+'%';
+  document.getElementById('sctx-eff').textContent=m.eff+'%';
+  document.getElementById('sctx-rde').textContent=m.rde+'%';
+  document.getElementById('sctx-age').textContent=m.age75+'%';
+  document.getElementById('sctx-ltv').textContent='$'+m.ltv;
+  document.getElementById('sctx-label').textContent=m.label+' · '+m.dates;
+  const pill=document.getElementById('seasonContextPill');
+  pill.textContent=s; pill.style.color=m.color; pill.style.background=m.pillBg; pill.style.border='1px solid '+m.pillBorder;
+  renderRPTab(); renderSubIDTab(); renderDispositionsTab(); renderAlerts();
 }
 
-function rpBadgeColor(action) {
-  const map = {'Scale Up':'#00E676','On Target':'#00E676','Slight ↑':'#4FC3F7','Reduce Bid':'#FFB547','Cut Bid':'#FF5252','No Spend':'rgba(255,255,255,0.2)'};
-  return map[action] || 'rgba(255,255,255,0.2)';
-}
+/* ── RIGHT PRICING TAB ── */
+function setRPSeason(s,btn){activeRPSeason=s;['SEP','OEP','AEP'].forEach(x=>{const el=document.getElementById('rp-'+x.toLowerCase());if(el){el.style.background=x===s?'var(--cyan)':'var(--surface)';el.style.color=x===s?'var(--ink)':'var(--text-3)';}});renderRPTab();}
 
-function mpqsBadgeColor(grade) {
-  return grade==='A'?'#00E676':grade==='B'?'#4FC3F7':grade==='C'?'#FFB547':'#FF5252';
-}
-
-function setRPSeason(s, btn) {
-  activeRPSeason = s;
-  ['SEP','OEP','AEP'].forEach(season => {
-    const el = document.getElementById('rp-'+season.toLowerCase());
-    if(el) { el.style.background = season===s ? 'var(--cyan)' : 'var(--surface)'; el.style.color = season===s ? 'var(--ink)' : 'var(--text-3)'; }
-  });
-  renderRPTab();
-}
-
-function renderRPTab() {
-  const t = RP_SEASONS[activeRPSeason];
-  const pubs = RP_NOTION_DATA.filter(d => d.Season === activeRPSeason);
-
-  // KPI grid
-  const active = pubs.filter(d => d.actualCpa);
-  const avgCpa = active.length ? Math.round(active.reduce((s,d)=>s+d.actualCpa,0)/active.length) : null;
-  const onTarget = active.filter(d => d.actualCpa <= t.cpa).length;
-  const scaleEligible = pubs.filter(d => d.actionBand === 'Scale Eligible').length;
-  const pullback = pubs.filter(d => d.actionBand === 'Pullback').length;
-  document.getElementById('rp-kpi-grid').innerHTML = `
-    <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">Season Target CPA</div><div class="kpi-val">$${t.cpa}</div><span class="kpi-badge flat">${activeRPSeason} · ${t.label.split(' — ')[0]}</span></div>
-    <div class="kpi green-accent"><div class="kpi-accent"></div><div class="kpi-label">Avg Actual CPA</div><div class="kpi-val" style="color:${avgCpa&&avgCpa<=t.cpa?'var(--green)':'var(--amber)'}">${avgCpa?'$'+avgCpa:'—'}</div><span class="kpi-badge flat">${active.length} active pubs</span></div>
-    <div class="kpi green-accent"><div class="kpi-accent"></div><div class="kpi-label">On / Under Target</div><div class="kpi-val">${onTarget}</div><span class="kpi-badge up">of ${active.length} active</span></div>
+function renderRPTab(){
+  const t=RP_SEASONS[activeRPSeason];
+  const pubs=RP_NOTION_DATA.filter(d=>d.Season===activeRPSeason);
+  const active=pubs.filter(d=>d.actualCpa);
+  const avgCpa=active.length?Math.round(active.reduce((s,d)=>s+d.actualCpa,0)/active.length):null;
+  const onTarget=active.filter(d=>d.actualCpa<=t.cpa).length;
+  const scaleEligible=pubs.filter(d=>d.actionBand==='Scale Eligible').length;
+  const pullback=pubs.filter(d=>d.actionBand==='Pullback').length;
+  document.getElementById('rp-kpi-grid').innerHTML=`
+    <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">Season Target CPA</div><div class="kpi-val">$${t.cpa}</div><span class="kpi-badge flat">${activeRPSeason}</span></div>
+    <div class="kpi green-accent"><div class="kpi-accent"></div><div class="kpi-label">Avg Actual CPA</div><div class="kpi-val" style="color:${avgCpa&&avgCpa<=t.cpa?'var(--green)':'var(--amber)'}">${avgCpa?'$'+avgCpa:'—'}</div><span class="kpi-badge flat">${active.length} active</span></div>
+    <div class="kpi green-accent"><div class="kpi-accent"></div><div class="kpi-label">On / Under Target</div><div class="kpi-val">${onTarget}</div><span class="kpi-badge up">of ${active.length}</span></div>
     <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">Scale Eligible</div><div class="kpi-val" style="color:var(--green)">${scaleEligible}</div><span class="kpi-badge up">publishers</span></div>
     <div class="kpi amber-accent"><div class="kpi-accent"></div><div class="kpi-label">CR Target</div><div class="kpi-val">${t.cr}%</div><span class="kpi-badge flat">${activeRPSeason}</span></div>
-    <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">Pullback</div><div class="kpi-val" style="color:var(--red)">${pullback}</div><span class="kpi-badge down">publishers</span></div>
-  `;
-
-  // Table
-  document.getElementById('rp-table-body').innerHTML = pubs.map(d => {
-    const enhBid = calcRPEnhancedBid(d);
-    const delta = d.actualCpa ? Math.round(d.actualCpa - t.cpa) : null;
-    const deltaColor = !delta ? 'var(--text-3)' : delta > 50 ? 'var(--red)' : delta > 0 ? 'var(--amber)' : 'var(--green)';
-    const cpaColor = !d.actualCpa ? 'var(--text-3)' : d.actualCpa <= t.cpa ? 'var(--green)' : 'var(--amber)';
-    const actionColor = rpBadgeColor(d.rpAction);
-    const mpqsColor = mpqsBadgeColor(d.MPQS);
-    const effColor = d.eff >= t.eff ? 'var(--green)' : 'var(--amber)';
-    const rdeColor = d.rde <= t.rde ? 'var(--green)' : 'var(--red)';
-    const age75Color = d.age75 <= t.age75 ? 'var(--text-2)' : 'var(--red)';
+    <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">Pullback</div><div class="kpi-val" style="color:var(--red)">${pullback}</div><span class="kpi-badge down">publishers</span></div>`;
+  document.getElementById('rp-table-body').innerHTML=pubs.map(d=>{
+    const enhBid=calcRPEnhancedBid(d),delta=d.actualCpa?Math.round(d.actualCpa-t.cpa):null;
+    const dc=!delta?'var(--text-3)':delta>50?'var(--red)':delta>0?'var(--amber)':'var(--green)';
+    const cc=!d.actualCpa?'var(--text-3)':d.actualCpa<=t.cpa?'var(--green)':'var(--amber)';
+    const ac=rpBadgeColor(d.rpAction),mc=mpqsBadgeColor(d.MPQS);
     return `<tr style="border-bottom:1px solid var(--edge);">
       <td style="padding:9px 12px;color:var(--text);font-family:var(--font-s);font-size:12px;font-weight:500;">${d.Publisher}</td>
-      <td style="padding:9px 12px;text-align:center;"><span style="font-family:var(--font-m);font-size:10px;font-weight:700;color:${mpqsColor};padding:2px 8px;border-radius:3px;background:${mpqsColor}22;">${d.MPQS}</span></td>
-      <td style="padding:9px 12px;text-align:right;font-family:var(--font-m);font-size:11px;color:${cpaColor};">${d.actualCpa?'$'+d.actualCpa:'—'}</td>
+      <td style="padding:9px 12px;text-align:center;"><span style="font-family:var(--font-m);font-size:10px;font-weight:700;color:${mc};padding:2px 8px;border-radius:3px;background:${mc}22;">${d.MPQS}</span></td>
+      <td style="padding:9px 12px;text-align:right;font-family:var(--font-m);font-size:11px;color:${cc};">${d.actualCpa?'$'+d.actualCpa:'—'}</td>
       <td style="padding:9px 12px;text-align:right;font-family:var(--font-m);font-size:11px;color:var(--text-3);">$${t.cpa}</td>
-      <td style="padding:9px 12px;text-align:right;font-family:var(--font-m);font-size:11px;color:${deltaColor};">${delta!=null?(delta>0?'+$'+delta:'-$'+Math.abs(delta)):'—'}</td>
-      <td style="padding:9px 12px;text-align:right;font-family:var(--font-m);font-size:11px;color:${effColor};">${d.eff}%</td>
-      <td style="padding:9px 12px;text-align:right;font-family:var(--font-m);font-size:11px;color:${rdeColor};">${d.rde}%</td>
-      <td style="padding:9px 12px;text-align:right;font-family:var(--font-m);font-size:11px;color:${age75Color};">${d.age75}%</td>
+      <td style="padding:9px 12px;text-align:right;font-family:var(--font-m);font-size:11px;color:${dc};">${delta!=null?(delta>0?'+$'+delta:'-$'+Math.abs(delta)):'—'}</td>
+      <td style="padding:9px 12px;text-align:right;font-family:var(--font-m);font-size:11px;color:${d.eff>=t.eff?'var(--green)':'var(--amber)'};">${d.eff}%</td>
+      <td style="padding:9px 12px;text-align:right;font-family:var(--font-m);font-size:11px;color:${d.rde<=t.rde?'var(--green)':'var(--red)'};">${d.rde}%</td>
+      <td style="padding:9px 12px;text-align:right;font-family:var(--font-m);font-size:11px;color:${d.age75<=t.age75?'var(--text-2)':'var(--red)'};">${d.age75}%</td>
       <td style="padding:9px 12px;text-align:right;font-family:var(--font-m);font-size:11px;color:var(--green);">${enhBid>0?'$'+enhBid:'—'}</td>
-      <td style="padding:9px 12px;"><span style="font-family:var(--font-m);font-size:9px;font-weight:700;padding:3px 8px;border-radius:3px;background:${actionColor}22;color:${actionColor};border:1px solid ${actionColor}44;">${d.rpAction}</span></td>
+      <td style="padding:9px 12px;"><span style="font-family:var(--font-m);font-size:9px;font-weight:700;padding:3px 8px;border-radius:3px;background:${ac}22;color:${ac};border:1px solid ${ac}44;">${d.rpAction}</span></td>
     </tr>`;
   }).join('');
 }
 
-function renderSubIDTab() {
-  const t = RP_SEASONS[activeRPSeason];
-
-  document.getElementById('subid-cards').innerHTML = SUBID_DATA.map(si => {
-    const qiColor = si.qi >= 1.05 ? 'var(--green)' : si.qi >= 0.95 ? 'var(--amber)' : 'var(--red)';
-    const crOk = si.cr >= t.cr, gpthOk = si.gpth >= 90, effOk = si.eff >= t.eff, rdeOk = si.rde <= t.rde, age75Ok = si.age75 <= t.age75;
-    let pts = [crOk?2:si.cr>=t.cr-2?1:0, gpthOk?2:si.gpth>=70?1:0, effOk?2:si.eff>=t.eff-8?1:0, rdeOk?2:si.rde<=t.rde+3?1:0, age75Ok?2:si.age75<=t.age75+5?1:0].reduce((a,b)=>a+b,0);
-    const grade = pts>=9?'A':pts>=7?'B':pts>=4?'C':'D';
-    const gradeColor = mpqsBadgeColor(grade);
-    return `<div class="panel">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
-        <div>
-          <div style="font-family:var(--font-num);font-size:15px;font-weight:400;color:var(--text);">${si.id}</div>
-          <div style="font-size:10px;color:var(--text-3);margin-top:2px;">${si.angle}</div>
-        </div>
-        <span style="font-family:var(--font-m);font-size:10px;font-weight:700;padding:3px 8px;border-radius:3px;background:${gradeColor}22;color:${gradeColor};">${grade}</span>
-      </div>
+/* ── SUB ID TAB ── */
+function renderSubIDTab(){
+  const t=RP_SEASONS[activeRPSeason];
+  document.getElementById('subid-cards').innerHTML=SUBID_DATA.map(si=>{
+    const qiC=si.qi>=1.05?'var(--green)':si.qi>=0.95?'var(--amber)':'var(--red)';
+    const crOk=si.cr>=t.cr,gpthOk=si.gpth>=90,effOk=si.eff>=t.eff,rdeOk=si.rde<=t.rde,age75Ok=si.age75<=t.age75;
+    let pts=[crOk?2:si.cr>=t.cr-2?1:0,gpthOk?2:si.gpth>=70?1:0,effOk?2:si.eff>=t.eff-8?1:0,rdeOk?2:si.rde<=t.rde+3?1:0,age75Ok?2:si.age75<=t.age75+5?1:0].reduce((a,b)=>a+b,0);
+    const grade=pts>=9?'A':pts>=7?'B':pts>=4?'C':'D';
+    const gc=mpqsBadgeColor(grade);
+    return `<div class="panel"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;"><div><div style="font-family:var(--font-num);font-size:15px;font-weight:400;color:var(--text);">${si.id}</div><div style="font-size:10px;color:var(--text-3);margin-top:2px;">${si.angle}</div></div><span style="font-family:var(--font-m);font-size:10px;font-weight:700;padding:3px 8px;border-radius:3px;background:${gc}22;color:${gc};">${grade}</span></div>
       <div style="display:flex;flex-direction:column;gap:5px;margin-top:10px;padding-top:10px;border-top:1px solid var(--edge);">
-        ${[
-          ['Conv. Rate', si.cr+'%', crOk?'var(--green)':'var(--amber)'],
-          ['GP/TH', '$'+si.gpth, gpthOk?'var(--green)':'var(--amber)'],
-          ['Effectuation', si.eff+'%', effOk?'var(--green)':'var(--amber)'],
-          ['RDE', si.rde+'%', rdeOk?'var(--green)':'var(--red)'],
-          ['Age 75+', si.age75+'%', age75Ok?'var(--text-2)':'var(--red)'],
-        ].map(([l,v,c])=>`<div style="display:flex;justify-content:space-between;"><span style="font-size:10px;color:var(--text-3);font-family:var(--font-m);">${l}</span><span style="font-size:10px;font-family:var(--font-m);font-weight:600;color:${c};">${v}</span></div>`).join('')}
-        <div style="display:flex;justify-content:space-between;margin-top:5px;padding-top:5px;border-top:1px solid var(--edge);">
-          <span style="font-size:10px;color:var(--text-3);font-family:var(--font-m);">Bid QI Index</span>
-          <span style="font-size:12px;font-family:var(--font-num);font-weight:400;color:${qiColor};">×${si.qi.toFixed(2)}</span>
-        </div>
-      </div>
-    </div>`;
+        ${[['Conv. Rate',si.cr+'%',crOk?'var(--green)':'var(--amber)'],['GP/TH','$'+si.gpth,gpthOk?'var(--green)':'var(--amber)'],['Effectuation',si.eff+'%',effOk?'var(--green)':'var(--amber)'],['RDE',si.rde+'%',rdeOk?'var(--green)':'var(--red)'],['Age 75+',si.age75+'%',age75Ok?'var(--text-2)':'var(--red)']].map(([l,v,c])=>`<div style="display:flex;justify-content:space-between;"><span style="font-size:10px;color:var(--text-3);font-family:var(--font-m);">${l}</span><span style="font-size:10px;font-family:var(--font-m);font-weight:600;color:${c};">${v}</span></div>`).join('')}
+        <div style="display:flex;justify-content:space-between;margin-top:5px;padding-top:5px;border-top:1px solid var(--edge);"><span style="font-size:10px;color:var(--text-3);font-family:var(--font-m);">Bid QI Index</span><span style="font-size:12px;font-family:var(--font-num);font-weight:400;color:${qiC};">×${si.qi.toFixed(2)}</span></div>
+      </div></div>`;
   }).join('');
-
-  document.getElementById('subid-targets').innerHTML = Object.entries(RP_SEASONS).map(([s,t]) => `
-    <div class="panel" style="flex:1;min-width:200px;">
-      <div style="font-family:var(--font-m);font-size:9px;color:var(--cyan);font-weight:700;letter-spacing:1.5px;margin-bottom:10px;">${s} — ${t.label.split(' — ')[1]}</div>
-      ${[['Target CPA','$'+t.cpa],['CR Target',t.cr+'%'],['Effectuation',t.eff+'%'],['Max RDE',t.rde+'%'],['Age 75+ Max',t.age75+'%'],['LTV','$'+t.ltv]].map(([l,v])=>
-        `<div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:10px;color:var(--text-3);">${l}</span><span style="font-size:10px;font-family:var(--font-m);color:var(--text-2);">${v}</span></div>`
-      ).join('')}
-    </div>
-  `).join('');
+  document.getElementById('subid-targets').innerHTML=Object.entries(RP_SEASONS).map(([s,t])=>`
+    <div class="panel" style="flex:1;min-width:200px;"><div style="font-family:var(--font-m);font-size:9px;color:var(--cyan);font-weight:700;letter-spacing:1.5px;margin-bottom:10px;">${s} — ${t.label.split(' — ')[1]}</div>
+      ${[['Target CPA','$'+t.cpa],['CR Target',t.cr+'%'],['Effectuation',t.eff+'%'],['Max RDE',t.rde+'%'],['Age 75+ Max',t.age75+'%'],['LTV','$'+t.ltv]].map(([l,v])=>`<div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:10px;color:var(--text-3);">${l}</span><span style="font-size:10px;font-family:var(--font-m);color:var(--text-2);">${v}</span></div>`).join('')}
+    </div>`).join('');
 }
 
-/* ── GLOBAL SEASON TOGGLE ────────────────────────────────────────── */
-let globalSeason = 'SEP';
-
-const SEASON_META = {
-  SEP:{ cpa:325, cr:9.0, eff:73, rde:10, age75:15, ltv:730, label:'SEP — Special Enrollment', dates:'Apr 1 – Oct 14', color:'var(--green)', pillBg:'rgba(0,230,118,0.15)', pillBorder:'rgba(0,230,118,0.3)' },
-  OEP:{ cpa:325, cr:10.0, eff:72, rde:15, age75:15, ltv:730, label:'OEP — Open Enrollment',    dates:'Jan 1 – Mar 31', color:'var(--cyan)',  pillBg:'rgba(0,229,255,0.15)',  pillBorder:'rgba(0,229,255,0.3)' },
-  AEP:{ cpa:275, cr:16.0, eff:74, rde:15, age75:15, ltv:730, label:'AEP — Annual Enrollment',   dates:'Oct 15 – Nov 7', color:'var(--amber)', pillBg:'rgba(255,181,71,0.15)',  pillBorder:'rgba(255,181,71,0.3)' },
-};
-
-function setGlobalSeason(s, btn) {
-  globalSeason = s;
-  activeRPSeason = s;
-
-  // Update toggle button styles
-  document.querySelectorAll('.gstab').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-
-  // Update context bar
-  const m = SEASON_META[s];
-  document.getElementById('sctx-cpa').textContent  = '$' + m.cpa;
-  document.getElementById('sctx-cr').textContent   = m.cr + '%';
-  document.getElementById('sctx-eff').textContent  = m.eff + '%';
-  document.getElementById('sctx-rde').textContent  = m.rde + '%';
-  document.getElementById('sctx-age').textContent  = m.age75 + '%';
-  document.getElementById('sctx-ltv').textContent  = '$' + m.ltv;
-  document.getElementById('sctx-label').textContent = m.label + ' · ' + m.dates;
-  const pill = document.getElementById('seasonContextPill');
-  pill.textContent    = s;
-  pill.style.color    = m.color;
-  pill.style.background = m.pillBg;
-  pill.style.border   = '1px solid ' + m.pillBorder;
-
-  // Re-render all season-aware tabs
-  renderRPTab();
-  renderSubIDTab();
-  renderDispositionsTab();
-  renderAlerts();
-}
-
-/* ── ALERT ENGINE ────────────────────────────────────────────────── */
-const ALERT_THRESHOLDS = {
-  cpaOverPct:  0.20,
-  age75Max:    15,
-  effMin:      0.68,
-  rdeMax:      12,
-  dupRateMax:  0.05,
-};
-
-let alertsOpen = false;
-
-function toggleAlerts() {
-  alertsOpen = !alertsOpen;
-  document.getElementById('alertsBody').classList.toggle('open', alertsOpen);
-  document.getElementById('alertsChevron').classList.toggle('open', alertsOpen);
-}
-
-function renderAlerts() {
-  const t = SEASON_META[globalSeason];
-  const alerts = [];
-
-  // Scan RP publisher data
-  const pubs = RP_NOTION_DATA.filter(d => d.Season === globalSeason);
-  pubs.forEach(d => {
-    if (d.actualCpa && d.actualCpa > t.cpa * (1 + ALERT_THRESHOLDS.cpaOverPct)) {
-      const over = Math.round(d.actualCpa - t.cpa);
-      alerts.push({ type:'critical', pub:d.Publisher, msg:`CPA $${d.actualCpa} is $${over} above the $${t.cpa} target`, metric:`+$${over} over target`, cat:'CPA' });
-    }
-    if (d.age75 > ALERT_THRESHOLDS.age75Max) {
-      alerts.push({ type: d.age75 > 30 ? 'critical' : 'warning', pub:d.Publisher, msg:`Age 75+ at ${d.age75}% — exceeds ${ALERT_THRESHOLDS.age75Max}% compliance threshold`, metric:`${d.age75}% vs 15% max`, cat:'Compliance' });
-    }
-    if (d.eff && d.eff < ALERT_THRESHOLDS.effMin * 100) {
-      alerts.push({ type:'warning', pub:d.Publisher, msg:`Effectuation ${d.eff}% is below ${Math.round(ALERT_THRESHOLDS.effMin*100)}% minimum`, metric:`${d.eff}% eff`, cat:'Effectuation' });
-    }
-    if (d.rde > t.rde) {
-      alerts.push({ type: d.rde > t.rde * 1.3 ? 'critical' : 'warning', pub:d.Publisher, msg:`RDE ${d.rde}% exceeds ${t.rde}% ${globalSeason} maximum`, metric:`${d.rde}% RDE`, cat:'RDE' });
-    }
-    if (d.actionBand === 'Pullback') {
-      alerts.push({ type:'critical', pub:d.Publisher, msg:`Action band is PULLBACK — immediate bid review required`, metric:'Pullback', cat:'Action Band' });
-    }
+/* ── ALERTS ── */
+const ALERT_THRESHOLDS={cpaOverPct:0.20,age75Max:15,effMin:0.68,rdeMax:12,dupRateMax:0.05};
+let alertsOpen=false;
+function toggleAlerts(){alertsOpen=!alertsOpen;document.getElementById('alertsBody').classList.toggle('open',alertsOpen);document.getElementById('alertsChevron').classList.toggle('open',alertsOpen);}
+function renderAlerts(){
+  const t=SEASON_META[globalSeason],alerts=[];
+  RP_NOTION_DATA.filter(d=>d.Season===globalSeason).forEach(d=>{
+    if(d.actualCpa&&d.actualCpa>t.cpa*(1+ALERT_THRESHOLDS.cpaOverPct))alerts.push({type:'critical',pub:d.Publisher,msg:`CPA $${d.actualCpa} is $${Math.round(d.actualCpa-t.cpa)} above the $${t.cpa} target`,metric:`+$${Math.round(d.actualCpa-t.cpa)} over`,cat:'CPA'});
+    if(d.age75>ALERT_THRESHOLDS.age75Max)alerts.push({type:d.age75>30?'critical':'warning',pub:d.Publisher,msg:`Age 75+ at ${d.age75}% — exceeds ${ALERT_THRESHOLDS.age75Max}% threshold`,metric:`${d.age75}% vs 15%`,cat:'Compliance'});
+    if(d.eff&&d.eff<ALERT_THRESHOLDS.effMin*100)alerts.push({type:'warning',pub:d.Publisher,msg:`Effectuation ${d.eff}% below ${Math.round(ALERT_THRESHOLDS.effMin*100)}% minimum`,metric:`${d.eff}% eff`,cat:'Effectuation'});
+    if(d.rde>t.rde)alerts.push({type:d.rde>t.rde*1.3?'critical':'warning',pub:d.Publisher,msg:`RDE ${d.rde}% exceeds ${t.rde}% ${globalSeason} maximum`,metric:`${d.rde}% RDE`,cat:'RDE'});
+    if(d.actionBand==='Pullback')alerts.push({type:'critical',pub:d.Publisher,msg:`Action band PULLBACK — immediate bid review required`,metric:'Pullback',cat:'Action Band'});
   });
-
-  // Scan scorecard data
-  RP_SCORECARD_DATA.forEach(d => {
-    if (d.age75 && d.age75 > 0.40) {
-      if (!alerts.find(a => a.pub===d.pub && a.cat==='Compliance'))
-        alerts.push({ type:'critical', pub:d.pub, msg:`Age 75+ at ${(d.age75*100).toFixed(1)}% — critical compliance risk`, metric:`${(d.age75*100).toFixed(1)}% over75`, cat:'Compliance' });
-    }
-    if (d.eff && d.eff < 0.65) {
-      if (!alerts.find(a => a.pub===d.pub && a.cat==='Effectuation'))
-        alerts.push({ type:'warning', pub:d.pub, msg:`Effectuation ${(d.eff*100).toFixed(1)}% well below 72% benchmark`, metric:`${(d.eff*100).toFixed(1)}% eff`, cat:'Effectuation' });
-    }
-    if (d.dupRate && d.dupRate > ALERT_THRESHOLDS.dupRateMax) {
-      alerts.push({ type:'warning', pub:d.pub, msg:`Duplicate rate ${(d.dupRate*100).toFixed(1)}% exceeds 5% threshold`, metric:`${(d.dupRate*100).toFixed(1)}% dup`, cat:'Duplicates' });
-    }
+  RP_SCORECARD_DATA.forEach(d=>{
+    if(d.age75&&d.age75>0.40&&!alerts.find(a=>a.pub===d.pub&&a.cat==='Compliance'))alerts.push({type:'critical',pub:d.pub,msg:`Age 75+ at ${(d.age75*100).toFixed(1)}% — critical compliance risk`,metric:`${(d.age75*100).toFixed(1)}%`,cat:'Compliance'});
+    if(d.eff&&d.eff<0.65&&!alerts.find(a=>a.pub===d.pub&&a.cat==='Effectuation'))alerts.push({type:'warning',pub:d.pub,msg:`Effectuation ${(d.eff*100).toFixed(1)}% well below 72%`,metric:`${(d.eff*100).toFixed(1)}% eff`,cat:'Effectuation'});
+    if(d.dupRate&&d.dupRate>ALERT_THRESHOLDS.dupRateMax)alerts.push({type:'warning',pub:d.pub,msg:`Duplicate rate ${(d.dupRate*100).toFixed(1)}% exceeds 5%`,metric:`${(d.dupRate*100).toFixed(1)}% dup`,cat:'Duplicates'});
   });
-
-  // Deduplicate
-  const seen = new Set();
-  const deduped = alerts.filter(a => {
-    const key = a.pub + '|' + a.cat;
-    if (seen.has(key)) return false;
-    seen.add(key); return true;
-  });
-
-  const criticals = deduped.filter(a => a.type === 'critical');
-  const warnings  = deduped.filter(a => a.type === 'warning');
-  const header    = document.getElementById('alertsHeader');
-  const dotsEl    = document.getElementById('alertsDots');
-  const summaryEl = document.getElementById('alertsSummaryText');
-  const badgesEl  = document.getElementById('alertsBadges');
-  const body      = document.getElementById('alertsBody');
-
-  // All clear
-  if (!deduped.length) {
-    header.className = 'alerts-header all-clear';
-    dotsEl.innerHTML = `<div class="alerts-dot" style="background:var(--green);box-shadow:0 0 6px var(--green);"></div>`;
-    summaryEl.innerHTML = `<span style="color:var(--green);font-weight:600;">All clear</span> <span style="color:var(--text-3);">— all publishers within thresholds for ${globalSeason}</span>`;
-    badgesEl.innerHTML  = `<span class="alerts-badge clear">✓ No alerts</span>`;
-    body.innerHTML = '';
-    return;
-  }
-
-  // Header state
-  header.className = criticals.length ? 'alerts-header has-critical' : 'alerts-header has-warning';
-  const dotHTML = [
-    ...criticals.slice(0,5).map(()=>`<div class="alerts-dot" style="background:var(--red);box-shadow:0 0 5px var(--red);"></div>`),
-    ...warnings.slice(0,5).map(()=>`<div class="alerts-dot" style="background:var(--amber);box-shadow:0 0 5px var(--amber);"></div>`),
-  ].join('');
-  dotsEl.innerHTML = dotHTML;
-
-  const topPub = criticals[0]?.pub || warnings[0]?.pub;
-  summaryEl.innerHTML = criticals.length
-    ? `<span style="color:var(--red);font-weight:600;">${criticals.length} critical</span><span style="color:var(--text-3);"> · ${warnings.length} warning · lead issue: </span><span style="color:var(--text-2);">${topPub}</span>`
-    : `<span style="color:var(--amber);font-weight:600;">${warnings.length} warnings</span><span style="color:var(--text-3);"> · lead issue: </span><span style="color:var(--text-2);">${topPub}</span>`;
-
-  badgesEl.innerHTML = [
-    criticals.length ? `<span class="alerts-badge critical">${criticals.length} Critical</span>` : '',
-    warnings.length  ? `<span class="alerts-badge warning">${warnings.length} Warning</span>`   : '',
-  ].join('');
-
-  // Group cards by category
-  const categories = [...new Set(deduped.map(a => a.cat))];
-  const groupsHTML = [
-    criticals.length ? buildAlertGroup('critical', criticals) : '',
-    warnings.length  ? buildAlertGroup('warning',  warnings)  : '',
-  ].join('');
-
-  body.innerHTML = `
-    <div style="margin-bottom:8px;display:flex;gap:8px;flex-wrap:wrap;">
-      ${categories.map(cat => {
-        const count = deduped.filter(a=>a.cat===cat).length;
-        const hasCrit = deduped.some(a=>a.cat===cat&&a.type==='critical');
-        return `<span style="font-family:var(--font-m);font-size:9px;padding:3px 9px;border-radius:20px;background:var(--surface2);border:1px solid var(--edge2);color:${hasCrit?'var(--red)':'var(--amber)'};">${cat} · ${count}</span>`;
-      }).join('')}
-    </div>
-    ${groupsHTML}
-  `;
+  const seen=new Set();
+  const deduped=alerts.filter(a=>{const k=a.pub+'|'+a.cat;if(seen.has(k))return false;seen.add(k);return true;});
+  const crits=deduped.filter(a=>a.type==='critical'),warns=deduped.filter(a=>a.type==='warning');
+  const hdr=document.getElementById('alertsHeader'),dots=document.getElementById('alertsDots'),sum=document.getElementById('alertsSummaryText'),bdg=document.getElementById('alertsBadges'),body=document.getElementById('alertsBody');
+  if(!deduped.length){hdr.className='alerts-header all-clear';dots.innerHTML=`<div class="alerts-dot" style="background:var(--green);box-shadow:0 0 6px var(--green);"></div>`;sum.innerHTML=`<span style="color:var(--green);font-weight:600;">All clear</span> <span style="color:var(--text-3);">— all publishers within thresholds for ${globalSeason}</span>`;bdg.innerHTML=`<span class="alerts-badge clear">✓ No alerts</span>`;body.innerHTML='';return;}
+  hdr.className=crits.length?'alerts-header has-critical':'alerts-header has-warning';
+  dots.innerHTML=[...crits.slice(0,5).map(()=>`<div class="alerts-dot" style="background:var(--red);box-shadow:0 0 5px var(--red);"></div>`),...warns.slice(0,5).map(()=>`<div class="alerts-dot" style="background:var(--amber);box-shadow:0 0 5px var(--amber);"></div>`)].join('');
+  const topPub=crits[0]?.pub||warns[0]?.pub;
+  sum.innerHTML=crits.length?`<span style="color:var(--red);font-weight:600;">${crits.length} critical</span><span style="color:var(--text-3);"> · ${warns.length} warning · lead: </span><span style="color:var(--text-2);">${topPub}</span>`:`<span style="color:var(--amber);font-weight:600;">${warns.length} warnings</span><span style="color:var(--text-3);"> · lead: </span><span style="color:var(--text-2);">${topPub}</span>`;
+  bdg.innerHTML=[crits.length?`<span class="alerts-badge critical">${crits.length} Critical</span>`:'',warns.length?`<span class="alerts-badge warning">${warns.length} Warning</span>`:''].join('');
+  const cats=[...new Set(deduped.map(a=>a.cat))];
+  body.innerHTML=`<div style="margin-bottom:8px;display:flex;gap:8px;flex-wrap:wrap;">${cats.map(cat=>{const cnt=deduped.filter(a=>a.cat===cat).length;const hc=deduped.some(a=>a.cat===cat&&a.type==='critical');return `<span style="font-family:var(--font-m);font-size:9px;padding:3px 9px;border-radius:20px;background:var(--surface2);border:1px solid var(--edge2);color:${hc?'var(--red)':'var(--amber)'};">${cat} · ${cnt}</span>`;}).join('')}</div>${crits.length?buildAlertGroup('critical',crits):''}${warns.length?buildAlertGroup('warning',warns):''}`;
+}
+function buildAlertGroup(type,alerts){
+  return `<div class="alert-group"><div class="alert-group-label ${type}">${type==='critical'?'🔴 Critical':'🟡 Warning'} · ${alerts.length} publisher${alerts.length>1?'s':''}</div><div class="alert-cards ${type}">${alerts.map(a=>`<div class="alert-card"><div class="alert-card-pub">${a.pub}</div><div class="alert-card-msg">${a.msg}</div><span class="alert-card-metric ${type}">${a.metric}</span></div>`).join('')}</div></div>`;
 }
 
-function buildAlertGroup(type, alerts) {
-  const label   = type === 'critical' ? '🔴 Critical' : '🟡 Warning';
-  const cards   = alerts.map(a => `
-    <div class="alert-card">
-      <div class="alert-card-pub">${a.pub}</div>
-      <div class="alert-card-msg">${a.msg}</div>
-      <span class="alert-card-metric ${type}">${a.metric}</span>
-    </div>
-  `).join('');
-  return `<div class="alert-group">
-    <div class="alert-group-label ${type}">${label} · ${alerts.length} publisher${alerts.length>1?'s':''}</div>
-    <div class="alert-cards ${type}">${cards}</div>
-  </div>`;
+/* ── TREND CHARTS ── */
+let trendCharts={};
+function renderTrendCharts(entries){
+  if(!entries||entries.length<1)entries=[{reportName:'Period 1',mpqsScore:null,qmScore:null,mpScore:null,date:'—'}];
+  const labels=entries.map(e=>e.reportName||e.date||'Period');
+  const t=SEASON_META[globalSeason];
+  const chartOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,labels:{color:'rgba(240,244,255,0.5)',font:{size:9,family:'Space Mono'},boxWidth:10,padding:14}}},scales:{x:{ticks:{color:'rgba(240,244,255,0.35)',font:{size:9,family:'Space Mono'},maxRotation:30},grid:{color:'rgba(255,255,255,0.04)'}},y:{ticks:{color:'rgba(240,244,255,0.35)',font:{size:9,family:'Space Mono'}},grid:{color:'rgba(255,255,255,0.04)'},min:0}}};
+  if(trendCharts.mpqs)trendCharts.mpqs.destroy();
+  trendCharts.mpqs=new Chart(document.getElementById('trendMpqsChart'),{type:'line',data:{labels,datasets:[{label:'MPQS Score',data:entries.map(e=>e.mpqsScore||null),borderColor:'rgba(0,230,118,0.8)',backgroundColor:'rgba(0,230,118,0.08)',tension:0.3,pointBackgroundColor:'rgba(0,230,118,0.9)',pointRadius:4,fill:true}]},options:chartOpts});
+  if(trendCharts.qmmp)trendCharts.qmmp.destroy();
+  trendCharts.qmmp=new Chart(document.getElementById('trendQmMpChart'),{type:'line',data:{labels,datasets:[{label:'QM Score',data:entries.map(e=>e.qmScore||null),borderColor:'rgba(0,229,255,0.8)',backgroundColor:'rgba(0,229,255,0.06)',tension:0.3,pointBackgroundColor:'rgba(0,229,255,0.9)',pointRadius:4},{label:'MP Score',data:entries.map(e=>e.mpScore||null),borderColor:'rgba(179,136,255,0.8)',backgroundColor:'rgba(179,136,255,0.06)',tension:0.3,pointBackgroundColor:'rgba(179,136,255,0.9)',pointRadius:4}]},options:chartOpts});
+  if(trendCharts.cpa)trendCharts.cpa.destroy();
+  trendCharts.cpa=new Chart(document.getElementById('trendCpaChart'),{type:'line',data:{labels,datasets:[{label:'CPA',data:entries.map(e=>e.cpa||null),borderColor:'rgba(255,181,71,0.8)',backgroundColor:'rgba(255,181,71,0.08)',tension:0.3,pointBackgroundColor:'rgba(255,181,71,0.9)',pointRadius:4,fill:true},{label:'Target $'+t.cpa,data:entries.map(()=>t.cpa),borderColor:'rgba(255,255,255,0.15)',borderDash:[4,4],pointRadius:0}]},options:{...chartOpts,scales:{...chartOpts.scales,y:{...chartOpts.scales.y,ticks:{...chartOpts.scales.y.ticks,callback:v=>'$'+v}}}}});
+  const latest=entries[entries.length-1];
+  if(trendCharts.dist)trendCharts.dist.destroy();
+  trendCharts.dist=new Chart(document.getElementById('trendDistChart'),{type:'radar',data:{labels:['MPQS','QM Score','MP Score'],datasets:[{label:'Latest Period',data:[latest.mpqsScore||0,latest.qmScore||0,latest.mpScore||0],borderColor:'rgba(0,229,255,0.7)',backgroundColor:'rgba(0,229,255,0.08)',pointBackgroundColor:'rgba(0,229,255,0.9)',pointRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'rgba(240,244,255,0.5)',font:{size:9,family:'Space Mono'}}}},scales:{r:{min:0,max:100,ticks:{color:'rgba(240,244,255,0.3)',font:{size:8},backdropColor:'transparent'},grid:{color:'rgba(255,255,255,0.06)'},pointLabels:{color:'rgba(240,244,255,0.5)',font:{size:10}}}}}});
 }
 
-
-/* ── TREND CHARTS ────────────────────────────────────────────────── */
-let trendCharts = {};
-
-function renderTrendCharts(entries) {
-  if (!entries || entries.length < 1) {
-    // Show placeholder charts with sample data shape
-    entries = [
-      { reportName:'Period 1', mpqsScore:null, qmScore:null, mpScore:null, date:'—' },
-    ];
-  }
-
-  const labels   = entries.map(e => e.reportName || e.date || 'Period');
-  const mpqs     = entries.map(e => e.mpqsScore || null);
-  const qm       = entries.map(e => e.qmScore || null);
-  const mp       = entries.map(e => e.mpScore || null);
-  const t        = SEASON_META[globalSeason];
-  const cpaVals  = entries.map(e => e.cpa || null);
-  const chartOpts = {
-    responsive:true, maintainAspectRatio:false,
-    plugins:{ legend:{ display:true, labels:{ color:'rgba(240,244,255,0.5)', font:{ size:9, family:'Space Mono' }, boxWidth:10, padding:14 }}},
-    scales:{
-      x:{ ticks:{ color:'rgba(240,244,255,0.35)', font:{ size:9, family:'Space Mono' }, maxRotation:30 }, grid:{ color:'rgba(255,255,255,0.04)' }},
-      y:{ ticks:{ color:'rgba(240,244,255,0.35)', font:{ size:9, family:'Space Mono' }}, grid:{ color:'rgba(255,255,255,0.04)' }, min:0 }
-    }
-  };
-
-  // MPQS Trend
-  if (trendCharts.mpqs) trendCharts.mpqs.destroy();
-  trendCharts.mpqs = new Chart(document.getElementById('trendMpqsChart'), {
-    type:'line',
-    data:{ labels, datasets:[{ label:'MPQS Score', data:mpqs, borderColor:'rgba(0,230,118,0.8)', backgroundColor:'rgba(0,230,118,0.08)', tension:0.3, pointBackgroundColor:'rgba(0,230,118,0.9)', pointRadius:4, fill:true }]},
-    options:{ ...chartOpts, plugins:{ ...chartOpts.plugins, annotation:{ annotations:{ target:{ type:'line', yMin:80, yMax:80, borderColor:'rgba(0,230,118,0.3)', borderDash:[4,4], label:{ content:'Target 80', enabled:true }}}}}}
-  });
-
-  // QM vs MP
-  if (trendCharts.qmmp) trendCharts.qmmp.destroy();
-  trendCharts.qmmp = new Chart(document.getElementById('trendQmMpChart'), {
-    type:'line',
-    data:{ labels, datasets:[
-      { label:'QM Score', data:qm, borderColor:'rgba(0,229,255,0.8)', backgroundColor:'rgba(0,229,255,0.06)', tension:0.3, pointBackgroundColor:'rgba(0,229,255,0.9)', pointRadius:4 },
-      { label:'MP Score', data:mp, borderColor:'rgba(179,136,255,0.8)', backgroundColor:'rgba(179,136,255,0.06)', tension:0.3, pointBackgroundColor:'rgba(179,136,255,0.9)', pointRadius:4 },
-    ]},
-    options:chartOpts
-  });
-
-  // CPA Trend
-  if (trendCharts.cpa) trendCharts.cpa.destroy();
-  trendCharts.cpa = new Chart(document.getElementById('trendCpaChart'), {
-    type:'line',
-    data:{ labels, datasets:[
-      { label:'CPA', data:cpaVals, borderColor:'rgba(255,181,71,0.8)', backgroundColor:'rgba(255,181,71,0.08)', tension:0.3, pointBackgroundColor:'rgba(255,181,71,0.9)', pointRadius:4, fill:true },
-      { label:'Target $'+t.cpa, data:entries.map(()=>t.cpa), borderColor:'rgba(255,255,255,0.15)', borderDash:[4,4], pointRadius:0 },
-    ]},
-    options:{ ...chartOpts, scales:{ ...chartOpts.scales, y:{ ...chartOpts.scales.y, ticks:{ ...chartOpts.scales.y.ticks, callback:v=>'$'+v }}}}
-  });
-
-  // Score Distribution (latest period)
-  const latest = entries[entries.length - 1];
-  if (trendCharts.dist) trendCharts.dist.destroy();
-  trendCharts.dist = new Chart(document.getElementById('trendDistChart'), {
-    type:'radar',
-    data:{
-      labels:['MPQS','QM Score','MP Score'],
-      datasets:[{ label:'Latest Period', data:[latest.mpqsScore||0, latest.qmScore||0, latest.mpScore||0], borderColor:'rgba(0,229,255,0.7)', backgroundColor:'rgba(0,229,255,0.08)', pointBackgroundColor:'rgba(0,229,255,0.9)', pointRadius:4 }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{ labels:{ color:'rgba(240,244,255,0.5)', font:{ size:9, family:'Space Mono' }}}},
-      scales:{ r:{ min:0, max:100, ticks:{ color:'rgba(240,244,255,0.3)', font:{ size:8 }, backdropColor:'transparent' }, grid:{ color:'rgba(255,255,255,0.06)' }, pointLabels:{ color:'rgba(240,244,255,0.5)', font:{ size:10 }}}}
-    }
-  });
+/* ── SNAPSHOT MODE ── */
+let snapshotModeOn=false;
+function toggleSnapshotMode(){
+  snapshotModeOn=!snapshotModeOn;
+  document.body.classList.toggle('snapshot-mode',snapshotModeOn);
+  const btn=document.getElementById('snapshotModeBtn');
+  btn.classList.toggle('active',snapshotModeOn);
+  btn.innerHTML=snapshotModeOn?'&#9670; <span>Full View</span>':'&#9670; <span>Leadership</span>';
+  const activeTab=document.querySelector('.nav-tab.active');
+  if(snapshotModeOn&&activeTab&&activeTab.dataset.working!==undefined)switchTab('overview',document.querySelector('.nav-tab:first-child'));
 }
 
-/* ── SNAPSHOT MODE ───────────────────────────────────────────────── */
-let snapshotModeOn = false;
-
-function toggleSnapshotMode() {
-  snapshotModeOn = !snapshotModeOn;
-  document.body.classList.toggle('snapshot-mode', snapshotModeOn);
-  const btn = document.getElementById('snapshotModeBtn');
-  btn.classList.toggle('active', snapshotModeOn);
-  btn.innerHTML = snapshotModeOn
-    ? '&#9670; <span>Full View</span>'
-    : '&#9670; <span>Leadership</span>';
-
-  // If active working tab gets hidden, switch to overview
-  const activeTab = document.querySelector('.nav-tab.active');
-  if (snapshotModeOn && activeTab && activeTab.dataset.working !== undefined) {
-    const overviewBtn = document.querySelector('.nav-tab:first-child');
-    switchTab('overview', overviewBtn);
-  }
-}
-
-/* ── EXEC SNAPSHOT ───────────────────────────────────────────────── */
-function openExecSnapshot() {
-  buildExecSnapshot();
-  document.getElementById('execSnapshot').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeExecSnapshot() {
-  document.getElementById('execSnapshot').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-function buildExecSnapshot() {
-  const t      = SEASON_META[globalSeason];
-  const pubs   = RP_NOTION_DATA.filter(d => d.Season === globalSeason);
-  const active = pubs.filter(d => d.actualCpa);
-  const now    = new Date();
-
-  // KPI calculations
-  const avgCpa     = active.length ? Math.round(active.reduce((s,d)=>s+d.actualCpa,0)/active.length) : null;
-  const onTarget   = active.filter(d => d.actualCpa <= t.cpa).length;
-  const totalSales = RP_SCORECARD_DATA.reduce((s,d)=>s+(d.netSales||0),0);
-  const avgEff     = RP_SCORECARD_DATA.filter(d=>d.eff).length
-    ? (RP_SCORECARD_DATA.filter(d=>d.eff).reduce((s,d)=>s+d.eff,0)/RP_SCORECARD_DATA.filter(d=>d.eff).length*100).toFixed(1)
-    : '—';
-
-  // Action band counts
-  const bandCounts = {
-    'Scale Eligible': pubs.filter(d=>d.actionBand==='Scale Eligible').length,
-    'Maintain':       pubs.filter(d=>d.actionBand==='Maintain').length,
-    'Monitor':        pubs.filter(d=>d.actionBand==='Monitor').length,
-    'Throttle':       pubs.filter(d=>d.actionBand==='Throttle').length,
-    'Pullback':       pubs.filter(d=>d.actionBand==='Pullback').length,
-  };
-  const bandColors = {
-    'Scale Eligible':'var(--green)','Maintain':'var(--cyan)',
-    'Monitor':'var(--amber)','Throttle':'rgba(255,181,71,0.6)','Pullback':'var(--red)'
-  };
-
-  // Alerts for exec report
-  const alertItems = buildExecAlerts(t, pubs);
-
-  // Top opportunities and risks from scorecard
-  const scaleEligible = RP_SCORECARD_DATA.filter(d=>d.actionBand==='Scale Eligible');
-  const atRisk        = RP_SCORECARD_DATA.filter(d=>d.status==='At Risk');
-
-  // Publisher table — active publishers sorted by CPA
-  const pubRows = active.sort((a,b)=>a.actualCpa-b.actualCpa).map(d => {
-    const cpaColor = d.actualCpa <= t.cpa ? '#00E676' : d.actualCpa <= t.cpa*1.2 ? '#FFB547' : '#FF5252';
-    const sc = RP_SCORECARD_DATA.find(s=>s.pub===d.Publisher||s.pub.toLowerCase().includes(d.Publisher.split(' ')[0].toLowerCase()));
-    return `<tr>
-      <td style="color:var(--text);font-weight:500;">${d.Publisher}</td>
-      <td><span style="font-family:var(--font-m);font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;background:${bandColors[d.actionBand]}22;color:${bandColors[d.actionBand]};">${d.actionBand}</span></td>
-      <td style="color:var(--text-3);">${d.MPQS}</td>
-      <td style="color:${cpaColor};">$${d.actualCpa}</td>
-      <td style="color:var(--text-2);">${d.eff}%</td>
-      <td style="color:${d.age75>15?'var(--red)':'var(--text-2)'};">${d.age75}%</td>
-      <td style="color:var(--text-3);">${sc?Math.round(sc.netSales||0).toLocaleString():'—'}</td>
-    </tr>`;
+/* ── EXEC SNAPSHOT ── */
+function openExecSnapshot(){buildExecSnapshot();document.getElementById('execSnapshot').classList.add('open');document.body.style.overflow='hidden';}
+function closeExecSnapshot(){document.getElementById('execSnapshot').classList.remove('open');document.body.style.overflow='';}
+function buildExecSnapshot(){
+  const t=SEASON_META[globalSeason],pubs=RP_NOTION_DATA.filter(d=>d.Season===globalSeason),active=pubs.filter(d=>d.actualCpa),now=new Date();
+  const avgCpa=active.length?Math.round(active.reduce((s,d)=>s+d.actualCpa,0)/active.length):null;
+  const onTarget=active.filter(d=>d.actualCpa<=t.cpa).length;
+  const totalSales=RP_SCORECARD_DATA.reduce((s,d)=>s+(d.netSales||0),0);
+  const effArr=RP_SCORECARD_DATA.filter(d=>d.eff);
+  const avgEff=effArr.length?(effArr.reduce((s,d)=>s+d.eff,0)/effArr.length*100).toFixed(1):'—';
+  const bandCounts={'Scale Eligible':pubs.filter(d=>d.actionBand==='Scale Eligible').length,'Maintain':pubs.filter(d=>d.actionBand==='Maintain').length,'Monitor':pubs.filter(d=>d.actionBand==='Monitor').length,'Throttle':pubs.filter(d=>d.actionBand==='Throttle').length,'Pullback':pubs.filter(d=>d.actionBand==='Pullback').length};
+  const bandColors={'Scale Eligible':'var(--green)','Maintain':'var(--cyan)','Monitor':'var(--amber)','Throttle':'rgba(255,181,71,0.6)','Pullback':'var(--red)'};
+  const alertItems=buildExecAlerts(t,pubs);
+  const scaleEl=RP_SCORECARD_DATA.filter(d=>d.actionBand==='Scale Eligible'),atRisk=RP_SCORECARD_DATA.filter(d=>d.status==='At Risk');
+  const pubRows=active.sort((a,b)=>a.actualCpa-b.actualCpa).map(d=>{
+    const cc=d.actualCpa<=t.cpa?'#00E676':d.actualCpa<=t.cpa*1.2?'#FFB547':'#FF5252';
+    const sc=RP_SCORECARD_DATA.find(s=>s.pub===d.Publisher||s.pub.toLowerCase().includes(d.Publisher.split(' ')[0].toLowerCase()));
+    return `<tr><td style="color:var(--text);font-weight:500;">${d.Publisher}</td><td><span style="font-family:var(--font-m);font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;background:${bandColors[d.actionBand]}22;color:${bandColors[d.actionBand]};">${d.actionBand}</span></td><td style="color:var(--text-3);">${d.MPQS}</td><td style="color:${cc};">$${d.actualCpa}</td><td style="color:var(--text-2);">${d.eff}%</td><td style="color:${d.age75>15?'var(--red)':'var(--text-2)'};">${d.age75}%</td><td style="color:var(--text-3);">${sc?Math.round(sc.netSales||0).toLocaleString():'—'}</td></tr>`;
   }).join('');
-
-  document.getElementById('execSnapshotContent').innerHTML = `
-    <div class="exec-header">
-      <div class="exec-logo">
-        <div class="exec-logo-mark">MM</div>
-        <div>
-          <div class="exec-title">Media Match</div>
-          <div class="exec-subtitle">CENTERFIELD HEALTH &amp; MEDICARE · EXECUTIVE SUMMARY</div>
-        </div>
-      </div>
-      <div class="exec-meta">
-        <strong>${now.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}</strong>
-        Season: ${globalSeason} — ${t.label.split(' — ')[1]}<br>
-        Target CPA: $${t.cpa} · CR: ${t.cr}% · Eff: ${t.eff}%
-      </div>
+  document.getElementById('execSnapshotContent').innerHTML=`
+    <div class="exec-header"><div class="exec-logo"><div class="exec-logo-mark">MM</div><div><div class="exec-title">Media Match</div><div class="exec-subtitle">CENTERFIELD HEALTH &amp; MEDICARE · EXECUTIVE SUMMARY</div></div></div>
+    <div class="exec-meta"><strong>${now.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}</strong>Season: ${globalSeason} — ${t.label.split(' — ')[1]}<br>Target CPA: $${t.cpa} · CR: ${t.cr}% · Eff: ${t.eff}%</div></div>
+    <div class="exec-section"><div class="exec-section-title">Portfolio KPIs</div><div class="exec-kpi-row">
+      <div class="exec-kpi cyan"><div class="exec-kpi-label">Avg Actual CPA</div><div class="exec-kpi-val" style="color:${avgCpa&&avgCpa<=t.cpa?'var(--green)':'var(--amber)'};">${avgCpa?'$'+avgCpa:'—'}</div><div class="exec-kpi-sub">Target $${t.cpa} · ${active.length} active publishers</div></div>
+      <div class="exec-kpi green"><div class="exec-kpi-label">On / Under Target</div><div class="exec-kpi-val">${onTarget} <span style="font-size:14px;color:var(--text-3);">/ ${active.length}</span></div><div class="exec-kpi-sub">Publishers at or below $${t.cpa}</div></div>
+      <div class="exec-kpi amber"><div class="exec-kpi-label">Total Net Sales</div><div class="exec-kpi-val">${totalSales.toLocaleString()}</div><div class="exec-kpi-sub">Sold policies across portfolio</div></div>
+      <div class="exec-kpi cyan"><div class="exec-kpi-label">Avg Effectuation</div><div class="exec-kpi-val">${avgEff}<span style="font-size:14px;">%</span></div><div class="exec-kpi-sub">Target ${t.eff}% durability</div></div>
+    </div></div>
+    <div class="exec-section"><div class="exec-section-title">Publisher Action Bands — ${globalSeason}</div><div class="exec-action-grid">
+      ${Object.entries(bandCounts).map(([band,count])=>`<div class="exec-action-card"><div class="exec-action-count" style="color:${bandColors[band]};">${count}</div><div class="exec-action-label">${band}</div></div>`).join('')}
+    </div></div>
+    ${alertItems.length?`<div class="exec-section"><div class="exec-section-title">Active Alerts</div>${alertItems.map(a=>`<div class="exec-alert-row ${a.type}"><strong>${a.pub}</strong> — ${a.msg}<span style="margin-left:auto;font-family:var(--font-m);font-size:9px;opacity:0.7;">${a.metric}</span></div>`).join('')}</div>`:''}
+    <div class="exec-section"><div class="exec-section-title">Publisher Performance — Active ${globalSeason} Publishers</div>
+      <table class="exec-pub-table"><thead><tr><th>Publisher</th><th>Action Band</th><th>MPQS</th><th>CPA</th><th>Eff%</th><th>Age 75+</th><th>Net Sales</th></tr></thead><tbody>${pubRows}</tbody></table>
     </div>
-
-    <div class="exec-section">
-      <div class="exec-section-title">Portfolio KPIs</div>
-      <div class="exec-kpi-row">
-        <div class="exec-kpi cyan"><div class="exec-kpi-label">Avg Actual CPA</div><div class="exec-kpi-val" style="color:${avgCpa&&avgCpa<=t.cpa?'var(--green)':'var(--amber)'};">${avgCpa?'$'+avgCpa:'—'}</div><div class="exec-kpi-sub">Target $${t.cpa} · ${active.length} active publishers</div></div>
-        <div class="exec-kpi green"><div class="exec-kpi-label">On / Under Target</div><div class="exec-kpi-val">${onTarget} <span style="font-size:14px;color:var(--text-3);">/ ${active.length}</span></div><div class="exec-kpi-sub">Publishers at or below $${t.cpa} CPA</div></div>
-        <div class="exec-kpi amber"><div class="exec-kpi-label">Total Net Sales</div><div class="exec-kpi-val">${totalSales.toLocaleString()}</div><div class="exec-kpi-sub">Sold policies across portfolio</div></div>
-        <div class="exec-kpi cyan"><div class="exec-kpi-label">Avg Effectuation</div><div class="exec-kpi-val">${avgEff}<span style="font-size:14px;">%</span></div><div class="exec-kpi-sub">Target ${t.eff}% · policy durability</div></div>
-      </div>
-    </div>
-
-    <div class="exec-section">
-      <div class="exec-section-title">Publisher Action Bands — ${globalSeason}</div>
-      <div class="exec-action-grid">
-        ${Object.entries(bandCounts).map(([band,count])=>`
-          <div class="exec-action-card">
-            <div class="exec-action-count" style="color:${bandColors[band]};">${count}</div>
-            <div class="exec-action-label">${band}</div>
-          </div>`).join('')}
-      </div>
-    </div>
-
-    ${alertItems.length ? `
-    <div class="exec-section">
-      <div class="exec-section-title">Active Alerts</div>
-      ${alertItems.map(a=>`<div class="exec-alert-row ${a.type}"><strong>${a.pub}</strong> — ${a.msg} <span style="margin-left:auto;font-family:var(--font-m);font-size:9px;opacity:0.7;">${a.metric}</span></div>`).join('')}
-    </div>` : ''}
-
-    <div class="exec-section">
-      <div class="exec-section-title">Publisher Performance — Active ${globalSeason} Publishers</div>
-      <table class="exec-pub-table">
-        <thead><tr>
-          <th>Publisher</th><th>Action Band</th><th>MPQS</th><th>CPA</th><th>Eff%</th><th>Age 75+</th><th>Net Sales</th>
-        </tr></thead>
-        <tbody>${pubRows}</tbody>
-      </table>
-    </div>
-
-    <div class="exec-section">
-      <div class="exec-section-title">Key Insights</div>
-      <div class="exec-two-col">
-        <div class="exec-insight-box">
-          <div class="exec-insight-title" style="color:var(--green);">↑ Scale Opportunities</div>
-          ${scaleEligible.length ? scaleEligible.map(d=>`
-            <div class="exec-insight-item">
-              <span style="color:var(--green);flex-shrink:0;">+</span>
-              <span><strong style="color:var(--text);">${d.pub}</strong> — ${d.topOpp}</span>
-            </div>`).join('') : '<div class="exec-insight-item" style="color:var(--text-3);">No scale eligible publishers this period</div>'}
-        </div>
-        <div class="exec-insight-box">
-          <div class="exec-insight-title" style="color:var(--red);">⚠ Priority Risks</div>
-          ${atRisk.length ? atRisk.map(d=>`
-            <div class="exec-insight-item">
-              <span style="color:var(--red);flex-shrink:0;">!</span>
-              <span><strong style="color:var(--text);">${d.pub}</strong> — ${d.biggestRisk}</span>
-            </div>`).join('') : '<div class="exec-insight-item" style="color:var(--text-3);">No at-risk publishers flagged</div>'}
-        </div>
-      </div>
-    </div>
-
-    <div class="exec-footer">
-      <span>Media Match · Centerfield Health &amp; Medicare · ${globalSeason} ${now.getFullYear()}</span>
-      <span>Generated ${now.toLocaleString()} · Confidential — Internal Use Only</span>
-    </div>
-  `;
+    <div class="exec-section"><div class="exec-section-title">Key Insights</div><div class="exec-two-col">
+      <div class="exec-insight-box"><div class="exec-insight-title" style="color:var(--green);">↑ Scale Opportunities</div>${scaleEl.length?scaleEl.map(d=>`<div class="exec-insight-item"><span style="color:var(--green);flex-shrink:0;">+</span><span><strong style="color:var(--text);">${d.pub}</strong> — ${d.topOpp}</span></div>`).join(''):'<div class="exec-insight-item" style="color:var(--text-3);">No scale eligible publishers this period</div>'}</div>
+      <div class="exec-insight-box"><div class="exec-insight-title" style="color:var(--red);">⚠ Priority Risks</div>${atRisk.length?atRisk.map(d=>`<div class="exec-insight-item"><span style="color:var(--red);flex-shrink:0;">!</span><span><strong style="color:var(--text);">${d.pub}</strong> — ${d.biggestRisk}</span></div>`).join(''):'<div class="exec-insight-item" style="color:var(--text-3);">No at-risk publishers flagged</div>'}</div>
+    </div></div>
+    <div class="exec-footer"><span>Media Match · Centerfield Health &amp; Medicare · ${globalSeason} ${now.getFullYear()}</span><span>Generated ${now.toLocaleString()} · Confidential — Internal Use Only</span></div>`;
 }
-
-function buildExecAlerts(t, pubs) {
-  const alerts = [];
-  pubs.forEach(d => {
-    if (d.actualCpa && d.actualCpa > t.cpa * 1.20)
-      alerts.push({ type:'critical', pub:d.Publisher, msg:`CPA $${d.actualCpa} is $${Math.round(d.actualCpa-t.cpa)} over target`, metric:`+${Math.round((d.actualCpa/t.cpa-1)*100)}%` });
-    if (d.age75 > 25)
-      alerts.push({ type:'critical', pub:d.Publisher, msg:`Age 75+ at ${d.age75}% — compliance risk`, metric:`${d.age75}% vs 15%` });
-    if (d.actionBand === 'Pullback')
-      alerts.push({ type:'critical', pub:d.Publisher, msg:`Pullback — immediate bid review required`, metric:'Pullback' });
-    if (d.rde > t.rde * 1.3)
-      alerts.push({ type:'warning', pub:d.Publisher, msg:`RDE ${d.rde}% exceeds ${t.rde}% maximum`, metric:`${d.rde}% RDE` });
+function buildExecAlerts(t,pubs){
+  const alerts=[];
+  pubs.forEach(d=>{
+    if(d.actualCpa&&d.actualCpa>t.cpa*1.20)alerts.push({type:'critical',pub:d.Publisher,msg:`CPA $${d.actualCpa} is $${Math.round(d.actualCpa-t.cpa)} over target`,metric:`+${Math.round((d.actualCpa/t.cpa-1)*100)}%`});
+    if(d.age75>25)alerts.push({type:'critical',pub:d.Publisher,msg:`Age 75+ at ${d.age75}% — compliance risk`,metric:`${d.age75}% vs 15%`});
+    if(d.actionBand==='Pullback')alerts.push({type:'critical',pub:d.Publisher,msg:`Pullback — immediate bid review required`,metric:'Pullback'});
+    if(d.rde>t.rde*1.3)alerts.push({type:'warning',pub:d.Publisher,msg:`RDE ${d.rde}% exceeds maximum`,metric:`${d.rde}% RDE`});
   });
-  const seen = new Set();
-  return alerts.filter(a=>{ const k=a.pub+'|'+a.msg.slice(0,20); if(seen.has(k))return false; seen.add(k); return true; })
-    .sort((a,b)=>(a.type==='critical'?0:1)-(b.type==='critical'?0:1));
+  const seen=new Set();
+  return alerts.filter(a=>{const k=a.pub+'|'+a.msg.slice(0,20);if(seen.has(k))return false;seen.add(k);return true;}).sort((a,b)=>(a.type==='critical'?0:1)-(b.type==='critical'?0:1));
 }
-
-/* ── NOTION API CALL ─────────────────────────────────────────────── */
-const FALLBACK=[{"Report":"QM — Healthcare.com — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Scale Eligible","CPA":240,"Conv Rate (CR%)":0.194,"Effectuation %":0.667,"Duplicate Rate %":0.047,"Headline Metric":"MPQS 102.4 — #1 in portfolio. GPpTH $205. Scale Eligible.","Biggest Risk":"Over75 = 0.0% — confirm not a data gap before scaling","Top Opportunity":"Highest MPQS in portfolio — immediate scale candidate"},{"Report":"QM — RevRise Media — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Scale Eligible","CPA":231,"Conv Rate (CR%)":0.148,"Effectuation %":0.873,"Duplicate Rate %":0.047,"Headline Metric":"MPQS 97.3 — #2 in portfolio. GPpTH $135. Scale Eligible.","Biggest Risk":"Demo Mix 43.3% Over75 — nearly 3x benchmark.","Top Opportunity":"Strongest Effectuation % at 87.3%"},{"Report":"QM — Scalability.io — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Maintain","CPA":369,"Conv Rate (CR%)":0.106,"Effectuation %":0.784,"Duplicate Rate %":null,"Headline Metric":"MPQS 83.8 — #4. Maintain.","Biggest Risk":"GPpTH $57 below $75 benchmark","Top Opportunity":"7 points from Scale Eligible"},{"Report":"QM — Quote Velocity — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Monitor","CPA":352,"Conv Rate (CR%)":0.1,"Effectuation %":0.753,"Duplicate Rate %":null,"Headline Metric":"MPQS 81.4 — #6. Monitor.","Biggest Risk":"GPpTH $53 below benchmark","Top Opportunity":"Best Over75% in Monitor tier"},{"Report":"QM — Milestone Marketing — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Monitor","CPA":442,"Conv Rate (CR%)":0.11,"Effectuation %":0.789,"Duplicate Rate %":null,"Headline Metric":"MPQS 76.0. Monitor. Highest volume in Monitor.","Biggest Risk":"GPpTH $42 significantly below benchmark","Top Opportunity":"GPpTH improvement would have largest portfolio impact"},{"Report":"QM — EngageCX — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Throttle","CPA":413,"Conv Rate (CR%)":0.098,"Effectuation %":0.731,"Duplicate Rate %":0.042,"Headline Metric":"MPQS 69.5. Throttle. 950 sales.","Biggest Risk":"GPpTH $36 on highest-volume Throttle partner","Top Opportunity":"950 net sales — largest volume outside Maintain/Scale"},{"Report":"QM — Adolent Marketing — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Throttle","CPA":294,"Conv Rate (CR%)":0.062,"Effectuation %":0.706,"Duplicate Rate %":null,"Headline Metric":"MPQS 69.6. Throttle. Over75 66.9%.","Biggest Risk":"Over75 66.9% — compliance escalation required","Top Opportunity":"High volume — compliance fix unlocks expansion"},{"Report":"QM — Elijay / VitalCareWorks — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Pullback","CPA":663,"Conv Rate (CR%)":0.049,"Effectuation %":0.364,"Duplicate Rate %":null,"Headline Metric":"MPQS 56.3 — Pullback.","Biggest Risk":"Lowest MPQS. All components flagged.","Top Opportunity":"Full program review required"},{"Report":"QM — Paragon — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Maintain","CPA":265,"Conv Rate (CR%)":0.096,"Effectuation %":0.704,"Duplicate Rate %":0.029,"Headline Metric":"MPQS 83.4. Maintain. High volume.","Biggest Risk":"Effectuation 70.4% slightly below 72%","Top Opportunity":"Highest Net Sales in Maintain band"},{"Report":"QM — Insurco — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Monitor","CPA":564,"Conv Rate (CR%)":0.082,"Effectuation %":0.813,"Duplicate Rate %":0.033,"Headline Metric":"MPQS Monitor. GPpTH negative.","Biggest Risk":"Negative GPpTH — entire score drag is economics","Top Opportunity":"If GPpTH turns positive, Maintain band is within reach"},{"Report":"QM — MyHealthAngel — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Pullback","CPA":421,"Conv Rate (CR%)":0.065,"Effectuation %":0.660,"Duplicate Rate %":null,"Headline Metric":"Pullback. Low LTV, elevated RDE and demo age over 75.","Biggest Risk":"Durability profile unacceptable at current spend","Top Opportunity":"None — program review required"},{"Report":"QM — Barrington Media Group — Feb 2026","date:Date:start":"2026-02-28","Action Band":"Pullback","CPA":765,"Conv Rate (CR%)":0.061,"Effectuation %":0.680,"Duplicate Rate %":0.058,"Headline Metric":"Pullback. GPpTH -$117, Over75 37.5%.","Biggest Risk":"Economics and compliance both flagged simultaneously","Top Opportunity":"CR 17.2% is a genuine strength if CPA corrected"}];
 
 async function loadNotionData(){
   const btn=document.getElementById('refreshBtn');
