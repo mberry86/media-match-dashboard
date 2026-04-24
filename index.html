@@ -439,8 +439,117 @@ body.snapshot-mode .nav-tab[data-working]{display:none;}
   .exec-kpi,.exec-action-card,.exec-insight-box{background:#f5f5f5!important;border-color:#ddd!important;}
   .exec-pub-table td,.exec-pub-table th{border-color:#ddd!important;color:#333!important;}
 }
+/* ── PREDICTIVE INTELLIGENCE ──────────────────────────── */
+:root{--pred:#A78BFA;--pred-dim:rgba(167,139,250,0.12);--pred2:#C4B5FD;}
+.pred-status-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px;}
+.pred-status-card{background:var(--surface);border:1px solid var(--edge);border-radius:var(--r-md);padding:16px 14px;position:relative;overflow:hidden;transition:border-color 0.2s,transform 0.2s;}
+.pred-status-card:hover{border-color:var(--edge2);transform:translateY(-2px);}
+.pred-status-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.pred-status-card.live::before{background:linear-gradient(90deg,var(--green),transparent);opacity:1;}
+.pred-status-card.proto::before{background:linear-gradient(90deg,var(--cyan),transparent);opacity:0.8;}
+.pred-status-card.build::before{background:linear-gradient(90deg,var(--amber),transparent);opacity:0.7;}
+.pred-status-card.gated::before{background:linear-gradient(90deg,rgba(255,255,255,0.2),transparent);opacity:0.5;}
+.pred-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.pred-card-name{font-family:var(--font-d);font-size:13px;font-weight:800;color:var(--text);letter-spacing:-0.2px;}
+.pred-card-badge{font-family:var(--font-m);font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:20px;}
+.badge-live{background:var(--green-dim);color:var(--green);}
+.badge-proto{background:var(--cyan-dim);color:var(--cyan);}
+.badge-build{background:var(--amber-dim);color:var(--amber);}
+.badge-gated{background:var(--surface2);color:var(--text-3);}
+.pred-card-desc{font-size:10px;color:var(--text-3);line-height:1.5;margin-bottom:10px;}
+.pred-card-metric{display:flex;align-items:baseline;gap:5px;}
+.pred-card-val{font-family:var(--font-d);font-size:22px;font-weight:800;color:var(--text);letter-spacing:-0.5px;}
+.pred-card-lbl{font-family:var(--font-m);font-size:9px;color:var(--text-3);}
+.pred-card-bar{height:2px;background:var(--edge);border-radius:1px;overflow:hidden;margin-top:8px;}
+.pred-card-bar-fill{height:100%;border-radius:1px;transition:width 1.6s cubic-bezier(0.16,1,0.3,1);}
+.pred-main-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:12px;}
+.pred-3col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.pred-pill-live{color:var(--green);border-color:rgba(0,230,118,0.3);background:var(--green-dim);font-family:var(--font-m);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:20px;border:1px solid;}
+.pred-pill-proto{color:var(--cyan);border-color:rgba(0,229,255,0.3);background:var(--cyan-dim);font-family:var(--font-m);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:20px;border:1px solid;}
+.pred-pill-gated{color:var(--text-3);border-color:var(--edge);background:var(--surface2);font-family:var(--font-m);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:20px;border:1px solid;}
+.ccp-gauge-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 0;}
+.ccp-gauge-ring{position:relative;width:140px;height:140px;margin:0 auto 16px;}
+.ccp-gauge-ring svg{width:140px;height:140px;transform:rotate(-90deg);}
+.ccp-gauge-track{fill:none;stroke:var(--edge);stroke-width:10;}
+.ccp-gauge-fill{fill:none;stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset 1.5s cubic-bezier(0.16,1,0.3,1);}
+.ccp-gauge-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.ccp-gauge-val{font-family:var(--font-d);font-size:28px;font-weight:800;color:var(--text);line-height:1;}
+.ccp-gauge-sub{font-family:var(--font-m);font-size:9px;color:var(--text-3);margin-top:2px;}
+.routing-tiers{display:flex;flex-direction:column;gap:8px;margin-top:6px;}
+.rt-row{display:flex;align-items:center;gap:10px;}
+.rt-label{font-size:11px;color:var(--text-2);width:120px;flex-shrink:0;}
+.rt-track{flex:1;height:24px;background:rgba(255,255,255,0.03);border-radius:3px;overflow:hidden;border:1px solid var(--edge);}
+.rt-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:10px;font-family:var(--font-m);font-size:10px;font-weight:700;transition:width 1.4s cubic-bezier(0.16,1,0.3,1);}
+.rt-pct{font-family:var(--font-m);font-size:10px;color:var(--text-3);width:38px;flex-shrink:0;text-align:right;}
+.alert-feed{display:flex;flex-direction:column;gap:8px;}
+.alert-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:var(--r-sm);border:1px solid;transition:background 0.15s;}
+.alert-item.red{background:var(--red-dim);border-color:rgba(255,82,82,0.2);}
+.alert-item.amber{background:var(--amber-dim);border-color:rgba(255,181,71,0.2);}
+.alert-item.green{background:var(--green-dim);border-color:rgba(0,230,118,0.2);}
+.alert-item.cyan{background:var(--cyan-dim);border-color:rgba(0,229,255,0.2);}
+.alert-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:3px;}
+.alert-dot.red{background:var(--red);box-shadow:0 0 6px var(--red);animation:blink 1.5s infinite;}
+.alert-dot.amber{background:var(--amber);box-shadow:0 0 6px var(--amber);animation:blink 2s infinite;}
+.alert-dot.green{background:var(--green);}
+.alert-dot.cyan{background:var(--cyan);}
+.alert-body{flex:1;}
+.alert-title{font-family:var(--font-d);font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.alert-desc{font-size:10px;color:var(--text-2);line-height:1.4;}
+.alert-time{font-family:var(--font-m);font-size:9px;color:var(--text-3);white-space:nowrap;margin-left:4px;margin-top:1px;}
+.traj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px;}
+.traj-card{background:rgba(255,255,255,0.025);border:1px solid var(--edge);border-radius:var(--r-sm);padding:12px;position:relative;overflow:hidden;transition:border-color 0.2s;}
+.traj-card:hover{border-color:var(--edge2);}
+.traj-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;}
+.traj-card.rising::before{background:var(--green);}
+.traj-card.stable::before{background:var(--cyan);}
+.traj-card.declining::before{background:var(--amber);}
+.traj-card.atrisk::before{background:var(--red);}
+.traj-pub{font-family:var(--font-d);font-size:11px;font-weight:700;color:var(--text);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.traj-state{font-family:var(--font-m);font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+.traj-state.rising{color:var(--green);}.traj-state.stable{color:var(--cyan);}.traj-state.declining{color:var(--amber);}.traj-state.atrisk{color:var(--red);}
+.traj-score-row{display:flex;align-items:baseline;gap:4px;margin:6px 0 2px;}
+.traj-now{font-family:var(--font-d);font-size:18px;font-weight:800;color:var(--text);}
+.traj-proj.up{color:var(--green);font-family:var(--font-d);font-size:16px;font-weight:700;}
+.traj-proj.flat{color:var(--cyan);font-family:var(--font-d);font-size:16px;font-weight:700;}
+.traj-proj.down{color:var(--amber);font-family:var(--font-d);font-size:16px;font-weight:700;}
+.traj-proj.warn{color:var(--red);font-family:var(--font-d);font-size:16px;font-weight:700;}
+.traj-lbl{font-family:var(--font-m);font-size:9px;color:var(--text-3);}
+.cpa-fcast-table{width:100%;border-collapse:collapse;}
+.cpa-fcast-table th{font-family:var(--font-m);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);text-align:left;padding:0 0 10px;border-bottom:1px solid var(--edge);}
+.cpa-fcast-table th:not(:first-child){text-align:right;}
+.cpa-fcast-table td{padding:10px 0;border-bottom:1px solid var(--edge);font-size:12px;color:var(--text-2);vertical-align:middle;}
+.cpa-fcast-table td:not(:first-child){text-align:right;font-family:var(--font-m);font-size:11px;}
+.cpa-fcast-table tr:last-child td{border-bottom:none;}
+.conf-wrap{display:flex;align-items:center;justify-content:flex-end;gap:6px;}
+.conf-bar{width:44px;height:3px;background:var(--edge);border-radius:2px;overflow:hidden;}
+.conf-fill{height:100%;border-radius:2px;transition:width 1s ease;}
+.fcast-pill{display:inline-block;font-family:var(--font-m);font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;letter-spacing:0.5px;}
+.fcast-green{background:var(--green-dim);color:var(--green);}
+.fcast-amber{background:var(--amber-dim);color:var(--amber);}
+.fcast-red{background:var(--red-dim);color:var(--red);}
+.obp-table{width:100%;border-collapse:collapse;}
+.obp-table th{font-family:var(--font-m);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);text-align:left;padding:0 0 10px;border-bottom:1px solid var(--edge);}
+.obp-table th:not(:first-child){text-align:right;}
+.obp-table td{padding:9px 0;border-bottom:1px solid var(--edge);font-size:12px;color:var(--text-2);vertical-align:middle;}
+.obp-table td:not(:first-child){text-align:right;font-family:var(--font-m);font-size:11px;}
+.obp-table tr:last-child td{border-bottom:none;}
+.obp-lift{display:inline-flex;align-items:center;gap:3px;font-family:var(--font-m);font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;}
+.obp-lift.pos{background:var(--green-dim);color:var(--green);}.obp-lift.neg{background:var(--red-dim);color:var(--red);}
+.obp-tier-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle;}
+.gated-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:rgba(5,8,15,0.7);backdrop-filter:blur(4px);border-radius:var(--r-lg);z-index:2;}
+.gated-icon{font-size:28px;opacity:0.5;}
+.gated-label{font-family:var(--font-m);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-3);}
+.gated-sub{font-size:11px;color:var(--text-3);}
+.acronym-legend{display:flex;flex-wrap:wrap;gap:6px;padding:12px 16px;background:rgba(167,139,250,0.04);border:1px solid rgba(167,139,250,0.12);border-radius:var(--r-md);margin-bottom:12px;}
+.acro-item{display:flex;align-items:baseline;gap:5px;padding:4px 10px;background:var(--surface);border:1px solid var(--edge);border-radius:20px;cursor:default;transition:border-color 0.15s,background 0.15s;}
+.acro-item:hover{background:var(--surface2);border-color:rgba(167,139,250,0.3);}
+.acro-abbr{font-family:var(--font-m);font-size:10px;font-weight:700;color:var(--pred2);letter-spacing:0.5px;}
+.acro-sep{font-size:9px;color:var(--text-3);}
+.acro-full{font-size:11px;color:var(--text-2);}
+.acro-sub{font-size:10px;color:var(--text-3);margin-left:2px;}
+@media(max-width:900px){.pred-status-row{grid-template-columns:repeat(2,1fr)!important;}.pred-main-grid{grid-template-columns:1fr!important;}.pred-3col{grid-template-columns:1fr!important;}.traj-grid{grid-template-columns:repeat(2,1fr)!important;}}
 
-</head>
+</style>
 <body>
 <div class="shell">
 
@@ -507,6 +616,7 @@ body.snapshot-mode .nav-tab[data-working]{display:none;}
   <button class="nav-tab" data-working onclick="switchTab('scorecards',this)">QM &amp; MP Scorecards</button>
   <button class="nav-tab" data-working onclick="switchTab('ai',this)">Joanie AI Activity</button>
   <button class="nav-tab" data-working onclick="switchTab('agents',this)">Agent Health</button>
+  <button class="nav-tab" onclick="switchTab('predictive',this)">&#9670; Predictive</button>
 </nav>
 
 <!-- OVERVIEW TAB -->
@@ -809,6 +919,127 @@ body.snapshot-mode .nav-tab[data-working]{display:none;}
     <div class="panel"><div class="p-head"><div><div class="p-title">Routing Funnel</div><div class="p-sub">Inbound &#8594; Answered &#8594; Routed &#8594; Converted</div></div><span class="pill pill-g">Live Logic</span></div><div class="funnel" id="funnelEl2" style="margin-top:6px;"></div></div>
   </div>
 </div>
+
+<!-- ══════════════════════════════════════════════════════
+     PREDICTIVE INTELLIGENCE TAB
+     ══════════════════════════════════════════════════════ -->
+<div id="tab-predictive" class="tab-panel">
+
+  <!-- Acronym Legend -->
+  <div class="acronym-legend">
+    <div class="acro-item"><span class="acro-abbr">CCP</span><span class="acro-sep">—</span><span class="acro-full">Call Conversion Probability</span><span class="acro-sub">· pre-routing win likelihood per call</span></div>
+    <div class="acro-item"><span class="acro-abbr">OBP</span><span class="acro-sep">—</span><span class="acro-full">Optimal Bid Price</span><span class="acro-sub">· source-level price for Right Pricing Agent</span></div>
+    <div class="acro-item"><span class="acro-abbr">MTF</span><span class="acro-sep">—</span><span class="acro-full">MPQS Trajectory Forecast</span><span class="acro-sub">· 4–8 week publisher score direction</span></div>
+    <div class="acro-item"><span class="acro-abbr">CCF</span><span class="acro-sep">—</span><span class="acro-full">Client CPA Forecast</span><span class="acro-sub">· projected period-end CPA vs. target</span></div>
+    <div class="acro-item"><span class="acro-abbr">MPQS</span><span class="acro-sep">—</span><span class="acro-full">Media Partner Quality Score</span><span class="acro-sub">· ongoing publisher quality index</span></div>
+    <div class="acro-item"><span class="acro-abbr">PSI</span><span class="acro-sep">—</span><span class="acro-full">Price Sensitivity Index</span><span class="acro-sub">· win rate change per $1 bid move</span></div>
+    <div class="acro-item"><span class="acro-abbr">AUC-ROC</span><span class="acro-sep">—</span><span class="acro-full">Model Accuracy Score</span><span class="acro-sub">· 0–1, target ≥0.72 for CCP</span></div>
+    <div class="acro-item"><span class="acro-abbr">RTB</span><span class="acro-sep">—</span><span class="acro-full">Real-Time Bidding</span><span class="acro-sub">· dynamic per-call pricing via Right Pricing Agent</span></div>
+  </div>
+
+  <!-- Model Status Row -->
+  <div class="pred-status-row" id="predStatusRow"></div>
+
+  <!-- Row 1: CCP gauge + routing tiers + alert feed -->
+  <div class="pred-main-grid" style="margin-bottom:12px;">
+    <div class="panel" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+      <div>
+        <div class="p-head" style="margin-bottom:12px;">
+          <div><div class="p-title">Conversion Probability</div><div class="p-sub">Live CCP score distribution · MTD calls</div></div>
+          <span class="pill pred-pill-proto">Model 1</span>
+        </div>
+        <div class="ccp-gauge-wrap">
+          <div class="ccp-gauge-ring">
+            <svg viewBox="0 0 140 140"><circle class="ccp-gauge-track" cx="70" cy="70" r="55"/><circle class="ccp-gauge-fill" id="ccpGaugeFill" cx="70" cy="70" r="55" stroke="#00E5FF" stroke-dasharray="345.4" stroke-dashoffset="345.4"/></svg>
+            <div class="ccp-gauge-center"><div class="ccp-gauge-val" id="ccpGaugeVal">—</div><div class="ccp-gauge-sub">avg score</div></div>
+          </div>
+          <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+            <div style="text-align:center;"><div style="font-family:var(--font-m);font-size:18px;font-weight:700;color:var(--green);" id="ccpHighPct">—</div><div style="font-family:var(--font-m);font-size:9px;color:var(--text-3);">High ≥0.70</div></div>
+            <div style="text-align:center;"><div style="font-family:var(--font-m);font-size:18px;font-weight:700;color:var(--cyan);" id="ccpMidPct">—</div><div style="font-family:var(--font-m);font-size:9px;color:var(--text-3);">Mid 0.40–0.69</div></div>
+            <div style="text-align:center;"><div style="font-family:var(--font-m);font-size:18px;font-weight:700;color:var(--amber);" id="ccpLowPct">—</div><div style="font-family:var(--font-m);font-size:9px;color:var(--text-3);">Low &lt;0.40</div></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:var(--font-m);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-3);margin-bottom:12px;">Routing Tier Breakdown</div>
+        <div class="routing-tiers" id="routingTiers"></div>
+        <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--edge);">
+          <div style="font-family:var(--font-m);font-size:9px;color:var(--text-3);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;">CCP Model Accuracy (AUC-ROC)</div>
+          <div style="display:flex;align-items:baseline;gap:6px;">
+            <div style="font-family:var(--font-d);font-size:26px;font-weight:800;color:var(--text);" id="ccpAuc">—</div>
+            <div style="font-size:10px;color:var(--text-3);font-family:var(--font-m);">target ≥0.72</div>
+          </div>
+          <div style="height:3px;background:var(--edge);border-radius:2px;overflow:hidden;margin-top:6px;"><div style="height:100%;background:linear-gradient(90deg,var(--pred),var(--cyan));border-radius:2px;transition:width 1.5s ease;" id="ccpAucBar"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="p-head" style="margin-bottom:12px;">
+        <div><div class="p-title">Model Alert Feed</div><div class="p-sub">Live signals · spec-driven from Notion Alert Spec</div></div>
+        <span class="pill" style="color:var(--pred);border-color:rgba(167,139,250,0.3);background:var(--pred-dim);font-family:var(--font-m);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:20px;border:1px solid;">Joanie</span>
+      </div>
+      <div class="alert-feed" id="alertFeedPred"></div>
+    </div>
+  </div>
+
+  <!-- Row 2: MTF Trajectories + CPA Forecast -->
+  <div class="pred-main-grid" style="margin-bottom:12px;">
+    <div class="panel">
+      <div class="p-head" style="margin-bottom:14px;">
+        <div><div class="p-title">MPQS Trajectory Forecast</div><div class="p-sub">4-week score direction · all active publishers · live from Notion</div></div>
+        <span class="pill pred-pill-live">MTF Live</span>
+      </div>
+      <div class="traj-grid" id="trajGrid"></div>
+    </div>
+    <div class="panel">
+      <div class="p-head" style="margin-bottom:14px;">
+        <div><div class="p-title">Client CPA Forecast</div><div class="p-sub">Projected period-end CPA vs. target · live from Notion</div></div>
+        <span class="pill pred-pill-live">CCF Live</span>
+      </div>
+      <table class="cpa-fcast-table">
+        <thead><tr><th>Client</th><th>Current CPA</th><th>Proj. Period-End</th><th>Band</th><th>Confidence</th><th>Status</th></tr></thead>
+        <tbody id="cpaFcastBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Row 3: OBP gated + Accuracy chart + Readiness -->
+  <div class="pred-3col" style="margin-bottom:12px;">
+    <div class="panel" style="position:relative;">
+      <div class="p-head" style="margin-bottom:14px;">
+        <div><div class="p-title">Optimal Bid Price</div><div class="p-sub">Source-level price recommendations · Model 2</div></div>
+        <span class="pill pred-pill-gated">OBP — Gated</span>
+      </div>
+      <table class="obp-table" style="opacity:0.25;"><thead><tr><th>Source</th><th>Current $</th><th>OBP Rec</th><th>PSI</th><th>Lift Est.</th></tr></thead><tbody id="obpTableBody"></tbody></table>
+      <div class="gated-overlay"><div class="gated-icon">&#9632;</div><div class="gated-label">Gated on Ping Analytics</div><div class="gated-sub">Available Q4 2026 · Awaiting bid/win data</div></div>
+    </div>
+    <div class="panel">
+      <div class="p-head" style="margin-bottom:14px;">
+        <div><div class="p-title">Prediction vs. Actual</div><div class="p-sub">Conv% predicted vs observed · 7 model runs · portfolio avg</div></div>
+        <span class="pill pred-pill-proto">CCP Accuracy</span>
+      </div>
+      <div style="height:120px;position:relative;"><canvas id="ccpAccChart"></canvas></div>
+      <div style="display:flex;gap:14px;margin:8px 0 10px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:5px;font-family:var(--font-m);font-size:9px;color:var(--text-3);"><span style="width:8px;height:8px;border-radius:2px;display:inline-block;background:var(--pred);"></span>Predicted Conv%</div>
+        <div style="display:flex;align-items:center;gap:5px;font-family:var(--font-m);font-size:9px;color:var(--text-3);"><span style="width:8px;height:8px;border-radius:2px;display:inline-block;background:var(--green);"></span>Actual Conv%</div>
+      </div>
+      <div style="font-family:var(--font-m);font-size:9px;color:var(--text-3);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">AUC-ROC trend · target 0.72</div>
+      <div style="height:80px;position:relative;"><canvas id="aucTrendChart"></canvas></div>
+      <div style="display:flex;gap:14px;margin-top:6px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:5px;font-family:var(--font-m);font-size:9px;color:var(--text-3);"><span style="width:8px;height:8px;border-radius:2px;display:inline-block;background:var(--pred);"></span>AUC-ROC</div>
+        <div style="display:flex;align-items:center;gap:5px;font-family:var(--font-m);font-size:9px;color:var(--text-3);"><span style="width:8px;height:8px;border-radius:2px;display:inline-block;background:var(--amber);opacity:0.6;"></span>Target 0.72</div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="p-head" style="margin-bottom:14px;">
+        <div><div class="p-title">Model Readiness</div><div class="p-sub">Training data depth by model · weeks available</div></div>
+        <span class="pill" style="color:var(--pred);border-color:rgba(167,139,250,0.3);background:var(--pred-dim);font-family:var(--font-m);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:20px;border:1px solid;">Data Audit</span>
+      </div>
+      <div style="height:170px;position:relative;"><canvas id="readinessChart"></canvas></div>
+    </div>
+  </div>
+
+</div><!-- /tab-predictive -->
 
 <!-- FOOTER -->
 <footer class="footer">
@@ -1505,7 +1736,11 @@ async function loadNotionData(){
     let txt='';
     if(data.content){for(const b of data.content){if(b.type==='text')txt+=b.text;else if(b.type==='mcp_tool_result'&&Array.isArray(b.content)){for(const c of b.content){if(c.text)txt+=c.text;}}}}
     const m=txt.match(/\[[\s\S]*\]/);
-    if(m){const recs=JSON.parse(m[0]);if(recs&&recs.length){renderCards(recs);renderDist(recs);}}
+    if(m){const recs=JSON.parse(m[0]);if(recs&&recs.length){
+      window._lastScorecardRecs=recs;
+      renderCards(recs);renderDist(recs);
+      if(predLoaded)buildTrajGrid(recs),buildCpaForecast(recs),buildPredStatusRow(recs);
+    }}
     else{renderCards(FALLBACK);renderDist(FALLBACK);}
   }catch(e){renderCards(FALLBACK);renderDist(FALLBACK);}
 
@@ -1581,8 +1816,228 @@ window.addEventListener('DOMContentLoaded',()=>{
   renderTrendCharts([]);
   loadNotionData();
 });
+/* ══════════════════════════════════════════════════════
+   PREDICTIVE INTELLIGENCE — DATA & RENDERERS
+   ══════════════════════════════════════════════════════ */
+
+// ── Helpers ──────────────────────────────────────────
+function predPubShortName(report) {
+  if (!report) return 'Unknown';
+  const m = report.match(/QM\s*[—–-]\s*(.+?)\s*[—–-]\s*\w+\s+\d{4}$/);
+  return m ? m[1].trim() : report.replace(/QM\s*[—–-]\s*/,'').split(/\s*[—–-]\s*\d/)[0].trim();
+}
+function deriveTraj(r) {
+  const band=r['Action Band']||'', status=r['Status']||'', mom=r['MoM Change (%)'];
+  if (status==='At RIsk'||band==='Pullback') return {state:'at risk',cls:'atrisk',dir:'down'};
+  if (mom!=null){if(mom>0.03)return{state:'rising',cls:'rising',dir:'up'};if(mom<-0.03)return{state:'declining',cls:'declining',dir:'down'};return{state:'stable',cls:'stable',dir:'flat'};}
+  if(band==='Scale Eligible')return{state:'rising',cls:'rising',dir:'up'};
+  if(band==='Maintain')return{state:'stable',cls:'stable',dir:'flat'};
+  if(band==='Monitor'||band==='Throttle')return{state:'declining',cls:'declining',dir:'down'};
+  return{state:'at risk',cls:'atrisk',dir:'down'};
+}
+function projectMpqs(r) {
+  const hm=r['Headline Metric']||'', sm=hm.match(/MPQS\s+([\d.]+)/);
+  if(!sm)return null;
+  const score=parseFloat(sm[1]), band=r['Action Band']||'';
+  const delta=band==='Scale Eligible'?1.5:band==='Maintain'?0.4:band==='Monitor'?-1.2:band==='Throttle'?-2.0:-3.5;
+  return Math.round((score+delta)*10)/10;
+}
+function cpaFcastStatus(r){
+  if(r['Status']==='At RIsk')return{label:'At Risk',cls:'fcast-red'};
+  if(r['Status']==='Watch')return{label:'Watch',cls:'fcast-amber'};
+  return{label:'On Track',cls:'fcast-green'};
+}
+function cpaConf(r){let c=65;if(r['Effectuation %']!=null)c+=10;if((r['Net Sales']||0)>200)c+=8;if(r['Status']==='Healthy')c+=7;return Math.min(c,94);}
+
+// ── Static config (CCP/OBP not yet live-wired) ───────
+const PRED_CFG = {
+  models:[
+    {name:'Call Conversion',abbr:'CCP',desc:'Pre-routing win probability per call',status:'proto',badge:'Prototype',metric:'0.68',lbl:'AUC-ROC',pct:68},
+    {name:'Optimal Bid Price',abbr:'OBP',desc:'Source-level bid optimization for Right Pricing Agent',status:'gated',badge:'Gated',metric:"Q4 '26",lbl:'target launch',pct:0},
+    {name:'MPQS Trajectory',abbr:'MTF',desc:'4–8 week publisher score direction · Live from Notion',status:'live',badge:'Live',metric:'—',lbl:'publishers tracked',pct:100},
+    {name:'CPA Forecast',abbr:'CCF',desc:'Period-end CPA status vs. target · Live from Notion',status:'live',badge:'Live',metric:'—',lbl:'clients tracked',pct:100},
+  ],
+  ccp:{avgScore:0.63,highPct:'41%',midPct:'38%',lowPct:'21%',auc:0.68,
+    routingTiers:[{label:'QM First (≥0.70)',pct:41,color:'var(--green)'},{label:'QM if Avail (0.40–0.69)',pct:38,color:'var(--cyan)'},{label:'Marketplace Direct (<0.40)',pct:21,color:'var(--amber)'}],
+    weeklyAcc:{labels:['Mar-W1','Mar-W2','Mar-W3','Mar-W4','Apr-W1','Apr-W2','Apr-W3'],predicted:[0.098,0.101,0.103,0.104,0.105,0.106,0.107],actual:[0.108,0.109,0.110,0.110,0.110,0.111,0.111]},
+    aucTrend:[0.61,0.63,0.64,0.65,0.66,0.67,0.68]
+  },
+  obpSources:[{src:'Healthcare.com',current:22,rec:26,psi:'High',lift:'+18%'},{src:'RevRise Media',current:19,rec:21,psi:'Med',lift:'+11%'},{src:'GoldMineLeads',current:17,rec:17,psi:'Low',lift:'0%'},{src:'Ring2Media',current:14,rec:11,psi:'High',lift:'-21%'}],
+  readiness:{labels:['CCP','MTF','CCF','OBP'],available:[52,38,64,0],required:[52,52,52,60]}
+};
+
+// ── Severity map for alert spec ──────────────────────
+const SEVERITY_MAP={'Red — Immediate':{tier:'red',icon:'🔴'},'Amber — Watch':{tier:'amber',icon:'🟡'},'Green — Positive':{tier:'green',icon:'🟢'},'Cyan — Info':{tier:'cyan',icon:'ℹ️'}};
+
+// ── Renderers ────────────────────────────────────────
+function buildPredStatusRow(liveRecs){
+  const models=[...PRED_CFG.models];
+  if(liveRecs){const mi=models.findIndex(m=>m.abbr==='MTF'),ci=models.findIndex(m=>m.abbr==='CCF');if(mi>-1)models[mi].metric=liveRecs.length+'';if(ci>-1)models[ci].metric=liveRecs.length+'';}
+  const row=document.getElementById('predStatusRow');if(!row)return;
+  row.innerHTML=models.map(m=>{const barColor=m.status==='gated'?'rgba(255,255,255,0.15)':m.status==='live'?'var(--green)':'var(--cyan)';
+  return `<div class="pred-status-card ${m.status==='live'?'live':m.status}"><div class="pred-card-top"><div class="pred-card-name">${m.name} <span style="font-family:var(--font-m);font-size:9px;color:var(--text-3);font-weight:400;">(${m.abbr})</span></div><span class="pred-card-badge badge-${m.status==='live'?'live':m.status}">${m.badge}</span></div><div class="pred-card-desc">${m.desc}</div><div class="pred-card-metric"><span class="pred-card-val">${m.metric}</span><span class="pred-card-lbl">${m.lbl}</span></div><div class="pred-card-bar"><div class="pred-card-bar-fill" style="width:0%;background:${barColor};" data-t="${m.pct}"></div></div></div>`;
+  }).join('');
+  setTimeout(()=>{document.querySelectorAll('.pred-card-bar-fill').forEach(el=>{el.style.width=el.dataset.t+'%';});},300);
+}
+
+function buildCcpGauge(ccpRecs){
+  let score=PRED_CFG.ccp.avgScore, auc=PRED_CFG.ccp.auc, highPct=PRED_CFG.ccp.highPct, midPct=PRED_CFG.ccp.midPct, lowPct=PRED_CFG.ccp.lowPct;
+  if(ccpRecs&&ccpRecs.length){
+    const active=ccpRecs.filter(r=>r['Status']==='Active'&&r['CCP Score']!=null);
+    if(active.length)score=Math.round(active.reduce((s,r)=>s+r['CCP Score'],0)/active.length*100)/100;
+    const withAuc=ccpRecs.filter(r=>r['AUC-ROC']!=null).sort((a,b)=>(b['date:Date:start']||'').localeCompare(a['date:Date:start']||''));
+    if(withAuc.length)auc=withAuc[0]['AUC-ROC'];
+    const total=ccpRecs.length;
+    if(total){highPct=Math.round(ccpRecs.filter(r=>r['Routing Tier']==='QM First').length/total*100)+'%';midPct=Math.round(ccpRecs.filter(r=>r['Routing Tier']==='QM If Available').length/total*100)+'%';lowPct=Math.round(ccpRecs.filter(r=>r['Routing Tier']==='Marketplace Direct').length/total*100)+'%';}
+  }
+  const fill=document.getElementById('ccpGaugeFill'),val=document.getElementById('ccpGaugeVal');
+  const color=score>=0.70?'var(--green)':score>=0.40?'var(--cyan)':'var(--amber)';
+  setTimeout(()=>{if(fill){fill.style.strokeDashoffset=2*Math.PI*55*(1-score);fill.style.stroke=color;}if(val){val.textContent=score.toFixed(2);val.style.color=color;}},400);
+  const aucEl=document.getElementById('ccpAuc');if(aucEl)aucEl.textContent=auc.toFixed(2);
+  const aucBar=document.getElementById('ccpAucBar');setTimeout(()=>{if(aucBar)aucBar.style.width=Math.round(auc*100)+'%';},400);
+  document.getElementById('ccpHighPct').textContent=highPct;
+  document.getElementById('ccpMidPct').textContent=midPct;
+  document.getElementById('ccpLowPct').textContent=lowPct;
+}
+
+function buildPredRoutingTiers(ccpRecs){
+  let tiers=[...PRED_CFG.ccp.routingTiers];
+  if(ccpRecs&&ccpRecs.length){const total=ccpRecs.length;tiers=[{label:'QM First (≥0.70)',pct:Math.round(ccpRecs.filter(r=>r['Routing Tier']==='QM First').length/total*100),color:'var(--green)'},{label:'QM if Avail (0.40–0.69)',pct:Math.round(ccpRecs.filter(r=>r['Routing Tier']==='QM If Available').length/total*100),color:'var(--cyan)'},{label:'Marketplace Direct (<0.40)',pct:Math.round(ccpRecs.filter(r=>r['Routing Tier']==='Marketplace Direct').length/total*100),color:'var(--amber)'}];}
+  const el=document.getElementById('routingTiers');if(!el)return;
+  el.innerHTML=tiers.map(t=>`<div class="rt-row"><div class="rt-label">${t.label}</div><div class="rt-track"><div class="rt-fill" style="background:${t.color};width:0%;color:rgba(255,255,255,0.85);" data-t="${t.pct}">${t.pct}%</div></div><div class="rt-pct">${t.pct}%</div></div>`).join('');
+  setTimeout(()=>{document.querySelectorAll('.rt-fill').forEach(b=>{b.style.width=b.dataset.t+'%';});},350);
+}
+
+function buildTrajGrid(recs){
+  const el=document.getElementById('trajGrid');if(!el)return;
+  if(!recs||!recs.length){el.innerHTML='<div style="grid-column:1/-1;padding:20px;text-align:center;font-family:var(--font-m);font-size:10px;color:var(--text-3);">Sync Notion to load live trajectories</div>';return;}
+  const scored=recs.map(r=>{const sm=(r['Headline Metric']||'').match(/MPQS\s+([\d.]+)/);return{...r,_score:sm?parseFloat(sm[1]):null};}).filter(r=>r._score!==null).sort((a,b)=>b._score-a._score).slice(0,6);
+  const arrowMap={up:'↑',flat:'→',down:'↓'};
+  el.innerHTML=scored.map(r=>{const name=predPubShortName(r['Report']);const traj=deriveTraj(r);const proj=projectMpqs(r);const projDisp=proj!==null?proj.toFixed(1):'—';const projCls=traj.cls==='atrisk'?'warn':traj.dir;
+  return `<div class="traj-card ${traj.cls}"><div class="traj-pub" title="${name}">${name}</div><div class="traj-state ${traj.cls}">${traj.state}</div><div class="traj-score-row"><span class="traj-now">${r._score.toFixed(1)}</span><span style="color:var(--text-3);margin:0 2px;">${arrowMap[traj.dir]}</span><span class="traj-proj ${projCls}">${projDisp}</span></div><div class="traj-lbl">now → 4wk projection</div></div>`;
+  }).join('');
+}
+
+function buildCpaForecast(recs){
+  const tbody=document.getElementById('cpaFcastBody');if(!tbody)return;
+  if(!recs||!recs.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:20px;font-family:var(--font-m);font-size:10px;color:var(--text-3);">Sync Notion to load live forecasts</td></tr>';return;}
+  const sorted=[...recs].filter(r=>r['CPA']>0).sort((a,b)=>(b['Net Sales']||0)-(a['Net Sales']||0)).slice(0,6);
+  tbody.innerHTML=sorted.map(r=>{const cpa=r['CPA']||0,status=cpaFcastStatus(r),conf=cpaConf(r);const confClr=conf>=80?'var(--green)':conf>=68?'var(--cyan)':'var(--amber)';const band=r['Action Band']||'';const multi=band==='Scale Eligible'?0.97:band==='Maintain'?0.99:band==='Monitor'?1.04:band==='Throttle'?1.08:1.15;const projCpa=Math.round(cpa*multi);const name=predPubShortName(r['Report']);
+  return `<tr><td style="font-family:var(--font-d);font-weight:700;font-size:12px;color:var(--text);">${name}</td><td>$${cpa.toLocaleString()}</td><td style="color:${projCpa<=cpa?'var(--green)':'var(--amber)'};font-weight:700;">$${projCpa.toLocaleString()}</td><td><span style="font-family:var(--font-m);font-size:9px;color:var(--text-3);">${band}</span></td><td><div class="conf-wrap"><div class="conf-bar"><div class="conf-fill" style="width:0%;background:${confClr};" data-t="${conf}"></div></div><span style="font-family:var(--font-m);font-size:10px;color:var(--text-2);">${conf}%</span></div></td><td><span class="fcast-pill ${status.cls}">${status.label}</span></td></tr>`;
+  }).join('');
+  setTimeout(()=>{document.querySelectorAll('.conf-fill').forEach(el=>{el.style.width=el.dataset.t+'%';});},400);
+}
+
+function buildObpTable(){
+  const tbody=document.getElementById('obpTableBody');if(!tbody)return;
+  const tierColors={'High':'var(--green)','Med':'var(--cyan)','Low':'var(--amber)'};
+  tbody.innerHTML=PRED_CFG.obpSources.map(r=>{const isPos=r.lift.startsWith('+')||r.lift==='0%';return `<tr><td style="color:var(--text);font-weight:500;">${r.src}</td><td>$${r.current}</td><td style="color:var(--cyan);font-weight:700;">$${r.rec}</td><td><span class="obp-tier-dot" style="background:${tierColors[r.psi]||'var(--text-3)'}"></span>${r.psi}</td><td><span class="obp-lift ${isPos&&r.lift!=='0%'?'pos':'neg'}">${r.lift}</span></td></tr>`;}).join('');
+}
+
+let ccpAccChartInst=null, ccpAucChartInst=null;
+function buildCcpAccChart(ccpRecs){
+  const ctx=document.getElementById('ccpAccChart');if(!ctx)return;
+  if(ccpAccChartInst){ccpAccChartInst.destroy();ccpAccChartInst=null;}
+  const runs=ccpRecs?[...ccpRecs].filter(r=>r['Publisher']==='Portfolio Summary'&&r['Portfolio Avg Predicted']!=null).sort((a,b)=>(a['Run Number']||0)-(b['Run Number']||0)):[];
+  let labels,predicted,actual,aucData;
+  if(runs.length>=2){labels=runs.map(r=>r['Week Label']||`W${r['Run Number']}`);predicted=runs.map(r=>r['Portfolio Avg Predicted']);actual=runs.map(r=>r['Portfolio Avg Actual']);aucData=runs.map(r=>r['AUC-ROC']);}
+  else{const d=PRED_CFG.ccp.weeklyAcc;labels=d.labels;predicted=d.predicted;actual=d.actual;aucData=PRED_CFG.ccp.aucTrend;}
+  ccpAccChartInst=new Chart(ctx.getContext('2d'),{type:'line',data:{labels,datasets:[{label:'Predicted %',data:predicted,borderColor:'#A78BFA',borderWidth:2,pointRadius:3,pointBackgroundColor:'#A78BFA',tension:0.3,borderDash:[4,3]},{label:'Actual %',data:actual,borderColor:'#00E676',borderWidth:2,pointRadius:3,pointBackgroundColor:'#00E676',tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{...TS,callbacks:{label:c=>` ${c.dataset.label}: ${(c.parsed.y*100).toFixed(1)}%`}}},scales:{x:{...AX,ticks:{...TICKS,maxTicksLimit:7}},y:{...AX,min:0.05,max:0.22,ticks:{...TICKS,callback:v=>`${(v*100).toFixed(0)}%`}}}}});
+  const ctx2=document.getElementById('aucTrendChart');if(!ctx2)return;
+  if(ccpAucChartInst){ccpAucChartInst.destroy();ccpAucChartInst=null;}
+  ccpAucChartInst=new Chart(ctx2.getContext('2d'),{type:'line',data:{labels,datasets:[{label:'AUC-ROC',data:aucData,borderColor:'#A78BFA',borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#A78BFA',tension:0.3},{label:'Target 0.72',data:labels.map(()=>0.72),borderColor:'rgba(255,181,71,0.55)',borderWidth:1.5,borderDash:[5,3],pointRadius:0,tension:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TS,callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.y.toFixed(2)}`}}},scales:{x:{...AX,ticks:{...TICKS,maxTicksLimit:7}},y:{...AX,min:0.55,max:0.78,ticks:{...TICKS,callback:v=>v.toFixed(2)}}}}});
+}
+
+function buildReadinessChart(){
+  const ctx=document.getElementById('readinessChart');if(!ctx)return;
+  const d=PRED_CFG.readiness;
+  new Chart(ctx.getContext('2d'),{type:'bar',data:{labels:d.labels,datasets:[{label:'Available (wks)',data:d.available,backgroundColor:['rgba(0,229,255,0.7)','rgba(0,229,255,0.7)','rgba(0,229,255,0.7)','rgba(255,255,255,0.1)'],borderRadius:4,borderSkipped:false},{label:'Required (wks)',data:d.required,backgroundColor:'transparent',borderColor:'rgba(255,181,71,0.6)',borderWidth:2,type:'line',pointRadius:5,pointBackgroundColor:'#FFB547',tension:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...TS}},scales:{x:{...AX},y:{...AX,ticks:{...TICKS,callback:v=>`${v}w`}}}}});
+}
+
+function buildAlertFeedPred(scorecardRecs, ccpRecs, alertSpecRules){
+  const el=document.getElementById('alertFeedPred');if(!el)return;
+  const PRIORITY={'Red — Immediate':0,'Amber — Watch':1,'Green — Positive':2,'Cyan — Info':3};
+  const rules=alertSpecRules?[...alertSpecRules].sort((a,b)=>(PRIORITY[a['Severity']]??9)-(PRIORITY[b['Severity']]??9)):[];
+  if(!rules.length&&(!scorecardRecs||!scorecardRecs.length)){el.innerHTML='<div style="padding:12px;font-size:11px;color:var(--text-3);font-family:var(--font-m);">Sync Notion to load live alerts</div>';return;}
+  const fired=[];const seen=new Set();
+  for(const rule of rules){
+    if(fired.length>=5)break;
+    const alert=evalAlertRule(rule,scorecardRecs,ccpRecs);
+    if(!alert)continue;
+    const key=`${rule['Model']}-${alert.tier}-${alert.title.substring(0,30)}`;
+    if(seen.has(key))continue;seen.add(key);
+    fired.push({...alert,cadence:rule['Cadence']||''});
+  }
+  if(!fired.length){el.innerHTML='<div style="padding:12px;font-size:11px;color:var(--text-3);font-family:var(--font-m);">All models healthy — no active alerts</div>';return;}
+  el.innerHTML=fired.map(a=>`<div class="alert-item ${a.tier}"><span class="alert-dot ${a.tier}"></span><div class="alert-body"><div class="alert-title">${a.title}</div><div class="alert-desc">${a.desc}</div>${a.routedTo?`<div style="font-family:var(--font-m);font-size:9px;color:var(--text-3);margin-top:3px;">→ ${a.routedTo} · ${a.cadence}</div>`:''}</div><div class="alert-time">${a.time}</div></div>`).join('');
+}
+
+function evalAlertRule(rule,scorecardRecs,ccpRecs){
+  const src=rule['Source Database']||'',cond=rule['Trigger Condition']||'',sev=SEVERITY_MAP[rule['Severity']]||{tier:'cyan',icon:'ℹ️'};
+  let routed=[];try{routed=JSON.parse(rule['Routed To']||'[]');}catch{}
+  const routedDisp=routed.filter(r=>r!=='Dashboard Only').join(', ')||'Dashboard';
+  if(src==='Joanie QM Scorecards'&&scorecardRecs&&scorecardRecs.length){
+    if(cond.includes("Status = 'At RIsk' OR Action Band = 'Pullback'")){const m=scorecardRecs.filter(r=>r['Status']==='At RIsk'||r['Action Band']==='Pullback');if(!m.length)return null;const r=m[0];return{tier:sev.tier,title:`${sev.icon} MTF — ${predPubShortName(r['Report'])} flagged At Risk`,desc:(r['Biggest Risk']||'Immediate review required.').substring(0,95),time:'Live',routedTo:routedDisp};}
+    if(cond.includes("Status = 'At RIsk' AND Projected CPA")){const m=scorecardRecs.filter(r=>r['Status']==='At RIsk'&&(r['CPA']||0)>0);if(!m.length)return null;const r=m[0];const proj=Math.round((r['CPA']||0)*1.15);return{tier:sev.tier,title:`${sev.icon} CCF — ${predPubShortName(r['Report'])} CPA breach risk`,desc:`Projected $${proj} vs current $${r['CPA']}. Action Band: ${r['Action Band']}.`,time:'Live',routedTo:routedDisp};}
+    if(cond.includes("Action Band = 'Monitor' AND Status = 'Watch'")){const m=scorecardRecs.filter(r=>r['Action Band']==='Monitor'&&r['Status']==='Watch');if(!m.length)return null;const r=m[0];return{tier:sev.tier,title:`${sev.icon} MTF — ${predPubShortName(r['Report'])} trajectory declining`,desc:(r['Biggest Risk']||'Monitor for further decline.').substring(0,95),time:'Live',routedTo:routedDisp};}
+    if(cond.includes("Action Band = 'Scale Eligible'")){const m=scorecardRecs.filter(r=>r['Action Band']==='Scale Eligible');if(!m.length)return null;const r=m[0];return{tier:sev.tier,title:`${sev.icon} MTF — ${predPubShortName(r['Report'])} Scale Eligible`,desc:(r['Top Opportunity']||'Scale candidate confirmed.').substring(0,95),time:'Live',routedTo:routedDisp};}
+    if(cond.includes("Status = 'Healthy'")){const m=scorecardRecs.filter(r=>r['Status']==='Healthy'&&['Scale Eligible','Maintain'].includes(r['Action Band']));if(!m.length)return null;const r=m[0];return{tier:sev.tier,title:`${sev.icon} CCF — ${predPubShortName(r['Report'])} CPA on track`,desc:`Status Healthy · $${r['CPA']} · ${r['Action Band']}. Period-end trajectory positive.`,time:'Live',routedTo:routedDisp};}
+  }
+  if(src==='Joanie CCP Model Output'&&ccpRecs&&ccpRecs.length){
+    const latest=ccpRecs.sort((a,b)=>(b['date:Date:start']||'').localeCompare(a['date:Date:start']||''))[0];
+    const auc=latest?.['AUC-ROC']??null;
+    if(cond==='AUC-ROC < 0.72'){if(auc===null||auc>=0.72)return null;return{tier:sev.tier,title:`${sev.icon} CCP — AUC-ROC ${auc.toFixed(2)} below target 0.72`,desc:`Model version ${latest['Model Version']||'unknown'}. Consider retraining. → AI Product Team.`,time:'Live',routedTo:routedDisp};}
+    if(cond==='AUC-ROC >= 0.72'){if(auc===null||auc<0.72)return null;return{tier:sev.tier,title:`${sev.icon} CCP — AUC-ROC ${auc.toFixed(2)} ✓ target met`,desc:`Routing thresholds validated. Model version ${latest['Model Version']||'unknown'}.`,time:'Live',routedTo:routedDisp};}
+    if(cond.includes("Routing Tier = 'Marketplace Direct'")){const m=ccpRecs.filter(r=>r['Routing Tier']==='Marketplace Direct');if(!m.length)return null;const r=m[0];return{tier:sev.tier,title:`${sev.icon} CCP — ${r['Publisher']} routed Marketplace Direct`,desc:`Score ${r['CCP Score']?.toFixed(2)} · Bid floor $${r['Bid Floor Signal']?.toFixed(2)}. Bypassing QM queue.`,time:'Live',routedTo:routedDisp};}
+  }
+  if(rule['Model']==='OBP')return{tier:sev.tier,title:`${sev.icon} OBP — gated · Ping Analytics Phase 1 pending`,desc:'No bid optimization active. Target Q4 2026.',time:'Q4 2026',routedTo:'Dashboard'};
+  return null;
+}
+
+// ── Fetch CCP model output ─────────────────────────
+async function loadCcpDataPred(){
+  const DS='collection://9fb7f8a2-0353-4181-a170-f1738a6e8cf5';
+  try{const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:3000,system:'Return ONLY a raw JSON array. No markdown, no explanation.',messages:[{role:'user',content:`Use notion-query-data-sources to run: SELECT "Report","Publisher","Week Label","Run Number","CCP Score","Routing Tier","AUC-ROC","AUC-ROC Delta","Confidence Band","Predicted Conv Rate","Actual Conv Rate","Accuracy Delta","Bid Floor Signal","Call Volume","Portfolio Avg Predicted","Portfolio Avg Actual","Period Type","Status","Model Version","date:Date:start" FROM "${DS}" ORDER BY "Run Number" ASC, "date:Date:start" ASC LIMIT 30. Return ONLY the JSON array.`}],mcp_servers:[{type:'url',url:'https://mcp.notion.com/mcp',name:'notion-mcp'}]})});const data=await res.json();let txt='';if(data.content){for(const b of data.content){if(b.type==='text')txt+=b.text;else if(b.type==='mcp_tool_result'&&Array.isArray(b.content)){for(const c of b.content){if(c.text)txt+=c.text;}}}}const m=txt.match(/\[[\s\S]*\]/);if(m){const recs=JSON.parse(m[0]);if(recs&&recs.length)return recs;}}catch(e){}return null;
+}
+
+// ── Fetch Alert Spec ───────────────────────────────
+async function loadAlertSpecPred(){
+  const DS='collection://91c40a49-595c-4cfb-9bcf-01b3d8402cee';
+  try{const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:3000,system:'Return ONLY a raw JSON array. No markdown, no explanation.',messages:[{role:'user',content:`Use notion-query-data-sources to run: SELECT "Alert Name","Model","Severity","Trigger Condition","Threshold","Alert Message Template","Routed To","Notification Channel","Cadence","Auto-Clear","Status","Source Database","Source Field" FROM "${DS}" WHERE "Status" = 'Active' ORDER BY "Severity" ASC, "Model" ASC LIMIT 20. Return ONLY the JSON array.`}],mcp_servers:[{type:'url',url:'https://mcp.notion.com/mcp',name:'notion-mcp'}]})});const data=await res.json();let txt='';if(data.content){for(const b of data.content){if(b.type==='text')txt+=b.text;else if(b.type==='mcp_tool_result'&&Array.isArray(b.content)){for(const c of b.content){if(c.text)txt+=c.text;}}}}const m=txt.match(/\[[\s\S]*\]/);if(m){const recs=JSON.parse(m[0]);if(recs&&recs.length)return recs;}}catch(e){}return null;
+}
+
+// ── Master predictive init ─────────────────────────
+function buildAllPredictive(scorecardRecs, ccpRecs, alertSpecRules){
+  buildPredStatusRow(scorecardRecs);
+  buildCcpGauge(ccpRecs);
+  buildPredRoutingTiers(ccpRecs);
+  buildTrajGrid(scorecardRecs);
+  buildAlertFeedPred(scorecardRecs, ccpRecs, alertSpecRules);
+  buildCpaForecast(scorecardRecs);
+  buildObpTable();
+  buildCcpAccChart(ccpRecs);
+  buildReadinessChart();
+}
+
+// ── Wire into tab switch ───────────────────────────
+// Lazy-load predictive data the first time the tab is opened
+let predLoaded=false;
+const _origSwitchTab=window.switchTab;
+window.switchTab=function(tab,btn){
+  if(typeof _origSwitchTab==='function')_origSwitchTab(tab,btn);
+  if(tab==='predictive'&&!predLoaded){
+    predLoaded=true;
+    buildAllPredictive(window._lastScorecardRecs||null, null, null);
+    Promise.all([loadCcpDataPred(), loadAlertSpecPred()]).then(([ccpRecs,alertRules])=>{
+      buildCcpGauge(ccpRecs);
+      buildPredRoutingTiers(ccpRecs);
+      buildCcpAccChart(ccpRecs);
+      buildAlertFeedPred(window._lastScorecardRecs||null, ccpRecs, alertRules);
+    });
+  }
+};
+
 </script>
-<!-- EXEC SNAPSHOT OVERLAY -->
 <div id="execSnapshot">
   <button class="exec-print" onclick="window.print()">&#8682; Print / Save PDF</button>
   <button class="exec-close" onclick="closeExecSnapshot()">✕ Close</button>
