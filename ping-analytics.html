@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ping Analytics — Media Match | Centerfield</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:          #09090f;
+      --surface:     #111118;
+      --surface-2:   #18181f;
+      --border:      #252530;
+      --border-2:    #2e2e3c;
+      --text:        #e8e8f0;
+      --text-muted:  #7878a0;
+      --text-dim:    #4a4a6a;
+      --accent:      #00d4aa;
+      --accent-2:    #7b6fff;
+      --amber:       #f5a623;
+      --red:         #ff5a5a;
+      --green:       #00d4aa;
+      --blue:        #4fa3e0;
+      --t1:          #00d4aa;
+      --t2:          #4fa3e0;
+      --t3:          #f5a623;
+      --t4:          #ff8c42;
+      --t5:          #ff5a5a;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 14px; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* ─── NAV ─────────────────────────────────── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(9,9,15,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 0;
+      padding: 0 24px;
+      height: 52px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    nav::-webkit-scrollbar { display: none; }
+    .nav-brand {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800; font-size: 13px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--accent);
+      margin-right: 24px; white-space: nowrap; flex-shrink: 0;
+    }
+    .nav-links { display: flex; gap: 2px; flex-shrink: 0; }
+    .nav-links a {
+      font-family: 'Syne', sans-serif; font-size: 11.5px; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none;
+      padding: 6px 12px; border-radius: 4px;
+      transition: all 0.15s; white-space: nowrap;
+    }
+    .nav-links a:hover { color: var(--text); background: var(--surface-2); }
+    .nav-links a.active { color: var(--accent); background: rgba(0,212,170,0.08); }
+    .nav-badge {
+      font-family: 'DM Mono', monospace; font-size: 10px;
+      background: rgba(0,212,170,0.12); color: var(--accent);
+      border: 1px solid rgba(0,212,170,0.25); border-radius: 3px;
+      padding: 1px 6px; margin-left: 4px;
+    }
+
+    /* ─── LAYOUT ──────────────────────────────── */
+    .page { max-width: 1440px; margin: 0 auto; padding: 28px 28px 60px; }
+
+    /* ─── HEADER ──────────────────────────────── */
+    .page-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 28px; gap: 20px; flex-wrap: wrap;
+    }
+    .page-header-left h1 {
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px;
+      letter-spacing: -0.01em; color: var(--text);
+      white-space: nowrap;
+    }
+    .page-header-left p {
+      font-size: 12.5px; color: var(--text-muted); margin-top: 4px;
+    }
+    .period-badge {
+      font-family: 'DM Mono', monospace; font-size: 11px;
+      background: var(--surface-2); border: 1px solid var(--border-2);
+      color: var(--text-muted); border-radius: 4px;
+      padding: 4px 10px; margin-top: 8px; display: inline-block;
+    }
+    .header-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .btn {
+      font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 7px 16px; border-radius: 4px; cursor: pointer;
+      border: 1px solid var(--border-2); background: var(--surface-2);
+      color: var(--text-muted); transition: all 0.15s;
+    }
+    .btn:hover { border-color: var(--accent); color: var(--accent); }
+    .btn.primary { background: var(--accent); border-color: var(--accent); color: #000; font-weight: 700; }
+    .btn.primary:hover { background: #00f0c2; }
+
+    /* ─── KPI STRIP ───────────────────────────── */
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(180px, 1fr));
+      gap: 12px; margin-bottom: 24px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .kpi-strip::-webkit-scrollbar { display: none; }
+    .kpi-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 18px 20px;
+      position: relative; overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .kpi-card::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      right: 0; height: 2px;
+    }
+    .kpi-card.green::before { background: var(--green); }
+    .kpi-card.blue::before  { background: var(--blue); }
+    .kpi-card.amber::before { background: var(--amber); }
+    .kpi-card.purple::before { background: var(--accent-2); }
+    .kpi-card.red::before   { background: var(--red); }
+    .kpi-label {
+      font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 10px;
+      white-space: nowrap;
+    }
+    .kpi-value {
+      font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800;
+      letter-spacing: -0.02em; color: var(--text);
+      white-space: nowrap; line-height: 1.1;
+    }
+    .kpi-sub {
+      font-family: 'DM Mono', monospace; font-size: 10.5px;
+      color: var(--text-dim); margin-top: 5px;
+      line-height: 1.4; white-space: nowrap;
+    }
+    .kpi-delta {
+      font-family: 'DM Mono', monospace; font-size: 10px;
+      display: inline-block;
+      margin-top: 6px; padding: 2px 7px; border-radius: 3px;
+      white-space: nowrap;
+    }
+    .kpi-delta.up { background: rgba(0,212,170,0.1); color: var(--green); }
+    .kpi-delta.warn { background: rgba(245,166,35,0.1); color: var(--amber); }
+    .kpi-delta.down { background: rgba(255,90,90,0.1); color: var(--red); }
+
+    /* ─── SECTION TITLES ─────────────────────── */
+    .section-title {
+      font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 14px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-title::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* ─── TWO COLUMN ──────────────────────────── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+    @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+
+    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+    @media (max-width: 1100px) { .three-col { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 700px) { .three-col { grid-template-columns: 1fr; } }
+
+    /* ─── CARD ────────────────────────────────── */
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 20px;
+    }
+    .card-title {
+      font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 16px;
+    }
+
+    /* ─── TIER DISTRIBUTION ───────────────────── */
+    .tier-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; }
+    .tier-block {
+      border-radius: 6px; padding: 14px 12px; text-align: center;
+      border: 1px solid var(--border);
+    }
+    .tier-block.t1 { background: rgba(0,212,170,0.06); border-color: rgba(0,212,170,0.2); }
+    .tier-block.t2 { background: rgba(79,163,224,0.06); border-color: rgba(79,163,224,0.2); }
+    .tier-block.t3 { background: rgba(245,166,35,0.06); border-color: rgba(245,166,35,0.2); }
+    .tier-block.t4 { background: rgba(255,140,66,0.06); border-color: rgba(255,140,66,0.2); }
+    .tier-block.t5 { background: rgba(255,90,90,0.06); border-color: rgba(255,90,90,0.2); }
+    .tier-num {
+      font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800;
+      line-height: 1;
+    }
+    .tier-block.t1 .tier-num { color: var(--t1); }
+    .tier-block.t2 .tier-num { color: var(--t2); }
+    .tier-block.t3 .tier-num { color: var(--t3); }
+    .tier-block.t4 .tier-num { color: var(--t4); }
+    .tier-block.t5 .tier-num { color: var(--t5); }
+    .tier-label {
+      font-family: 'Syne', sans-serif; font-size: 9px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .tier-desc { font-size: 10.5px; color: var(--text-dim); margin-top: 3px; }
+
+    /* ─── OPPORTUNITY CARDS ────────────────────── */
+    .opp-card {
+      background: var(--surface-2); border: 1px solid var(--border-2);
+      border-radius: 8px; padding: 16px 18px; position: relative;
+    }
+    .opp-card::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px; border-radius: 8px 0 0 8px;
+    }
+    .opp-card.green::before { background: var(--green); }
+    .opp-card.amber::before { background: var(--amber); }
+    .opp-card.blue::before  { background: var(--blue); }
+    .opp-card.red::before   { background: var(--red); }
+    .opp-source {
+      font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500;
+      color: var(--text-muted); margin-bottom: 6px; display: flex;
+      align-items: center; gap: 8px;
+    }
+    .opp-title {
+      font-family: 'Syne', sans-serif; font-size: 13.5px; font-weight: 700;
+      color: var(--text); margin-bottom: 6px;
+    }
+    .opp-body { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+    .opp-metrics {
+      display: flex; gap: 16px; margin-top: 10px; flex-wrap: wrap;
+    }
+    .opp-metric {
+      font-family: 'DM Mono', monospace;
+    }
+    .opp-metric .om-label { font-size: 9.5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; }
+    .opp-metric .om-value { font-size: 13px; color: var(--text); font-weight: 500; }
+
+    /* ─── SCATTER PLOT ────────────────────────── */
+    .chart-wrap { position: relative; }
+    canvas { display: block; width: 100%; }
+
+    /* ─── MAIN TABLE ──────────────────────────── */
+    .table-controls {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap;
+    }
+    .filter-tabs { display: flex; gap: 4px; }
+    .filter-tab {
+      font-family: 'Syne', sans-serif; font-size: 10.5px; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 5px 12px; border-radius: 4px; cursor: pointer;
+      border: 1px solid var(--border); background: transparent;
+      color: var(--text-muted); transition: all 0.15s;
+    }
+    .filter-tab.active { border-color: var(--accent); color: var(--accent); background: rgba(0,212,170,0.08); }
+    .filter-tab:hover:not(.active) { border-color: var(--border-2); color: var(--text); }
+    .search-box {
+      flex: 1; min-width: 160px; max-width: 280px;
+      background: var(--surface-2); border: 1px solid var(--border-2);
+      border-radius: 4px; padding: 6px 12px;
+      font-family: 'Inter', sans-serif; font-size: 12px;
+      color: var(--text); outline: none;
+    }
+    .search-box::placeholder { color: var(--text-dim); }
+    .search-box:focus { border-color: var(--accent); }
+    .source-count {
+      font-family: 'DM Mono', monospace; font-size: 11px;
+      color: var(--text-muted); margin-left: auto;
+    }
+
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table th {
+      font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-dim); text-align: left; padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap; cursor: pointer; user-select: none;
+    }
+    .data-table th:hover { color: var(--text-muted); }
+    .data-table th.sorted { color: var(--accent); }
+    .data-table th .sort-indicator { margin-left: 4px; opacity: 0.6; }
+    .data-table td {
+      padding: 9px 12px; border-bottom: 1px solid rgba(37,37,48,0.6);
+      font-size: 12.5px; white-space: nowrap;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tbody tr {
+      transition: background 0.1s;
+    }
+    .data-table tbody tr:hover { background: rgba(255,255,255,0.025); }
+
+    .source-name-cell { max-width: 220px; }
+    .source-code {
+      font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500;
+      color: var(--accent); background: rgba(0,212,170,0.08);
+      border-radius: 3px; padding: 2px 6px; margin-right: 6px;
+      display: inline-block;
+    }
+    .source-full { font-size: 11px; color: var(--text-muted); 
+      overflow: hidden; text-overflow: ellipsis; max-width: 200px; display: block; }
+    
+    .pct-bar-wrap { display: flex; align-items: center; gap: 8px; min-width: 90px; }
+    .pct-bar-bg { flex: 1; height: 4px; background: var(--border); border-radius: 2px; min-width: 50px; }
+    .pct-bar-fill { height: 4px; border-radius: 2px; transition: width 0.3s; }
+    .pct-value { font-family: 'DM Mono', monospace; font-size: 11.5px; min-width: 38px; text-align: right; }
+
+    .money { font-family: 'DM Mono', monospace; font-size: 12px; }
+    .positive { color: var(--green); }
+    .negative { color: var(--red); }
+    .neutral { color: var(--text); }
+
+    .tier-pill {
+      font-family: 'Syne', sans-serif; font-size: 9.5px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      border-radius: 3px; padding: 2px 8px; display: inline-block;
+    }
+    .tier-pill.t1 { background: rgba(0,212,170,0.12); color: var(--t1); }
+    .tier-pill.t2 { background: rgba(79,163,224,0.12); color: var(--t2); }
+    .tier-pill.t3 { background: rgba(245,166,35,0.12); color: var(--t3); }
+    .tier-pill.t4 { background: rgba(255,140,66,0.12); color: var(--t4); }
+    .tier-pill.t5 { background: rgba(255,90,90,0.12); color: var(--t5); }
+
+    .action-badge {
+      font-family: 'Syne', sans-serif; font-size: 9.5px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      border-radius: 3px; padding: 2px 8px; display: inline-block;
+      border: 1px solid;
+    }
+    .action-badge.scale   { color: var(--t1); border-color: rgba(0,212,170,0.3); background: rgba(0,212,170,0.06); }
+    .action-badge.maintain{ color: var(--t2); border-color: rgba(79,163,224,0.3); background: rgba(79,163,224,0.06); }
+    .action-badge.monitor { color: var(--t3); border-color: rgba(245,166,35,0.3); background: rgba(245,166,35,0.06); }
+    .action-badge.review  { color: var(--t4); border-color: rgba(255,140,66,0.3); background: rgba(255,140,66,0.06); }
+    .action-badge.pause   { color: var(--t5); border-color: rgba(255,90,90,0.3); background: rgba(255,90,90,0.06); }
+
+    .flag-icon { font-size: 13px; }
+
+    /* ─── INSIGHT PANELS ──────────────────────── */
+    .insight-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-top: 16px; }
+    .insight-item {
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 14px 16px;
+      display: flex; gap: 12px; align-items: flex-start;
+    }
+    .insight-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .insight-body h4 {
+      font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+      color: var(--text); margin-bottom: 4px;
+    }
+    .insight-body p { font-size: 11.5px; color: var(--text-muted); line-height: 1.55; }
+
+    /* ─── MINI BAR CHART ──────────────────────── */
+    .mini-bar-chart { display: flex; gap: 4px; align-items: flex-end; height: 60px; }
+    .mini-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .mini-bar { width: 100%; border-radius: 2px 2px 0 0; min-height: 2px; }
+    .mini-bar-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--text-dim); text-align: center; }
+
+    /* ─── FOOTER ──────────────────────────────── */
+    .page-footer {
+      margin-top: 40px; padding-top: 20px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+    }
+    .footer-brand {
+      font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim);
+    }
+    .footer-meta { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-dim); }
+
+    /* ─── TOOLTIP ─────────────────────────────── */
+    #tooltip {
+      position: fixed; z-index: 999;
+      background: var(--surface-2); border: 1px solid var(--border-2);
+      border-radius: 6px; padding: 10px 14px;
+      font-size: 11.5px; color: var(--text);
+      pointer-events: none; opacity: 0;
+      transition: opacity 0.15s;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      max-width: 240px; line-height: 1.6;
+    }
+    #tooltip.show { opacity: 1; }
+    #tooltip strong { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--accent); display: block; margin-bottom: 4px; }
+
+    /* ─── RESPONSIVE ──────────────────────────── */
+    @media (max-width: 600px) {
+      .tier-grid { grid-template-columns: repeat(3,1fr); }
+      .kpi-strip { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAV ──────────────────────────────────────── -->
+<nav>
+  <div class="nav-brand">Media Match</div>
+  <div class="nav-links">
+    <a href="https://media-match-dashboard.vercel.app/#overview">Overview</a>
+    <a href="https://media-match-dashboard.vercel.app/#right-pricing">Right Pricing</a>
+    <a href="https://media-match-dashboard.vercel.app/#sub-id">Sub ID Intel</a>
+    <a href="https://media-match-dashboard.vercel.app/#dispositions">Dispositions</a>
+    <a href="https://media-match-dashboard.vercel.app/#joanie">Joanie Reporting</a>
+    <a href="https://media-match-dashboard.vercel.app/#scorecards">Publisher Scorecards</a>
+    <a href="https://media-match-dashboard.vercel.app/#qm-mp">QM &amp; MP</a>
+    <a href="https://media-match-dashboard.vercel.app/#ai-activity">AI Activity</a>
+    <a href="/ping-analytics" class="active">Ping Analytics <span class="nav-badge">NEW</span></a>
+  </div>
+</nav>
+
+<div id="tooltip"></div>
+
+<div class="page">
+
+  <!-- ─── PAGE HEADER ─────────────────────────────── -->
+  <div class="page-header">
+    <div class="page-header-left">
+      <h1>Ping Analytics &amp; Bid Optimization</h1>
+      <p>QM Source-Level Bid Performance Intelligence — Media Match Health &amp; Medicare</p>
+      <span class="period-badge">April 2026 MTD · 25 Active Sources · QM Priority View</span>
+    </div>
+    <div class="header-actions">
+      <button class="btn" onclick="exportCSV()">Export CSV</button>
+      <button class="btn primary">→ RP Agent Handoff</button>
+    </div>
+  </div>
+
+  <!-- ─── KPI STRIP ────────────────────────────────── -->
+  <div class="kpi-strip" id="kpiStrip">
+    <div class="kpi-card green">
+      <div class="kpi-label">Total Pings</div>
+      <div class="kpi-value">1.96M</div>
+      <div class="kpi-sub">Raw inbound · 25 sources</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">Portfolio Bid Rate</div>
+      <div class="kpi-value">13.9%</div>
+      <div class="kpi-sub">272K bids / 1.96M pings</div>
+      <div class="kpi-delta warn">⚠ 86.1% never bid</div>
+    </div>
+    <div class="kpi-card amber">
+      <div class="kpi-label">Portfolio Win Rate</div>
+      <div class="kpi-value">18.7%</div>
+      <div class="kpi-sub">50.9K wins / 272K bids</div>
+      <div class="kpi-delta warn">↑ Range: 2.3%–96.9%</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Eff. Win Rate</div>
+      <div class="kpi-value">2.60%</div>
+      <div class="kpi-sub">Wins ÷ raw pings</div>
+      <div class="kpi-delta warn">⚠ Primary lever</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Total Revenue</div>
+      <div class="kpi-value">$3.37M</div>
+      <div class="kpi-sub">April MTD · all sources</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">Total GP</div>
+      <div class="kpi-value">$2.26M</div>
+      <div class="kpi-sub">67.2% gross margin</div>
+      <div class="kpi-delta up">↑ 1 source GP-negative</div>
+    </div>
+  </div>
+
+  <!-- ─── TIER OVERVIEW ────────────────────────────── -->
+  <div class="section-title">Source Tier Distribution — MPQS-Aligned</div>
+  <div class="card" style="margin-bottom:24px">
+    <div class="tier-grid">
+      <div class="tier-block t1">
+        <div class="tier-num" id="t1Count">0</div>
+        <div class="tier-label">Tier 1 — Scale</div>
+        <div class="tier-desc">High bid + win, above avg RpP</div>
+      </div>
+      <div class="tier-block t2">
+        <div class="tier-num" id="t2Count">0</div>
+        <div class="tier-label">Tier 2 — Maintain</div>
+        <div class="tier-desc">Solid bid/win, CPA within target</div>
+      </div>
+      <div class="tier-block t3">
+        <div class="tier-num" id="t3Count">0</div>
+        <div class="tier-label">Tier 3 — Monitor</div>
+        <div class="tier-desc">Low bid rate, review needed</div>
+      </div>
+      <div class="tier-block t4">
+        <div class="tier-num" id="t4Count">0</div>
+        <div class="tier-label">Tier 4 — Throttle</div>
+        <div class="tier-desc">High volume, low value</div>
+      </div>
+      <div class="tier-block t5">
+        <div class="tier-num" id="t5Count">0</div>
+        <div class="tier-label">Tier 5 — Pullback</div>
+        <div class="tier-desc">No wins or GP-negative</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SCATTER + OPPORTUNITIES ─────────────────── -->
+  <div class="two-col" style="margin-bottom:24px">
+    <!-- Bid Rate vs Win Rate Scatter -->
+    <div class="card">
+      <div class="card-title">Bid Rate vs. Win Rate — Source Scatter</div>
+      <canvas id="scatterChart" height="240"></canvas>
+      <div style="margin-top:12px; display:flex; gap:16px; flex-wrap:wrap;">
+        <span style="font-size:10.5px; color:var(--text-muted)">
+          <span style="color:var(--t1)">●</span> Tier 1 &nbsp;
+          <span style="color:var(--t2)">●</span> Tier 2 &nbsp;
+          <span style="color:var(--t3)">●</span> Tier 3 &nbsp;
+          <span style="color:var(--t4)">●</span> Tier 4 &nbsp;
+          <span style="color:var(--t5)">●</span> Tier 5
+        </span>
+        <span style="font-size:10.5px; color:var(--text-dim)">Bubble size = Revenue</span>
+      </div>
+    </div>
+
+    <!-- Revenue Distribution by Source (Top 10) -->
+    <div class="card">
+      <div class="card-title">Revenue &amp; GP by Source — Top 10</div>
+      <canvas id="revenueChart" height="240"></canvas>
+    </div>
+  </div>
+
+  <!-- ─── TOP OPPORTUNITIES ────────────────────────── -->
+  <div class="section-title">Bid &amp; Win Rate Improvement Opportunities</div>
+  <div id="opportunitiesGrid" style="display:grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); gap:12px; margin-bottom:24px;"></div>
+
+  <!-- ─── MAIN TABLE ────────────────────────────────── -->
+  <div class="section-title">Source Performance Detail — All Sources</div>
+  <div class="card" style="padding:0; overflow:hidden;">
+    <div style="padding:16px 20px 12px; border-bottom:1px solid var(--border);">
+      <div class="table-controls">
+        <div class="filter-tabs">
+          <button class="filter-tab active" data-tier="all">All</button>
+          <button class="filter-tab" data-tier="1">T1</button>
+          <button class="filter-tab" data-tier="2">T2</button>
+          <button class="filter-tab" data-tier="3">T3</button>
+          <button class="filter-tab" data-tier="4">T4</button>
+          <button class="filter-tab" data-tier="5">T5</button>
+        </div>
+        <input class="search-box" id="searchBox" type="text" placeholder="Search source…" />
+        <span class="source-count" id="sourceCount">25 sources</span>
+      </div>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="data-table" id="mainTable">
+        <thead>
+          <tr>
+            <th data-col="source">Source</th>
+            <th data-col="pings">Pings</th>
+            <th data-col="bid_rate">Bid Rate</th>
+            <th data-col="bids">Bids</th>
+            <th data-col="win_rate">Win Rate</th>
+            <th data-col="wins">Wins</th>
+            <th data-col="eff_win_rate">Eff. Win%</th>
+            <th data-col="avg_bid">Avg Bid</th>
+            <th data-col="revenue">Revenue</th>
+            <th data-col="gp">GP</th>
+            <th data-col="media_margin">Margin</th>
+            <th data-col="reject_errors">Rejects</th>
+            <th data-col="tier">Tier</th>
+            <th data-col="action">Action</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ─── ANALYSIS INSIGHTS ────────────────────────── -->
+  <div class="section-title" style="margin-top:28px">Analysis Insights &amp; RP Agent Signal</div>
+  <div class="insight-grid" id="insightGrid"></div>
+
+  <!-- ─── FOOTER ───────────────────────────────────── -->
+  <div class="page-footer">
+    <div class="footer-brand">Centerfield Media · Health &amp; Medicare · Media Match</div>
+    <div class="footer-meta">Ping Analytics v1.0 · April 2026 MTD · CONFIDENTIAL INTERNAL USE ONLY</div>
+  </div>
+
+</div><!-- end .page -->
+
+<script>
+// ─── DATA ─────────────────────────────────────────────
+const SOURCES = [
+  {sc_id:"120897",name:"SKYLB Medicare Inbound Network API Calls",source_code:"SKYLB",pings:95397,bids:45409,bid_rate:47.6,wins:11649,win_rate:25.7,eff_win_rate:12.21,posts:10772,post_rate:92.5,revenue:602700,gp:341274,media_cost:261426,avg_bid:25.95,max_bid:35,media_margin:56.6,billable:10045,xfers:10137,reject_errors:877,bids_zero:49988,rpp:6.32,rev_per_win:51.74,tier:2},
+  {sc_id:"118125",name:"RATEQ Medsupinbound Availability Ping 1",source_code:"RATEQ",pings:389552,bids:45812,bid_rate:11.8,wins:1961,win_rate:4.3,eff_win_rate:0.50,posts:1961,post_rate:100,revenue:442520,gp:422708,media_cost:19812,avg_bid:21.14,max_bid:22,media_margin:95.5,billable:1702,xfers:1714,reject_errors:0,bids_zero:343740,rpp:1.14,rev_per_win:225.66,tier:3},
+  {sc_id:"118273",name:"ENGCX Medicare Supplement API Ping Call 1",source_code:"ENGCX",pings:119401,bids:15861,bid_rate:13.3,wins:7313,win_rate:46.1,eff_win_rate:6.12,posts:7308,post_rate:99.9,revenue:417720,gp:178846,media_cost:238874,avg_bid:39.68,max_bid:40,media_margin:42.8,billable:6962,xfers:6974,reject_errors:5,bids_zero:103540,rpp:3.50,rev_per_win:57.12,tier:2},
+  {sc_id:"120610",name:"SCALA Medicare Supplement Network API Ping Calls (QM) 2",source_code:"SCALA",pings:68461,bids:4650,bid_rate:6.8,wins:1736,win_rate:37.3,eff_win_rate:2.54,posts:1717,post_rate:98.9,revenue:393380,gp:366140,media_cost:27240,avg_bid:29.42,max_bid:30,media_margin:93.1,billable:1513,xfers:1519,reject_errors:19,bids_zero:63811,rpp:5.75,rev_per_win:226.60,tier:3},
+  {sc_id:"117496",name:"UABIN Medicare Supplement Social API Ping Calls 1",source_code:"UABIN",pings:250239,bids:32079,bid_rate:12.8,wins:4681,win_rate:14.6,eff_win_rate:1.87,posts:4484,post_rate:95.8,revenue:243180,gp:176814,media_cost:66366,avg_bid:18,max_bid:18,media_margin:72.7,billable:4053,xfers:4089,reject_errors:197,bids_zero:218160,rpp:0.97,rev_per_win:51.95,tier:3},
+  {sc_id:"119373",name:"PARGN Medicare Supplement Network API Ping Calls QM",source_code:"PARGN",pings:49336,bids:7145,bid_rate:14.5,wins:4348,win_rate:60.9,eff_win_rate:8.81,posts:4345,post_rate:99.9,revenue:235260,gp:155997,media_cost:79263,avg_bid:23.70,max_bid:30,media_margin:66.3,billable:3921,xfers:3972,reject_errors:3,bids_zero:42191,rpp:4.77,rev_per_win:54.11,tier:2},
+  {sc_id:"120429",name:"QUOTV Medicare Supplement Network API Ping Calls QM 3",source_code:"QUOTV",pings:46428,bids:7449,bid_rate:16.0,wins:3696,win_rate:49.6,eff_win_rate:7.96,posts:3678,post_rate:99.5,revenue:193800,gp:99685,media_cost:94115,avg_bid:35,max_bid:35,media_margin:51.4,billable:3230,xfers:3266,reject_errors:18,bids_zero:38979,rpp:4.17,rev_per_win:52.44,tier:2},
+  {sc_id:"117500",name:"ADLNT Medicare Supplement Social API Ping Calls 1",source_code:"ADLNT",pings:243299,bids:30226,bid_rate:12.4,wins:3698,win_rate:12.2,eff_win_rate:1.52,posts:3451,post_rate:93.3,revenue:185160,gp:133950,media_cost:51210,avg_bid:18,max_bid:18,media_margin:72.3,billable:3086,xfers:3114,reject_errors:247,bids_zero:213073,rpp:0.76,rev_per_win:50.07,tier:3},
+  {sc_id:"117259",name:"DIGIP Medicare Supplement API Ping Calls 1",source_code:"DIGIP",pings:49362,bids:6816,bid_rate:13.8,wins:3211,win_rate:47.1,eff_win_rate:6.50,posts:3205,post_rate:99.8,revenue:165960,gp:104008,media_cost:61952,avg_bid:27.47,max_bid:28,media_margin:62.7,billable:2766,xfers:2810,reject_errors:6,bids_zero:42546,rpp:3.36,rev_per_win:51.69,tier:2},
+  {sc_id:"120793",name:"HLGSL Medicare Supplement Social API Ping Calls (QM) 2",source_code:"HLGSL",pings:3485,bids:465,bid_rate:13.3,wins:420,win_rate:90.3,eff_win_rate:12.05,posts:418,post_rate:99.5,revenue:119080,gp:112026,media_cost:7054,avg_bid:28.5,max_bid:35,media_margin:94.1,billable:458,xfers:459,reject_errors:2,bids_zero:3020,rpp:34.17,rev_per_win:283.52,tier:2},
+  {sc_id:"120908",name:"INSCO Medicare Supplement API Ping Calls 5",source_code:"INSCO",pings:55988,bids:9015,bid_rate:16.1,wins:2191,win_rate:24.3,eff_win_rate:3.91,posts:2148,post_rate:98.0,revenue:98580,gp:32935,media_cost:65644,avg_bid:43.99,max_bid:45,media_margin:33.4,billable:1643,xfers:1653,reject_errors:43,bids_zero:46973,rpp:1.76,rev_per_win:45.00,tier:3},
+  {sc_id:"120208",name:"WISDO Medicare Supplement API Ping Calls QM 3",source_code:"WISDO",pings:516542,bids:51398,bid_rate:10.0,wins:1418,win_rate:2.8,eff_win_rate:0.27,posts:1054,post_rate:74.3,revenue:56280,gp:35905,media_cost:20375,avg_bid:25,max_bid:25,media_margin:63.8,billable:938,xfers:949,reject_errors:364,bids_zero:465144,rpp:0.11,rev_per_win:39.69,tier:4},
+  {sc_id:"121563",name:"COBRA Medicare Insurance Ping Post Calls 1 (QM)",source_code:"COBRA",pings:13185,bids:2134,bid_rate:16.2,wins:992,win_rate:46.5,eff_win_rate:7.52,posts:989,post_rate:99.7,revenue:52325,gp:21461,media_cost:30864,avg_bid:26.22,max_bid:35,media_margin:41.0,billable:880,xfers:895,reject_errors:3,bids_zero:11051,rpp:3.97,rev_per_win:52.75,tier:2},
+  {sc_id:"117920",name:"R2MED Medicare Supplement DRTV API Ping Calls 2",source_code:"R2MED",pings:3222,bids:1745,bid_rate:54.2,wins:1691,win_rate:96.9,eff_win_rate:52.48,posts:704,post_rate:41.6,revenue:38880,gp:9311,media_cost:29569,avg_bid:64.67,max_bid:115,media_margin:23.9,billable:648,xfers:659,reject_errors:987,bids_zero:1477,rpp:12.07,rev_per_win:23.00,tier:3},
+  {sc_id:"121337",name:"RATEQ Medicare Insurance Social Ping Post Calls $33/90 Seconds 6 QM",source_code:"RATEQ",pings:35299,bids:6615,bid_rate:18.7,wins:758,win_rate:11.5,eff_win_rate:2.15,posts:758,post_rate:100,revenue:37500,gp:19119,media_cost:18381,avg_bid:33,max_bid:33,media_margin:51.0,billable:625,xfers:628,reject_errors:0,bids_zero:28684,rpp:1.06,rev_per_win:49.47,tier:3},
+  {sc_id:"120890",name:"PALOM - MedSup Network - Ping Post Calls (QM)",source_code:"PALOM",pings:6567,bids:1250,bid_rate:19.0,wins:578,win_rate:46.2,eff_win_rate:8.80,posts:577,post_rate:99.8,revenue:33540,gp:18945,media_cost:14595,avg_bid:35,max_bid:35,media_margin:56.5,billable:559,xfers:561,reject_errors:1,bids_zero:5317,rpp:5.11,rev_per_win:58.03,tier:2},
+  {sc_id:"120800",name:"VTLCW Medicare Supplement Network Social API Ping Calls (QM) 1",source_code:"VTLCW",pings:6771,bids:347,bid_rate:5.1,wins:104,win_rate:30.0,eff_win_rate:1.54,posts:104,post_rate:100,revenue:24960,gp:24085,media_cost:875,avg_bid:25,max_bid:25,media_margin:96.5,billable:96,xfers:96,reject_errors:0,bids_zero:6424,rpp:3.69,rev_per_win:240.00,tier:3},
+  {sc_id:"120599",name:"REVRS Medicare Supplement API Ping Calls (QM) 1",source_code:"REVRS",pings:1027,bids:841,bid_rate:81.9,wins:332,win_rate:39.5,eff_win_rate:32.33,posts:329,post_rate:99.1,revenue:18840,gp:10685,media_cost:8155,avg_bid:34.93,max_bid:35,media_margin:56.7,billable:314,xfers:315,reject_errors:3,bids_zero:186,rpp:18.34,rev_per_win:56.75,tier:2},
+  {sc_id:"121537",name:"HIWMG Medicare Insurance Ping Post Call (QM)",source_code:"HIWMG",pings:6243,bids:2604,bid_rate:41.7,wins:59,win_rate:2.3,eff_win_rate:0.95,posts:52,post_rate:88.1,revenue:2700,gp:1432,media_cost:1268,avg_bid:26.49,max_bid:35,media_margin:53.0,billable:45,xfers:46,reject_errors:7,bids_zero:3639,rpp:0.43,rev_per_win:51.92,tier:3},
+  {sc_id:"121583",name:"VPMOP Medicare Supplement Ping Post Calls 1 (QM)",source_code:"VPMOP",pings:923,bids:125,bid_rate:13.5,wins:60,win_rate:48.0,eff_win_rate:6.50,posts:59,post_rate:98.3,revenue:2760,gp:-3610,media_cost:6370,avg_bid:26.30,max_bid:35,media_margin:-130.8,billable:46,xfers:46,reject_errors:1,bids_zero:798,rpp:2.99,rev_per_win:46.00,tier:5},
+  {sc_id:"121528",name:"GOLDM Medicare Insurance Inbound Ping Calls (QM) 1",source_code:"GOLDM",pings:239,bids:92,bid_rate:38.5,wins:24,win_rate:26.1,eff_win_rate:10.04,posts:23,post_rate:95.8,revenue:1380,gp:680,media_cost:700,avg_bid:35,max_bid:35,media_margin:49.3,billable:23,xfers:23,reject_errors:1,bids_zero:147,rpp:5.77,rev_per_win:57.50,tier:2},
+  {sc_id:"120604",name:"HLTHC Medicare Supplement Network API Ping Calls (QM) 1",source_code:"HLTHC",pings:168,bids:36,bid_rate:21.4,wins:24,win_rate:66.7,eff_win_rate:14.29,posts:24,post_rate:100,revenue:1200,gp:525,media_cost:675,avg_bid:45,max_bid:45,media_margin:43.8,billable:20,xfers:20,reject_errors:0,bids_zero:132,rpp:7.14,rev_per_win:50.00,tier:2},
+  {sc_id:"117586",name:"CLKSV Medicare Supplement Social API Ping Calls 1",source_code:"CLKSV",pings:728,bids:0,bid_rate:0,wins:0,win_rate:0,eff_win_rate:0,posts:0,post_rate:0,revenue:0,gp:0,media_cost:0,avg_bid:0,max_bid:0,media_margin:0,billable:0,xfers:0,reject_errors:0,bids_zero:728,rpp:0,rev_per_win:0,tier:5},
+  {sc_id:"119008",name:"FLUCA Medicare Supplement API Ping Calls 1",source_code:"FLUCA",pings:347,bids:0,bid_rate:0,wins:0,win_rate:0,eff_win_rate:0,posts:0,post_rate:0,revenue:0,gp:0,media_cost:0,avg_bid:0,max_bid:0,media_margin:0,billable:0,xfers:0,reject_errors:0,bids_zero:347,rpp:0,rev_per_win:0,tier:5},
+  {sc_id:"119365",name:"MYHEA Medicare Supplement API Ping Calls 2",source_code:"MYHEA",pings:1,bids:0,bid_rate:0,wins:0,win_rate:0,eff_win_rate:0,posts:0,post_rate:0,revenue:0,gp:0,media_cost:0,avg_bid:0,max_bid:0,media_margin:0,billable:0,xfers:0,reject_errors:0,bids_zero:1,rpp:0,rev_per_win:0,tier:5}
+];
+
+const TIER_COLORS = {1:'#00d4aa',2:'#4fa3e0',3:'#f5a623',4:'#ff8c42',5:'#ff5a5a'};
+const ACTIONS = {1:'Scale',2:'Maintain',3:'Monitor',4:'Review',5:'Pause'};
+const ACTION_CLS = {1:'scale',2:'maintain',3:'monitor',4:'review',5:'pause'};
+
+// ─── TIER COUNTS ────────────────────────────────────────
+function populateTierCounts() {
+  const counts = {1:0,2:0,3:0,4:0,5:0};
+  SOURCES.forEach(s => counts[s.tier]++);
+  for(let t=1;t<=5;t++) document.getElementById(`t${t}Count`).textContent = counts[t];
+}
+
+// ─── SCATTER CHART ──────────────────────────────────────
+function drawScatter() {
+  const canvas = document.getElementById('scatterChart');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.parentElement.clientWidth - 40;
+  const H = 240;
+  canvas.width = W; canvas.height = H;
+
+  const pad = {l:40, r:20, t:10, b:35};
+  const maxRev = Math.max(...SOURCES.map(s=>s.revenue));
+  const tooltip = document.getElementById('tooltip');
+
+  function toX(v) { return pad.l + (v/100)*(W-pad.l-pad.r); }
+  function toY(v) { return H-pad.b - (v/100)*(H-pad.t-pad.b); }
+
+  // Draw grid
+  ctx.strokeStyle = '#252530'; ctx.lineWidth = 1;
+  for(let i=0;i<=10;i++) {
+    const x = toX(i*10);
+    ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,H-pad.b); ctx.stroke();
+    const y = toY(i*10);
+    ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
+  }
+
+  // Labels
+  ctx.font = '9px DM Mono,monospace'; ctx.fillStyle = '#4a4a6a'; ctx.textAlign = 'center';
+  for(let i=0;i<=5;i++) { ctx.fillText((i*20)+'%', toX(i*20), H-pad.b+14); }
+  ctx.textAlign = 'right';
+  for(let i=0;i<=5;i++) { ctx.fillText((i*20)+'%', pad.l-5, toY(i*20)+3); }
+  ctx.font = '9px Syne,sans-serif'; ctx.fillStyle = '#7878a0'; ctx.textAlign = 'center';
+  ctx.fillText('Bid Rate →', W/2, H-2);
+  ctx.save(); ctx.translate(10, H/2); ctx.rotate(-Math.PI/2);
+  ctx.fillText('Win Rate →', 0, 0); ctx.restore();
+
+  // Bubbles
+  SOURCES.forEach(s => {
+    const x = toX(Math.min(s.bid_rate,99));
+    const y = toY(Math.min(s.win_rate,99));
+    const r = Math.max(5, Math.min(22, Math.sqrt(s.revenue/maxRev)*38));
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI*2);
+    ctx.fillStyle = TIER_COLORS[s.tier] + '30';
+    ctx.fill();
+    ctx.strokeStyle = TIER_COLORS[s.tier];
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    // Label
+    if(r > 8) {
+      ctx.font = 'bold 8.5px DM Mono,monospace';
+      ctx.fillStyle = TIER_COLORS[s.tier];
+      ctx.textAlign = 'center';
+      ctx.fillText(s.source_code, x, y+3);
+    }
+  });
+
+  // Hover
+  canvas.onmousemove = (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX-rect.left, my = e.clientY-rect.top;
+    let hit = null;
+    SOURCES.forEach(s => {
+      const x = toX(Math.min(s.bid_rate,99));
+      const y = toY(Math.min(s.win_rate,99));
+      const r = Math.max(5,Math.min(22,Math.sqrt(s.revenue/maxRev)*38));
+      if(Math.sqrt((mx-x)**2+(my-y)**2) < r+3) hit = s;
+    });
+    if(hit) {
+      tooltip.innerHTML = `<strong>${hit.source_code}</strong>${hit.name}<br>Bid: ${hit.bid_rate}% &nbsp; Win: ${hit.win_rate}%<br>Eff Win: ${hit.eff_win_rate}%<br>Rev: $${hit.revenue.toLocaleString()} &nbsp; GP: $${hit.gp.toLocaleString()}<br>Avg Bid: $${hit.avg_bid}`;
+      tooltip.style.left = (e.clientX+14)+'px';
+      tooltip.style.top = (e.clientY-10)+'px';
+      tooltip.classList.add('show');
+    } else {
+      tooltip.classList.remove('show');
+    }
+  };
+  canvas.onmouseleave = () => tooltip.classList.remove('show');
+}
+
+// ─── REVENUE CHART ─────────────────────────────────────
+function drawRevenueChart() {
+  const canvas = document.getElementById('revenueChart');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.parentElement.clientWidth - 40;
+  const H = 240;
+  canvas.width = W; canvas.height = H;
+
+  const top10 = SOURCES.slice(0,10);
+  const pad = {l:60, r:12, t:10, b:30};
+  const barH = (H-pad.t-pad.b)/top10.length - 4;
+  const maxRev = top10[0].revenue;
+
+  top10.forEach((s,i) => {
+    const y = pad.t + i*(barH+4);
+    // Revenue bar
+    const rw = ((W-pad.l-pad.r) * s.revenue/maxRev);
+    ctx.fillStyle = TIER_COLORS[s.tier]+'28';
+    ctx.fillRect(pad.l, y, rw, barH);
+    ctx.fillStyle = TIER_COLORS[s.tier];
+    ctx.fillRect(pad.l, y, rw, 2);
+
+    // GP bar
+    const gpW = s.gp > 0 ? ((W-pad.l-pad.r)*s.gp/maxRev) : 0;
+    ctx.fillStyle = TIER_COLORS[s.tier]+'60';
+    ctx.fillRect(pad.l, y+barH*0.5, gpW, barH*0.45);
+
+    // Label
+    ctx.font = 'bold 9px DM Mono,monospace';
+    ctx.fillStyle = TIER_COLORS[s.tier];
+    ctx.textAlign = 'right';
+    ctx.fillText(s.source_code, pad.l-5, y+barH*0.65);
+
+    // Revenue value
+    ctx.font = '8.5px DM Mono,monospace';
+    ctx.fillStyle = '#7878a0';
+    ctx.textAlign = 'left';
+    ctx.fillText('$'+Math.round(s.revenue/1000)+'K', pad.l+rw+4, y+barH*0.55);
+  });
+
+  // Legend
+  ctx.font = '9px Inter,sans-serif'; ctx.fillStyle = '#4a4a6a';
+  ctx.textAlign = 'left';
+  ctx.fillText('▬ Revenue  ▪ GP', pad.l, H-5);
+}
+
+// ─── OPPORTUNITIES ─────────────────────────────────────
+function buildOpportunities() {
+  const opps = [];
+
+  // Low bid rate, high win rate = raise bid / increase participation
+  SOURCES.forEach(s => {
+    if(s.bid_rate < 15 && s.win_rate > 35 && s.pings > 1000) {
+      const potentialWins = Math.round(s.pings * 0.25 * (s.win_rate/100));
+      opps.push({
+        color:'green', icon:'⬆',
+        source: s.source_code, tier: s.tier,
+        title: `${s.source_code} — Increase Bid Rate (${s.bid_rate}%)`,
+        body: `Win rate is strong at ${s.win_rate}% but we're only bidding on ${s.bid_rate}% of ${s.pings.toLocaleString()} pings. Raising participation to 25%+ could unlock ~${potentialWins.toLocaleString()} additional wins.`,
+        metrics: [{l:'Current Bid Rate',v:`${s.bid_rate}%`},{l:'Win Rate',v:`${s.win_rate}%`},{l:'Pings Missed',v:s.bids_zero.toLocaleString()},{l:'Potential Rev',v:'$'+(potentialWins*s.rev_per_win/1000).toFixed(0)+'K'}]
+      });
+    }
+  });
+
+  // High bid rate, very low win rate = price review or geo issue
+  SOURCES.forEach(s => {
+    if(s.bid_rate > 30 && s.win_rate < 5 && s.pings > 500 && s.gp >= 0) {
+      opps.push({
+        color:'amber', icon:'⚠',
+        source: s.source_code, tier: s.tier,
+        title: `${s.source_code} — Win Rate Alert (${s.win_rate}%)`,
+        body: `Bidding aggressively at ${s.bid_rate}% bid rate but only winning ${s.win_rate}% — likely underpriced vs. competitors or geo/AA mismatch. Review fixed bid or filter geo.`,
+        metrics: [{l:'Bid Rate',v:`${s.bid_rate}%`},{l:'Win Rate',v:`${s.win_rate}%`},{l:'Avg Bid',v:'$'+s.avg_bid},{l:'Bids Placed',v:s.bids.toLocaleString()}]
+      });
+    }
+  });
+
+  // GP negative
+  SOURCES.forEach(s => {
+    if(s.gp < 0) {
+      opps.push({
+        color:'red', icon:'🛑',
+        source: s.source_code, tier: 5,
+        title: `${s.source_code} — GP Negative, Pause Bidding`,
+        body: `Generating $${Math.abs(s.gp).toLocaleString()} in negative GP this period. Media cost ($${s.media_cost.toLocaleString()}) exceeds revenue ($${s.revenue.toLocaleString()}). Pause until pricing is renegotiated.`,
+        metrics: [{l:'Revenue',v:'$'+s.revenue.toLocaleString()},{l:'Media Cost',v:'$'+s.media_cost.toLocaleString()},{l:'GP',v:'-$'+Math.abs(s.gp).toLocaleString()},{l:'Margin',v:`${s.media_margin.toFixed(1)}%`}]
+      });
+    }
+  });
+
+  // Zero bid sources
+  SOURCES.forEach(s => {
+    if(s.bid_rate === 0 && s.pings > 100) {
+      opps.push({
+        color:'amber', icon:'○',
+        source: s.source_code, tier: 5,
+        title: `${s.source_code} — Zero Bids on ${s.pings.toLocaleString()} Pings`,
+        body: `Source is sending pings (${s.pings.toLocaleString()} MTD) but we are returning $0 bids on all of them. Likely geo mismatch or AA constraints. Investigate source geo and call type.`,
+        metrics: [{l:'Pings',v:s.pings.toLocaleString()},{l:'Bid Rate',v:'0%'},{l:'Wins',v:'0'},{l:'Status',v:'Investigate'}]
+      });
+    }
+  });
+
+  // High reject errors
+  SOURCES.forEach(s => {
+    if(s.reject_errors > 200) {
+      opps.push({
+        color:'blue', icon:'⚙',
+        source: s.source_code, tier: s.tier,
+        title: `${s.source_code} — High Reject Errors (${s.reject_errors.toLocaleString()})`,
+        body: `${s.reject_errors.toLocaleString()} reject/error responses vs. ${s.wins.toLocaleString()} wins. Post errors are eroding post rate to ${s.post_rate.toFixed(1)}%. Investigate ping format or system issue with this source.`,
+        metrics: [{l:'Reject Errors',v:s.reject_errors.toLocaleString()},{l:'Post Rate',v:`${s.post_rate.toFixed(1)}%`},{l:'Wins',v:s.wins.toLocaleString()},{l:'Impact',v:'$'+(s.reject_errors*s.rev_per_win/1000).toFixed(0)+'K est.'}]
+      });
+    }
+  });
+
+  // High RpW hidden gems (small volume, huge value per win)
+  SOURCES.forEach(s => {
+    if(s.rev_per_win > 200 && s.pings < 10000 && s.wins > 10) {
+      opps.push({
+        color:'green', icon:'💎',
+        source: s.source_code, tier: s.tier,
+        title: `${s.source_code} — Premium RpW Signal ($${s.rev_per_win.toFixed(0)}/win)`,
+        body: `Extremely high revenue per won call at $${s.rev_per_win.toFixed(0)} — 4–5× portfolio average. Source has strong buyer intent. Prioritize for volume growth and bid competitiveness.`,
+        metrics: [{l:'Rev/Win',v:'$'+s.rev_per_win.toFixed(0)},{l:'Pings',v:s.pings.toLocaleString()},{l:'Win Rate',v:`${s.win_rate}%`},{l:'GP Margin',v:`${s.media_margin.toFixed(0)}%`}]
+      });
+    }
+  });
+
+  const grid = document.getElementById('opportunitiesGrid');
+  opps.slice(0,6).forEach(o => {
+    const div = document.createElement('div');
+    div.className = `opp-card ${o.color}`;
+    div.innerHTML = `
+      <div class="opp-source">
+        <span>${o.icon}</span>
+        <span>${o.source}</span>
+        <span class="tier-pill t${o.tier}">Tier ${o.tier}</span>
+      </div>
+      <div class="opp-title">${o.title}</div>
+      <div class="opp-body">${o.body}</div>
+      <div class="opp-metrics">
+        ${o.metrics.map(m=>`<div class="opp-metric"><div class="om-label">${m.l}</div><div class="om-value">${m.v}</div></div>`).join('')}
+      </div>`;
+    grid.appendChild(div);
+  });
+}
+
+// ─── TABLE ──────────────────────────────────────────────
+let currentTierFilter = 'all';
+let currentSearch = '';
+let sortCol = 'revenue';
+let sortAsc = false;
+
+const maxBidRate = Math.max(...SOURCES.map(s=>s.bid_rate));
+const maxWinRate = Math.max(...SOURCES.map(s=>s.win_rate));
+
+function getColor(val, max, inverted=false) {
+  const pct = val/max;
+  if(inverted) {
+    if(pct>0.7) return 'var(--red)';
+    if(pct>0.4) return 'var(--amber)';
+    return 'var(--green)';
+  } else {
+    if(pct>0.7) return 'var(--green)';
+    if(pct>0.35) return 'var(--blue)';
+    if(pct>0.1) return 'var(--amber)';
+    return 'var(--red)';
+  }
+}
+
+function renderTable() {
+  let data = [...SOURCES];
+  if(currentTierFilter !== 'all') data = data.filter(s=>s.tier==currentTierFilter);
+  if(currentSearch) {
+    const q = currentSearch.toLowerCase();
+    data = data.filter(s=>s.name.toLowerCase().includes(q)||s.source_code.toLowerCase().includes(q));
+  }
+  // Sort
+  data.sort((a,b) => {
+    let av = a[sortCol], bv = b[sortCol];
+    if(typeof av === 'string') return sortAsc ? av.localeCompare(bv) : bv.localeCompare(av);
+    return sortAsc ? av-bv : bv-av;
+  });
+
+  document.getElementById('sourceCount').textContent = `${data.length} source${data.length!==1?'s':''}`;
+
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+  data.forEach(s => {
+    const tr = document.createElement('tr');
+    const gpClass = s.gp < 0 ? 'negative' : s.gp > 50000 ? 'positive' : 'neutral';
+    const bidBarColor = getColor(s.bid_rate, maxBidRate);
+    const winBarColor = getColor(s.win_rate, maxWinRate);
+    tr.innerHTML = `
+      <td class="source-name-cell">
+        <span class="source-code">${s.source_code}</span>
+        <span class="source-full" title="${s.name}">${s.name.replace(/Medicare Supplement |Medicare Insurance |Medicare Inbound |Ping Calls|API Calls|API Ping|Ping Post|Ping Call|Social |Network |Inbound |Availability /gi,'').trim()}</span>
+      </td>
+      <td class="money">${s.pings.toLocaleString()}</td>
+      <td>
+        <div class="pct-bar-wrap">
+          <div class="pct-bar-bg"><div class="pct-bar-fill" style="width:${Math.min(s.bid_rate,100)}%;background:${bidBarColor}"></div></div>
+          <span class="pct-value" style="color:${bidBarColor}">${s.bid_rate.toFixed(1)}%</span>
+        </div>
+      </td>
+      <td class="money">${s.bids.toLocaleString()}</td>
+      <td>
+        <div class="pct-bar-wrap">
+          <div class="pct-bar-bg"><div class="pct-bar-fill" style="width:${Math.min(s.win_rate,100)}%;background:${winBarColor}"></div></div>
+          <span class="pct-value" style="color:${winBarColor}">${s.win_rate.toFixed(1)}%</span>
+        </div>
+      </td>
+      <td class="money">${s.wins.toLocaleString()}</td>
+      <td class="money" style="color:var(--text-muted)">${s.eff_win_rate.toFixed(2)}%</td>
+      <td class="money">${s.avg_bid > 0 ? '$'+s.avg_bid.toFixed(0) : '—'}</td>
+      <td class="money">${s.revenue > 0 ? '$'+s.revenue.toLocaleString() : '—'}</td>
+      <td class="money ${gpClass}">${s.gp !== 0 ? (s.gp < 0 ? '-$'+Math.abs(s.gp).toLocaleString() : '$'+s.gp.toLocaleString()) : '—'}</td>
+      <td class="money" style="color:${s.media_margin > 60 ? 'var(--green)' : s.media_margin > 30 ? 'var(--amber)' : 'var(--red)'}">${s.media_margin !== 0 ? s.media_margin.toFixed(1)+'%' : '—'}</td>
+      <td class="money" style="color:${s.reject_errors > 100 ? 'var(--red)' : 'var(--text-muted)'}">${s.reject_errors > 0 ? s.reject_errors.toLocaleString() : '—'}</td>
+      <td><span class="tier-pill t${s.tier}">T${s.tier}</span></td>
+      <td><span class="action-badge ${ACTION_CLS[s.tier]}">${ACTIONS[s.tier]}</span></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// ─── TABLE SORT ─────────────────────────────────────────
+const colMap = {source:'name',pings:'pings',bid_rate:'bid_rate',bids:'bids',win_rate:'win_rate',wins:'wins',eff_win_rate:'eff_win_rate',avg_bid:'avg_bid',revenue:'revenue',gp:'gp',media_margin:'media_margin',reject_errors:'reject_errors',tier:'tier'};
+document.querySelectorAll('.data-table th[data-col]').forEach(th => {
+  th.addEventListener('click', () => {
+    const col = colMap[th.dataset.col] || th.dataset.col;
+    if(sortCol === col) sortAsc = !sortAsc;
+    else { sortCol = col; sortAsc = false; }
+    document.querySelectorAll('.data-table th').forEach(t=>t.classList.remove('sorted'));
+    th.classList.add('sorted');
+    th.querySelector('.sort-indicator') && (th.querySelector('.sort-indicator').remove());
+    const ind = document.createElement('span');
+    ind.className = 'sort-indicator'; ind.textContent = sortAsc ? '↑' : '↓';
+    th.appendChild(ind);
+    renderTable();
+  });
+});
+
+// ─── FILTERS ────────────────────────────────────────────
+document.querySelectorAll('.filter-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-tab').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    currentTierFilter = btn.dataset.tier;
+    renderTable();
+  });
+});
+document.getElementById('searchBox').addEventListener('input', e => {
+  currentSearch = e.target.value;
+  renderTable();
+});
+
+// ─── INSIGHTS ───────────────────────────────────────────
+function buildInsights() {
+  const insights = [
+    {icon:'📊', title:'13.9% Portfolio Bid Rate — Major Headroom', body:'86.1% of all pings receive a $0 bid, primarily driven by agent availability constraints. The RP Agent activation is the structural fix, but short-term, geo filtering improvements and AA scheduling optimization on top sources (WISDO: 516K pings, 10% bid rate) could unlock significant volume.'},
+    {icon:'🎯', title:'18.7% Win Rate — 6× Spread Across Sources', body:'Win rates range from 2.3% (HIWMG) to 96.9% (R2MED). Sources with high win rates but low bid rates (HLGSL: 90.3% WR, 13.3% BR; PARGN: 60.9% WR, 14.5% BR) are the highest-priority levers — increasing bid participation on these sources converts directly to revenue.'},
+    {icon:'💰', title:'RATEQ + SCALA: Hidden High-Value Pattern', body:'Both sources show low bid rates (<12%) but extremely high revenue-per-won-call ($225–$229/win vs. $51–$58 portfolio avg). These are structured different — likely buyer pays on successful qualification rather than call transfer. Protect and grow these sources aggressively.'},
+    {icon:'⚠️', title:'WISDO: 516K Pings, 2.8% Win Rate — Tier 4 Flag', body:'Largest ping volume source in the portfolio but 2.8% win rate and 10% bid rate yields only 1,418 wins on 516K pings (0.27% effective win rate). The win rate floor suggests AA or geo is consistently blocking. Investigate cap/schedule structure before RTB activation.'},
+    {icon:'🛑', title:'VPMOP: GP-Negative — Immediate Action Required', body:'Only source generating negative GP (-$3,610) on $2,760 revenue vs. $6,370 media cost. Effective media margin of -130.8%. High win rate (48%) but media cost structure is inverted. Pause bidding pending contract renegotiation.'},
+    {icon:'🚀', title:'RTB Readiness Signal: 6 Sources Ready', body:'PARGN, DIGIP, QUOTV, COBRA, HLGSL, and PALOM show consistent bid/win patterns, positive GP, and sufficient volume for Price Sensitivity Index modeling. Recommend prioritizing these for Phase 2 elasticity analysis as RP Agent nears Q3 activation.'}
+  ];
+  const grid = document.getElementById('insightGrid');
+  insights.forEach(ins => {
+    const div = document.createElement('div');
+    div.className = 'insight-item';
+    div.innerHTML = `<div class="insight-icon">${ins.icon}</div><div class="insight-body"><h4>${ins.title}</h4><p>${ins.body}</p></div>`;
+    grid.appendChild(div);
+  });
+}
+
+// ─── EXPORT ─────────────────────────────────────────────
+function exportCSV() {
+  const headers = ['Source Code','Source Name','Pings','Bid Rate %','Bids','Win Rate %','Wins','Eff Win Rate %','Avg Bid','Revenue','GP','Media Margin %','Reject Errors','Tier','Action'];
+  const rows = SOURCES.map(s=>[s.source_code,`"${s.name}"`,s.pings,s.bid_rate,s.bids,s.win_rate,s.wins,s.eff_win_rate,s.avg_bid,s.revenue,s.gp,s.media_margin,s.reject_errors,s.tier,ACTIONS[s.tier]]);
+  const csv = [headers, ...rows].map(r=>r.join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'PingAnalytics_QM_April2026.csv';
+  a.click();
+}
+
+// ─── INIT ────────────────────────────────────────────────
+window.addEventListener('load', () => {
+  populateTierCounts();
+  drawScatter();
+  drawRevenueChart();
+  buildOpportunities();
+  renderTable();
+  buildInsights();
+});
+window.addEventListener('resize', () => {
+  drawScatter();
+  drawRevenueChart();
+});
+</script>
+</body>
+</html>
