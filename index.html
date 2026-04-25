@@ -39,11 +39,16 @@ body::after{content:'';position:fixed;inset:0;z-index:0;background-image:repeati
 .sync-dot{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:blink 2s infinite;}
 .sync-dot.stale{background:var(--amber);box-shadow:0 0 6px var(--amber);animation:none;}
 
-/* NAV TABS */
-.nav-tabs{display:flex;gap:2px;border-bottom:1px solid var(--edge);margin-bottom:24px;}
-.nav-tab{padding:12px 20px;font-family:var(--font-s);font-size:13px;font-weight:500;color:var(--text-3);background:transparent;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all 0.15s;letter-spacing:0.2px;margin-bottom:-1px;}
-.nav-tab.active{color:var(--cyan);border-bottom-color:var(--cyan);font-weight:600;}
+  /* NAV TABS — Option C Pill Groups */
+.nav-tabs{display:flex;align-items:center;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--edge);margin-bottom:24px;padding-bottom:10px;}
+.nav-pill-group{display:flex;align-items:center;gap:1px;padding:3px;background:var(--surface2,#111118);border-radius:6px;border:1px solid var(--edge);}
+.nav-tab{padding:5px 12px;font-family:var(--font-s);font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:var(--text-3);background:transparent;border:none;border-radius:4px;cursor:pointer;transition:all 0.15s;white-space:nowrap;}
 .nav-tab:hover:not(.active){color:var(--text-2);}
+.nav-tab.active{color:var(--text,#e8e8f0);background:var(--surface3,#1e1e28);font-weight:700;}
+.nav-pill-sep{width:1px;height:14px;background:var(--edge);flex-shrink:0;}
+.nav-tab-badge{font-size:9px;font-weight:700;letter-spacing:0.06em;background:rgba(0,212,170,0.15);color:var(--cyan);border-radius:3px;padding:1px 5px;margin-left:3px;}
+.nav-tab-ext{padding:5px 12px;font-family:var(--font-s);font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:var(--text-3);background:transparent;border:none;border-radius:4px;cursor:pointer;transition:all 0.15s;white-space:nowrap;text-decoration:none;display:flex;align-items:center;}
+.nav-tab-ext:hover{color:var(--cyan);}
 .tab-panel{display:none;}
 .tab-panel.active{display:block;}
 
@@ -607,17 +612,43 @@ body.snapshot-mode .nav-tab[data-working]{display:none;}
 
 <!-- NAV TABS -->
 <nav class="nav-tabs">
-  <button class="nav-tab active" onclick="switchTab('overview',this)">Overview</button>
-  <button class="nav-tab" onclick="switchTab('rp',this)">Right Pricing</button>
-  <button class="nav-tab" data-working onclick="switchTab('subid',this)">Sub ID Intel</button>
-  <button class="nav-tab" data-working onclick="switchTab('dispositions',this)">Dispositions</button>
-  <button class="nav-tab" onclick="switchTab('reporting',this)">Joanie Reporting</button>
-  <button class="nav-tab" onclick="switchTab('publishers',this)">Publisher Scorecards</button>
-  <button class="nav-tab" data-working onclick="switchTab('scorecards',this)">QM &amp; MP Scorecards</button>
-  <button class="nav-tab" data-working onclick="switchTab('ai',this)">Joanie AI Activity</button>
-  <button class="nav-tab" data-working onclick="switchTab('agents',this)">Agent Health</button>
-  <button class="nav-tab" onclick="switchTab('predictive',this)">&#9670; Predictive</button>
+
+  <div class="nav-pill-group">
+    <button class="nav-tab active" onclick="switchTab('overview',this)">Overview</button>
+  </div>
+
+  <div class="nav-pill-group">
+    <button class="nav-tab" onclick="switchTab('rp',this)">Right Pricing</button>
+    <div class="nav-pill-sep"></div>
+    <button class="nav-tab" onclick="switchTab('subid',this)">Sub ID Intel</button>
+  </div>
+
+  <div class="nav-pill-group">
+    <button class="nav-tab" onclick="switchTab('dispositions',this)">Dispositions</button>
+    <div class="nav-pill-sep"></div>
+    <button class="nav-tab" onclick="switchTab('publishers',this)">Publisher Scorecards</button>
+    <div class="nav-pill-sep"></div>
+    <button class="nav-tab" onclick="switchTab('scorecards',this)">QM &amp; MP</button>
+  </div>
+
+  <div class="nav-pill-group">
+    <button class="nav-tab" onclick="switchTab('reporting',this)">Joanie Reporting</button>
+    <div class="nav-pill-sep"></div>
+    <button class="nav-tab" onclick="switchTab('ai',this)">AI Activity</button>
+    <div class="nav-pill-sep"></div>
+    <button class="nav-tab" onclick="switchTab('agents',this)">Agent Health</button>
+  </div>
+
+  <div class="nav-pill-group">
+    <button class="nav-tab" onclick="switchTab('predictive',this)">&#9670; Predictive</button>
+  </div>
+
+  <div class="nav-pill-group">
+    <a class="nav-tab-ext" href="/ping-analytics">Ping Analytics <span class="nav-tab-badge">NEW</span></a>
+  </div>
+
 </nav>
+
 
 <!-- OVERVIEW TAB -->
 <div id="tab-overview" class="tab-panel active">
